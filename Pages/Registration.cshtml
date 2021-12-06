@@ -1,0 +1,148 @@
+﻿@page
+@model EDP_Project.Pages.Auth.RegistrationModel
+@{
+}
+
+
+<head>
+    <link href="~/css/register.css" rel="stylesheet" />
+
+    <style>
+        #g-recaptcha-response {
+            display: block !important;
+            position: absolute;
+            margin: -78px 0 0 0 !important;
+            width: 302px !important;
+            height: 76px !important;
+            z-index: -999999;
+            opacity: 0;
+        }
+    </style>
+
+</head>
+
+
+
+<h1 class="display-4">Registration</h1>
+
+<div class="registration-form" style="margin-bottom:120px;">
+
+
+    @*<form id="subscribeForm" method="POST" action="" enctype="multipart/form-data">*@
+
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+
+        <div>
+            <img id="avatarImg" style="
+width: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 7px;" src="https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png"
+                 class="avatar" alt="Avatar">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        </div>
+        <div>
+        </div>
+
+
+        <!-- <div class="custom-file">
+      <input type="file" class="custom-file-input" id="avatar" name="avatar" multiple accept=".jpg, .png, .jpeg" required>
+      <label class="custom-file-label" for="pic">Picture</label>
+    </div> -->
+        @*<div class="form-group">
+            <label>Profile Image</label>
+            <input id="avatarx" class="form-control" type="file" onChange="validation(event)" accept="" name="avatar"
+                   onChange="validate(this.value)" required />
+        </div>*@
+
+        <div class="form-group">
+            <label for="name">Username</label>
+            <input asp-for="myUser.Username" type="text" class="form-control" id="username" required>
+            <span asp-validation-for="myUser.Username" class="text-danger"></span>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input asp-for="myUser.Email" type="email" id="email" class="form-control" required>
+            <span asp-validation-for="myUser.Email" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" minlength="4" id="password" />
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input type="password" asp-for="myUser.Password" class="form-control" minlength="4" id="password_confirm" oninput="check(this)" required>
+            <span asp-validation-for="myUser.Password" class="text-danger"></span>
+
+
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="number">Contact Number</label>
+            <input asp-for="myUser.Contact" type="text" id="number" class="form-control" minlength="8" required>
+            <span asp-validation-for="myUser.Contact" class="text-danger"></span>
+        </div>
+
+
+
+
+
+        @*<div class="form-group">
+            <label for="address">Mailing Address</label>
+            <textarea class="form-control" name="address" id="exampleFormControlTextarea1" rows="3"
+                      title="5 characters minimum" maxlength="30" minlength="5"></textarea>
+        </div>*@
+
+
+
+        <div class="form-group">
+            <button type="submit" onclick="validate();" value="Submit" class="btn btn-block create-account">
+                Create
+                Account
+            </button>
+            <br>
+            <p class="text-muted">
+                Signing up signifies that you have read and agree to the <a href="#" data-toggle="modal"
+                                                                            data-target="#exampleModalCenter">Terms Of Service</a>
+                and our <a href="#" data-toggle="modal" data-target="#exampleModalCenter2">Privacy Policy</a>.
+            </p>
+        </div>
+
+
+
+
+    </form>
+    <div class="social-media">
+    </div>
+</div>
+
+
+<script>
+
+
+    function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+
+</script>
