@@ -85,3 +85,9 @@ C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\
 C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\System.Text.Encodings.Web.dll
 C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\System.Text.Json.dll
 C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\WebApiContrib.Formatting.JavaScriptSerializer.dll
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\obj\Debug\netcoreapp3.1\Razor\Pages\Staff\Accounts\List.cshtml.g.cs
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\obj\Debug\netcoreapp3.1\Razor\Pages\Staff\Accounts\Data.cshtml.g.cs
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\System.Web.Http.dll
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\System.Web.Http.WebHost.dll
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\Ayres\Desktop\Applesauce_Penguin\Y2S2\EDP\EDP_Project_Self\EDP_Project\obj\Debug\netcoreapp3.1\Razor\Pages\Logout.cshtml.g.cs

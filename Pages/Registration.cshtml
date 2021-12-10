@@ -5,6 +5,7 @@
 
 
 <head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfLmX8dAAAAAGbTIkC40y7eHl9GptSMiJQDI8L8"></script>    
     <link href="~/css/register.css" rel="stylesheet" />
 
     <style>
@@ -109,6 +110,7 @@ width: 100px;
                       title="5 characters minimum" maxlength="30" minlength="5"></textarea>
         </div>*@
 
+        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
 
 
         <div class="form-group">
@@ -135,6 +137,11 @@ width: 100px;
 
 <script>
 
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6LfLmX8dAAAAAGbTIkC40y7eHl9GptSMiJQDI8L8', { action: 'Login' }).then(function (token) {
+            document.getElementById("g-recaptcha-response").value = token;
+        });
+    });
 
     function check(input) {
         if (input.value != document.getElementById('password').value) {

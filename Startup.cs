@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pract2.Models;
+using Pract2.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +26,21 @@ namespace EDP_Project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSession();
+
+            services.AddDbContext<UserDbContext>();
+
+
+
+            services.AddTransient<UserService>();
+
             services.AddRazorPages();
+
+            //session timeout
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
 
         }

@@ -41,18 +41,20 @@ namespace EDP_Project.Pages.Auth
         public void createAccount(User user)
         {
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[User] VALUES(@Username, @Email, @PasswordSalt, @PasswordHash, @Contact, @Role)", con);
+            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[User] VALUES(@Username, @Email, @DateCreated, @PasswordSalt, @Password, @Contact, @Status, @Role)", con);
             con.Open();
 
             cmd.Parameters.AddWithValue("@Username", myUser.Username);
             cmd.Parameters.AddWithValue("@Email", myUser.Email);
+            cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
             cmd.Parameters.AddWithValue("@PasswordSalt", salt);
-            cmd.Parameters.AddWithValue("@PasswordHash", finalHash);
+            cmd.Parameters.AddWithValue("@Password", finalHash);
             cmd.Parameters.AddWithValue("@Contact", myUser.Contact);
+            cmd.Parameters.AddWithValue("@Status", "Active");
             cmd.Parameters.AddWithValue("@Role", "Guest");
 
 
-                var testing = cmd.ExecuteNonQuery();
+            var mother = cmd.ExecuteNonQuery();
             con.Close();
 
         }
@@ -61,7 +63,51 @@ namespace EDP_Project.Pages.Auth
 
 
 
+        public bool ValidateCaptcha()
+        {
+            bool result = true;
+            string captchaResponse = Request.Form["g-recaptcha-response"];
 
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create
+                (" https://www.google.com/recaptcha/api/siteverify?secret=6LfLmX8dAAAAAOr5H4_NpVIsM3z4tszdaL_UbMjn &response=" + captchaResponse
+                );
+
+            try
+            {
+                //Code to receive the Response in JSON format from google server
+
+                using (WebResponse wResponse = req.GetResponse())
+                {
+
+                    using (StreamReader readStream = new StreamReader(wResponse.GetResponseStream()))
+                    {
+                        //The response in JSON format
+                        string jsonResponse = readStream.ReadToEnd();
+
+                        // To show the JSON response string for learning purpsoe
+
+                        //lblMessage.Text = jsonResponse.ToString();
+
+
+                        // Create jsonObject to handle the response either success or error
+                        // Deserialize json
+
+                        MyObject jsonObject = JsonConvert.DeserializeObject<MyObject>(jsonResponse);
+
+                        //Convert the string "False" to bool false or "true" to bool true
+
+                        result = Convert.ToBoolean(jsonObject.success);
+                    }
+
+                }
+                return result;
+            }
+            catch (WebException ex)
+            {
+                throw ex;
+            }
+        }
 
 
 
@@ -74,7 +120,8 @@ namespace EDP_Project.Pages.Auth
             if (ModelState.IsValid)
             {
 
-
+                if (ValidateCaptcha())
+                {
 
                     // Retrive password from user input
                     string password = myUser.Password.ToString().Trim();
@@ -120,7 +167,7 @@ namespace EDP_Project.Pages.Auth
 
 
 
-            
+            }
 
 
 

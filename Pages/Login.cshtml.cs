@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using EDP_Project.Models;
@@ -8,15 +10,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using System.Web;
+using Newtonsoft.Json;
+
 
 namespace EDP_Project.Pages.Auth
 {
 
-    //Todo store user object in session
 
-    // Hash password, store in DB
-
-    // Email Verification
 
 
     public class LoginModel : PageModel
@@ -33,13 +34,67 @@ namespace EDP_Project.Pages.Auth
 
 
 
-        //[BindProperty]
+        public class MyObject
+        {
+            public string success { get; set; }
+
+            public List<String> ErrorMessage { get; set; }
+        }
 
 
-        //public User currentUser { get; set; }
 
 
         SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
+
+
+        // Captcha Validation - to prevent attacks
+
+        public bool ValidateCaptcha()
+        {
+            bool result = true;
+            string captchaResponse = Request.Form["g-recaptcha-response"];
+
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create
+                (" https://www.google.com/recaptcha/api/siteverify?secret=6LfLmX8dAAAAAOr5H4_NpVIsM3z4tszdaL_UbMjn &response=" + captchaResponse
+                );
+
+            try
+            {
+                //Code to receive the Response in JSON format from google server
+
+                using (WebResponse wResponse = req.GetResponse())
+                {
+
+                    using (StreamReader readStream = new StreamReader(wResponse.GetResponseStream()))
+                    {
+                        //The response in JSON format
+                        string jsonResponse = readStream.ReadToEnd();
+
+                        // To show the JSON response string for learning purpsoe
+
+                        //lblMessage.Text = jsonResponse.ToString();
+
+
+                        // Create jsonObject to handle the response either success or error
+                        // Deserialize json
+
+                        MyObject jsonObject = JsonConvert.DeserializeObject<MyObject>(jsonResponse);
+
+                        //Convert the string "False" to bool false or "true" to bool true
+
+                        result = Convert.ToBoolean(jsonObject.success);
+                    }
+
+                }
+                return result;
+            }
+            catch (WebException ex)
+            {
+                throw ex;
+            }
+        }
 
 
         //Get DB salt
@@ -111,6 +166,10 @@ namespace EDP_Project.Pages.Auth
         }
 
 
+
+
+
+
         public void OnGet()
         {
         }
@@ -119,80 +178,110 @@ namespace EDP_Project.Pages.Auth
         public IActionResult OnPost()
         {
 
-
-
-
-            string dbHash = "";
-            string dbSalt = "";
-
-            // Open DB,
-            con.Open();
-
-            SqlCommand check_User_Name = new SqlCommand("SELECT * FROM [dbo].[User] WHERE ([Email] = @userId)", con);
-            check_User_Name.Parameters.AddWithValue("@userId", userID);
-            int UserExist = (int)check_User_Name.ExecuteScalar();
-            string dbPass = "";
-            string currentUser = "";
-
-            try
+            if (ValidateCaptcha())
             {
-                using (SqlDataReader reader = check_User_Name.ExecuteReader())
+
+
+
+                string dbHash = "";
+                string dbSalt = "";
+
+                // Open DB,
+                con.Open();
+
+
+
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM [dbo].[User] WHERE ([Email] = @userId)", con);
+                cmd.Parameters.AddWithValue("@userId", userID);
+                int UserExist = (int)cmd.ExecuteScalar();
+
+                if (UserExist > 0)
                 {
-                    while (reader.Read())
+
+
+                    SqlCommand cmdx = new SqlCommand("SELECT * FROM [dbo].[User] WHERE ([Email] = @userId)", con);
+                    cmdx.Parameters.AddWithValue("@userId", userID);
+                    cmdx.ExecuteScalar();
+                    string dbPass = "";
+                    string currentUser = "";
+
+                    try
                     {
-                        if (reader["Username"] != null)
+                        using (SqlDataReader reader = cmdx.ExecuteReader())
                         {
-                            if (reader["Username"] != DBNull.Value)
+                            while (reader.Read())
                             {
-                                currentUser = reader["Username"].ToString();
+                                if (reader["Username"] != null)
+                                {
+                                    if (reader["Username"] != DBNull.Value)
+                                    {
+                                        currentUser = reader["Username"].ToString();
+                                    }
+
+                                }
+
+                                if (reader["PasswordSalt"] != null)
+                                {
+                                    if (reader["PasswordSalt"] != DBNull.Value)
+                                    {
+                                        dbSalt = reader["PasswordSalt"].ToString();
+                                    }
+
+                                }
+
+                                if (reader["Password"] != null)
+                                {
+                                    if (reader["Password"] != DBNull.Value)
+                                    {
+                                        dbHash = reader["Password"].ToString();
+                                    }
+
+                                }
+
                             }
-
                         }
-
-                        if (reader["PasswordSalt"] != null)
-                        {
-                            if (reader["PasswordSalt"] != DBNull.Value)
-                            {
-                                dbSalt = reader["PasswordSalt"].ToString();
-                            }
-
-                        }
-
-                        if (reader["PasswordHash"] != null)
-                        {
-                            if (reader["PasswordHash"] != DBNull.Value)
-                            {
-                                dbHash = reader["PasswordHash"].ToString();
-                            }
-
-                        }
-
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.ToString());
-            }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.ToString());
+                    }
 
 
-            if (UserExist > 0)
-            {
+ 
+                        // if password wrong, increase the thing.
 
-                // if password wrong, increase the thing.
 
-                // If corrett, goo bitch
+                        SHA512Managed hashing = new SHA512Managed();
+                        string pwdWithSalt = userPass + dbSalt;
+                        byte[] hashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pwdWithSalt));
+                        string userHash = Convert.ToBase64String(hashWithSalt);
 
-                SHA512Managed hashing = new SHA512Managed();
-                string pwdWithSalt = userPass + dbSalt;
-                byte[] hashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pwdWithSalt));
-                string userHash = Convert.ToBase64String(hashWithSalt);
+                        if (userHash.Equals(dbHash))
+                        {
 
-                if (userHash.Equals(dbHash))
-                {
 
-                    HttpContext.Session.SetString("user", currentUser);
-                    return RedirectToPage("Index");
+
+
+                            HttpContext.Session.SetString("user", currentUser.Trim());
+                            return RedirectToPage("Index");
+
+                        }
+
+                        else
+                        {
+
+                            error_msg = "Invalid email or password!";
+                            return Page();
+                        }
+
+
+                        //HttpContext.Session.SetString("user", "username");
+
+
+
+                   
+
+
 
                 }
 
@@ -200,39 +289,34 @@ namespace EDP_Project.Pages.Auth
                 {
 
                     error_msg = "Invalid email or password!";
+
+                    //Username doesn't exist.
                     return Page();
                 }
 
+                // Check whether user exists,
 
-                //HttpContext.Session.SetString("user", "username");
+
+                // if user exists generate session
 
 
+                // Otherwise 
+
+
+                // Return error
+                return Page();
 
             }
+
             else
             {
-
-
-                error_msg = "Invalid email or password!";
-
-                //Username doesn't exist.
+                error_msg = "Invalid captcha attempt!";
                 return Page();
+
+
             }
 
 
-
-
-            // Check whether user exists,
-
-
-            // if user exists generate session
-
-
-            // Otherwise 
-
-
-            // Return error
-            return Page();
         }
 
     }
