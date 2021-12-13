@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using System.Web;
 using Newtonsoft.Json;
-
+using MySql.Data.MySqlClient;
 
 namespace EDP_Project.Pages.Auth
 {
@@ -44,7 +44,11 @@ namespace EDP_Project.Pages.Auth
 
 
 
-        SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
+        MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+
+
+        //SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
 
 
@@ -103,13 +107,13 @@ namespace EDP_Project.Pages.Auth
         protected string getDBSalt(string userid)
         {
             string s = null;
-            string sql = "select PasswordSalt FROM [dbo].[User] WHERE [Email]=@USERID";
-            SqlCommand command = new SqlCommand(sql, con);
+            string sql = "select PasswordSalt FROM User WHERE Email@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
             command.Parameters.AddWithValue("@USERID", userid);
             try
             {
                 con.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -135,13 +139,13 @@ namespace EDP_Project.Pages.Auth
         protected string getDBHash(string userid)
         {
             string h = null;
-            string sql = "select PasswordHash FROM [dbo].[User] WHERE [Email]=@USERID";
-            SqlCommand command = new SqlCommand(sql, con);
+            string sql = "select PasswordHash FROM User WHERE Email@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
             command.Parameters.AddWithValue("@USERID", userid);
             try
             {
                 con.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
 
                     while (reader.Read())
@@ -172,8 +176,14 @@ namespace EDP_Project.Pages.Auth
 
         public void OnGet()
         {
-        }
 
+
+
+
+
+
+
+        }
 
         public IActionResult OnPost()
         {
@@ -191,15 +201,18 @@ namespace EDP_Project.Pages.Auth
 
 
 
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM [dbo].[User] WHERE ([Email] = @userId)", con);
+                //cmd.CommandText = "SELECT id from residentes WHERE nome = @nome";
+                //cmd.Parameters.AddWithValue("@nome", nomeres);
+
+                MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM USER WHERE EMAIL = @userId", con);
                 cmd.Parameters.AddWithValue("@userId", userID);
-                int UserExist = (int)cmd.ExecuteScalar();
+                int UserExist = Convert.ToInt32(cmd.ExecuteScalar());
 
                 if (UserExist > 0)
                 {
 
 
-                    SqlCommand cmdx = new SqlCommand("SELECT * FROM [dbo].[User] WHERE ([Email] = @userId)", con);
+                    MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE EMAIL = @userId", con);
                     cmdx.Parameters.AddWithValue("@userId", userID);
                     cmdx.ExecuteScalar();
                     string dbPass = "";
@@ -207,7 +220,7 @@ namespace EDP_Project.Pages.Auth
 
                     try
                     {
-                        using (SqlDataReader reader = cmdx.ExecuteReader())
+                        using (MySqlDataReader reader = cmdx.ExecuteReader())
                         {
                             while (reader.Read())
                             {

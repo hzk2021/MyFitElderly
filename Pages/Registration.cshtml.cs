@@ -7,7 +7,7 @@ using System.Text;
 using EDP_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
 namespace EDP_Project.Pages.Auth
@@ -35,13 +35,16 @@ namespace EDP_Project.Pages.Auth
         }
 
 
-        SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        //SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
+
+        MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
 
 
         public void createAccount(User user)
         {
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO [dbo].[User] VALUES(@Username, @Email, @DateCreated, @PasswordSalt, @Password, @Contact, @Status, @Role)", con);
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL, @Username, @Email, @DateCreated, @PasswordSalt, @Password, @Contact, @Status, @Role)", con);
             con.Open();
 
             cmd.Parameters.AddWithValue("@Username", myUser.Username);
@@ -53,8 +56,9 @@ namespace EDP_Project.Pages.Auth
             cmd.Parameters.AddWithValue("@Status", "Active");
             cmd.Parameters.AddWithValue("@Role", "Guest");
 
-
             var mother = cmd.ExecuteNonQuery();
+
+
             con.Close();
 
         }
