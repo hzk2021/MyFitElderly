@@ -25,9 +25,14 @@ namespace EDP_Project
             Configuration = configuration;
             con.Open();
 
-            //  ------------------ if table already exist drop it , otherwise create new table ------------------
 
-            string lel_fml = @"DROP TABLE IF EXISTS log";
+
+
+
+
+            //  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
+
+            string lel_fml = @"DROP TABLE IF EXISTS user";
 
 
             using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
@@ -40,18 +45,20 @@ namespace EDP_Project
             }
 
 
-            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE Log (
-            `Id`         INT AUTO_INCREMENT  NOT NULL,
-            `UserID`     VARCHAR(500)  NOT NULL,
-            `Date`       DATETIME(3)       NOT NULL,
-            `Thread`     VARCHAR(255)  NOT NULL,
-            `Level`      VARCHAR(50)   NOT NULL,
-            `Logger`     VARCHAR(255)  NOT NULL,
-            `Message`    VARCHAR(4000) NOT NULL,
-            `IP_Address` VARCHAR(4000) NOT NULL,
-            `Exception`  VARCHAR(2000) NULL,
-            PRIMARY KEY(`Id` ASC)
+            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE user (
+            `Id`           INT            AUTO_INCREMENT  NOT NULL,
+            `Username`     NCHAR (30)     NULL,
+            `Email`        NVARCHAR (50)  NULL,
+            `DateCreated`  NVARCHAR (50)  NULL,
+            `PasswordSalt` LONGTEXT  NULL,
+            `Password`     LONGTEXT  NULL,
+            `Contact`      NVARCHAR (20)  NULL,
+            `Status`       NVARCHAR (20)  DEFAULT ('Active') NULL,
+            `Role`         NCHAR (10)     DEFAULT ('Guest') NULL,
+            PRIMARY KEY (`Id` ASC)
             );", con);
+
+
 
 
             Create_table.ExecuteNonQuery();
