@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace EDP_Project.Pages
     public class IndexModel : PageModel
     {
 
-        SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
 
 
         private readonly ILogger<IndexModel> _logger;
@@ -34,13 +35,13 @@ namespace EDP_Project.Pages
 
             var role = "";
 
-            string sql = "select * FROM [dbo].[User] WHERE [Username]=@USERID";
-            SqlCommand command = new SqlCommand(sql, con);
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
             command.Parameters.AddWithValue("@USERID", userID);
             try
             {
                 con.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
