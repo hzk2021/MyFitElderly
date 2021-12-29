@@ -1,3 +1,5 @@
+using EDP_Project.Models.Survey;
+using EDP_Project.Services.Survey;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,17 +34,21 @@ namespace EDP_Project
 
             //  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
-            string lel_fml = @"DROP TABLE IF EXISTS user";
+
+            //string lel_fml = @"DROP TABLE IF EXISTS user";
+            //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
 
 
-            using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
-            {
+            //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
+            //{
 
-                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-                conn.Open();
-                cmd.ExecuteNonQuery();
+            //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+            //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
 
-            }
+            //    conn.Open();
+            //    cmd.ExecuteNonQuery();
+
+            //}
 
 
             MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE user (
@@ -58,10 +64,29 @@ namespace EDP_Project
             PRIMARY KEY (`Id` ASC)
             );", con);
 
+            MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE Survey (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `Category`          NCHAR(30)     NOT NULL,
+            `Title`             NCHAR(100)    NOT NULL,
+            `Description`       LONGTEXT      NULL,
+            `CreatedOn`         DATETIME       NOT NULL,
+            `UpdatedOn`         DATETIME       NOT NULL,
+            `ViewStatus`        BIT DEFAULT ('Hide')  NOT NULL,
+            `CreatedByStaffID`  INT            NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
+            );", con);
 
 
+            try
+            {
+                Create_table.ExecuteNonQuery();
+                create_surveyTable.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
 
-            Create_table.ExecuteNonQuery();
+            }
 
             //  ------------------ if table already exist drop it , otherwise create new table ------------------
 
@@ -87,9 +112,9 @@ namespace EDP_Project
 
             services.AddDbContext<UserDbContext>();
 
-
-
             services.AddTransient<UserService>();
+
+            services.AddTransient<SurveyService>();
 
             services.AddRazorPages();
 

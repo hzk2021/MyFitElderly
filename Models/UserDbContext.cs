@@ -1,4 +1,5 @@
 ﻿using EDP_Project.Models;
+using EDP_Project.Models.Survey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -22,13 +23,14 @@ namespace Pract2.Models
         {
             // Get connection string from the value of "MyConn" in appsetting and
             // Configure context to connect to microsoft SQL server database    
-            string connectionString = _config.GetConnectionString("MyCon");
-            optionsBuilder.UseSqlServer(connectionString);
+            string connectionString = _config.GetConnectionString("MySQLCon");
+            optionsBuilder.UseMySQL(connectionString);
 
         }
 
         // Map employee entity to Employees table in database
         public DbSet<User> User { get; set; }
+        public DbSet<Survey> Survey { get; set; }
 
     }
 }

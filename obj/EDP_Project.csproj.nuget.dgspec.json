@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj": {}
+    "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj": {
+    "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
         "projectName": "EDP_Project",
-        "projectPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
-        "packagesPath": "C:\\Users\\Ayres\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ayres\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[8.0.27, )"
             },
+            "MySql.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.8, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"
@@ -89,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

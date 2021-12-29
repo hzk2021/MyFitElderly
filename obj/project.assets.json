@@ -566,6 +566,19 @@
           "lib/netstandard2.1/ZstdNet.dll": {}
         }
       },
+      "MySql.EntityFrameworkCore/5.0.8": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "5.0.8",
+          "MySql.Data": "8.0.27"
+        },
+        "compile": {
+          "lib/netstandard2.1/MySql.EntityFrameworkCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/MySql.EntityFrameworkCore.dll": {}
+        }
+      },
       "NETStandard.Library/1.6.1": {
         "type": "package",
         "dependencies": {
@@ -3202,6 +3215,19 @@
         "lib/netstandard2.1/ZstdNet.dll",
         "mysql.data.8.0.27.nupkg.sha512",
         "mysql.data.nuspec"
+      ]
+    },
+    "MySql.EntityFrameworkCore/5.0.8": {
+      "sha512": "34F52zm294inqAEMaqySeHJ62XMjJFcOR35whUqjpvoBZ3XmkKDK5du87JBUHdXM12iLhbQYaX+XpVibP5qUjA==",
+      "type": "package",
+      "path": "mysql.entityframeworkcore/5.0.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/MySql.EntityFrameworkCore.dll",
+        "lib/netstandard2.1/MySql.EntityFrameworkCore.xml",
+        "mysql.entityframeworkcore.5.0.8.nupkg.sha512",
+        "mysql.entityframeworkcore.nuspec"
       ]
     },
     "NETStandard.Library/1.6.1": {
@@ -7734,25 +7760,26 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.12",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.12",
       "MySql.Data >= 8.0.27",
+      "MySql.EntityFrameworkCore >= 5.0.8",
       "Newtonsoft.Json >= 13.0.1",
       "System.Text.Json >= 6.0.0",
       "WebApiContrib.Formatting.JavaScriptSerializer >= 0.9.4"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ayres\\.nuget\\packages\\": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
       "projectName": "EDP_Project",
-      "projectPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
-      "packagesPath": "C:\\Users\\Ayres\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Ayres\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7796,6 +7823,10 @@
             "target": "Package",
             "version": "[8.0.27, )"
           },
+          "MySql.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[5.0.8, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.1, )"
@@ -7827,7 +7858,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   },
