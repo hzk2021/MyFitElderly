@@ -34,6 +34,7 @@ namespace EDP_Project
 
             //string lel_fml = @"DROP TABLE IF EXISTS user";
             //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
+            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
 
 
             //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
@@ -41,9 +42,12 @@ namespace EDP_Project
 
             //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
             //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
 
             //    conn.Open();
             //    cmd.ExecuteNonQuery();
+            //    dst.ExecuteNonQuery();
+            //    dqt.ExecuteNonQuery();
 
             //}
 
@@ -90,7 +94,7 @@ namespace EDP_Project
 
             MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE Survey (
             `Id`                INT            AUTO_INCREMENT  NOT NULL,
-            `SurveyUUID`        LONGTEXT     NOT NULL,
+            `SurveyUUID`        CHAR(36)      NOT NULL,
             `Category`          NCHAR(30)     NOT NULL,
             `Title`             NCHAR(100)    NOT NULL,
             `Description`       LONGTEXT      NULL,
@@ -98,34 +102,35 @@ namespace EDP_Project
             `UpdatedOn`         DATETIME       NOT NULL,
             `ViewStatus`        BIT            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
+            UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
             );", con);
+
+            MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE Question (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `QuestionUUID`      CHAR(36)       NOT NULL,
+            `Text`              NCHAR(255)     NOT NULL,
+            `BelongsToSurveyID` CHAR(36)      NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (QuestionUUID),
+            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
+            );", con);
+
 
             try
             {
                 Create_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
+                create_questionTable.ExecuteNonQuery();
+                Create_caloriesIntake.ExecuteNonQuery();
+                Create_foodList.ExecuteNonQuery();
+                Create_mealItems.ExecuteNonQuery();
             }
             catch (Exception)
             {
 
             }
-            Create_table.ExecuteNonQuery();
-            Create_caloriesIntake.ExecuteNonQuery();
-            Create_foodList.ExecuteNonQuery();
-            Create_mealItems.ExecuteNonQuery();
-
-            //  ------------------ if table already exist drop it , otherwise create new table ------------------
-
-
-
-
-
-
-
-
-
 
 
 

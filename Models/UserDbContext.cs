@@ -32,6 +32,8 @@ namespace Pract2.Models
         public DbSet<User> User { get; set; }
         public DbSet<Survey> Survey { get; set; }
 
+        public DbSet<Question> Question { get; set; }
+
         public DbSet<CaloriesIntakes> CaloriesIntakes { get; set; }
         public DbSet<Food> Food { get; set; }
         public DbSet<Meals> Meals { get; set; }

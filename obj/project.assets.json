@@ -7767,19 +7767,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sapph\\.nuget\\packages\\": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Visual Studio 2019 Projects\\Enterprise Development Project\\EDP_Project\\EDP_Project.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
       "projectName": "EDP_Project",
-      "projectPath": "D:\\Visual Studio 2019 Projects\\Enterprise Development Project\\EDP_Project\\EDP_Project.csproj",
-      "packagesPath": "C:\\Users\\sapph\\.nuget\\packages\\",
-      "outputPath": "D:\\Visual Studio 2019 Projects\\Enterprise Development Project\\EDP_Project\\obj\\",
+      "projectPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\sapph\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
