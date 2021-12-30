@@ -28,22 +28,5 @@ namespace EDP_Project.Services.Survey
             return _dbcontext.Survey.ToList(); // Test
         }
 
-        public Models.Survey.Survey GetASurvey(string surveyUUID)
-        {
-            return _dbcontext.Survey.FirstOrDefault(c => c.SurveyUUID == surveyUUID);
-        }
-        public void AddQuestionToSurvey(string questionText, string surveyUUID)
-        {
-            Models.Survey.Question qns = new Models.Survey.Question()
-            {
-                QuestionUUID = Guid.NewGuid().ToString(),
-                Text = questionText,
-                BelongsToSurveyID = surveyUUID
-            };
-
-            _dbcontext.Question.Add(qns);
-            _dbcontext.SaveChanges();
-        }
-
     }
 }

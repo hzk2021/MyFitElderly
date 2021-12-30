@@ -1,4 +1,4 @@
-using EDP_Project.Models.Survey;
+using EDP_Project.Services;
 using EDP_Project.Services.Survey;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MySql.Data.MySqlClient;
 using Pract2.Models;
-using Pract2.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,14 +29,11 @@ namespace EDP_Project
 
 
 
-
-
             //  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
 
             //string lel_fml = @"DROP TABLE IF EXISTS user";
             //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
-            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
 
 
             //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
@@ -45,17 +41,14 @@ namespace EDP_Project
 
             //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
             //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
 
             //    conn.Open();
             //    cmd.ExecuteNonQuery();
-            //    dst.ExecuteNonQuery();
-            //    dqt.ExecuteNonQuery();
 
             //}
 
 
-            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE user (
+            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS user (
             `Id`           INT            AUTO_INCREMENT  NOT NULL,
             `Username`     NCHAR (30)     NULL,
             `Email`        NVARCHAR (50)  NULL,
@@ -68,9 +61,36 @@ namespace EDP_Project
             PRIMARY KEY (`Id` ASC)
             );", con);
 
+            MySqlCommand Create_caloriesIntake = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS caloriesIntake (
+            `Date`              DATETIME        NOT NULL,
+            `UserId`                INT             NOT NULL,
+            `Day`               NVARCHAR (15)   NOT NULL,
+            `CaloriesIntake`    INT             NULL,
+            PRIMARY KEY (`Date` ASC),
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
+            );", con);
+
+            MySqlCommand Create_foodList = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS food (
+            `FoodId`       INT              AUTO_INCREMENT  NOT NULL,
+            `FoodName`     NVARCHAR (50)    NOT NULL,
+            `Category`     NVARCHAR (20)    NULL,
+            `Calories`     INT              NOT NULL,
+            PRIMARY KEY (`FoodId` ASC)
+            );", con);
+
+            MySqlCommand Create_mealItems = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS meals (
+            `ItemId`       INT            AUTO_INCREMENT  NOT NULL,
+            `FoodId`       INT            NOT NULL,
+            `MealType`     NVARCHAR (20)  NOT NULL,
+            `Date`         DATETIME       NULL,
+            PRIMARY KEY (`ItemId` ASC),
+            FOREIGN KEY (`FoodId`) REFERENCES food(`FoodId`),
+            FOREIGN KEY (`Date`) REFERENCES caloriesIntake(`Date`)
+            );", con);
+
             MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE Survey (
             `Id`                INT            AUTO_INCREMENT  NOT NULL,
-            `SurveyUUID`        CHAR(36)      NOT NULL,
+            `SurveyUUID`        LONGTEXT     NOT NULL,
             `Category`          NCHAR(30)     NOT NULL,
             `Title`             NCHAR(100)    NOT NULL,
             `Description`       LONGTEXT      NULL,
@@ -78,31 +98,23 @@ namespace EDP_Project
             `UpdatedOn`         DATETIME       NOT NULL,
             `ViewStatus`        BIT            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
-            UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
-            );", con);
-
-            MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE Question (
-            `Id`                INT            AUTO_INCREMENT  NOT NULL,
-            `QuestionUUID`      CHAR(36)       NOT NULL,
-            `Text`              NCHAR(255)     NOT NULL,
-            `BelongsToSurveyID` CHAR(36)      NOT NULL,
-            PRIMARY KEY (`Id` ASC),
-            UNIQUE (QuestionUUID),
-            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
             );", con);
 
             try
             {
                 Create_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
-                create_questionTable.ExecuteNonQuery();
             }
             catch (Exception)
             {
 
             }
+            Create_table.ExecuteNonQuery();
+            Create_caloriesIntake.ExecuteNonQuery();
+            Create_foodList.ExecuteNonQuery();
+            Create_mealItems.ExecuteNonQuery();
 
             //  ------------------ if table already exist drop it , otherwise create new table ------------------
 
@@ -129,6 +141,7 @@ namespace EDP_Project
             services.AddDbContext<UserDbContext>();
 
             services.AddTransient<UserService>();
+            services.AddTransient<HealthService>();
 
             services.AddTransient<SurveyService>();
 

@@ -12,7 +12,7 @@ namespace EDP_Project.Models
     public class User
     {
         [Required(ErrorMessage = "Please enter your email")]
-
+           
 
         public String Username { get; set; }
 

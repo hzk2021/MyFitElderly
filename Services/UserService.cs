@@ -1,12 +1,12 @@
-﻿using EDP_Project.Models;
-using Microsoft.EntityFrameworkCore;
-using Pract2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using EDP_Project.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Pract2.Models;
 
-namespace Pract2.Services
+namespace EDP_Project.Services
 {
     public class UserService
     {
@@ -27,8 +27,6 @@ namespace Pract2.Services
             return AllUsers;
 
         }
-
-   
 
     }
 

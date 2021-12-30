@@ -1,0 +1,7 @@
+﻿.bright-img {
+    filter: brightness(1.1) grayscale(0.35)
+}
+
+.health-selectionFooter {
+    height: 4.75em;
+}

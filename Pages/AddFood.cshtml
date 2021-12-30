@@ -1,0 +1,39 @@
+﻿@page
+@model EDP_Project.Pages.AddFoodModel
+@{
+    ViewData["Title"] = "Add Food";
+}
+
+<h1>Add new food record</h1>
+<form method="post">
+    <div class="card">
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Food Name</label>
+            <input asp-for="FoodModel.FoodName" required />
+            <span asp-validation-for="FoodModel.FoodName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Category</label>
+            <select asp-for="FoodModel.Category" required>
+                <option value="Light Meal" selected>Light Meal</option>
+                <option value="Heavy Meal">Heavy Meal</option>
+                <option value="Snack">Snack</option>
+                <option value="Drink">Drink</option>
+            </select>
+            <span asp-validation-for="FoodModel.Category" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Calories</label>
+            <input asp-for="FoodModel.Calories" required />
+            <span asp-validation-for="FoodModel.Calories" class="text-danger"></span>
+        </div>
+    </div>
+    <br style="margin-bottom:5%;" />
+
+    <a asp-page="Privacy" class="btn btn-secondary">Discard</a>
+    <input class="btn btn-success float-right" type="submit" value="Add to list" />
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

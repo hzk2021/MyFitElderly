@@ -42,7 +42,7 @@ namespace EDP_Project.Pages.Auth
 
 
         public void createAccount(User user)
-        {
+         {
 
             MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL, @Username, @Email, @DateCreated, @PasswordSalt, @Password, @Contact, @Status, @Role)", con);
             con.Open();
