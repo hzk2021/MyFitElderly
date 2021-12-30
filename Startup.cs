@@ -66,17 +66,17 @@ namespace EDP_Project
 
             MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE Survey (
             `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `SurveyUUID`        LONGTEXT     NOT NULL,
             `Category`          NCHAR(30)     NOT NULL,
             `Title`             NCHAR(100)    NOT NULL,
             `Description`       LONGTEXT      NULL,
             `CreatedOn`         DATETIME       NOT NULL,
             `UpdatedOn`         DATETIME       NOT NULL,
-            `ViewStatus`        BIT DEFAULT ('Hide')  NOT NULL,
+            `ViewStatus`        BIT            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
             );", con);
-
 
             try
             {

@@ -11,7 +11,9 @@ namespace EDP_Project.Pages.Staff.Survey
     public class CreateSurveyModel : PageModel
     {
         private SurveyService _srv;
-        public string test { get; set; }
+
+        [BindProperty]
+        public Models.Survey.Survey newSurvey { get; set; }
 
         public CreateSurveyModel(SurveyService surveySrv)
         {
@@ -19,7 +21,29 @@ namespace EDP_Project.Pages.Staff.Survey
         }
         public void OnGet()
         {
-            test = _srv.GetAllSurveys().Count.ToString();
+        }
+
+        public IActionResult OnPost()
+        {
+            if (ModelState.IsValid)
+            {
+                Models.Survey.Survey svy = new Models.Survey.Survey()
+                {
+                    SurveyUUID = Guid.NewGuid().ToString(),
+                    Category = newSurvey.Category,
+                    Title = newSurvey.Title,
+                    Description = newSurvey.Description,
+                    CreatedOn = DateTime.Now,
+                    UpdatedOn = DateTime.Now,
+                    ViewStatus = false,
+                    CreatedByStaffID = 1 // Temp | change later
+                };
+                _srv.AddSurvey(svy);
+
+                return Redirect("View");
+            }
+
+            return Page();
         }
     }
 }

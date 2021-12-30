@@ -1,0 +1,45 @@
+﻿@page
+@model EDP_Project.Pages.Staff.Survey.ViewModel
+@{
+    ViewData["Title"] = "View Survey - Admin";
+}
+
+<div>
+    <h1>Survey List</h1>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <td scope="col">SurveyUUID</td>
+                <td scope="col">Category</td>
+                <td scope="col">Title</td>
+                <td scope="col">Description</td>
+                <td scope="col">CreatedOn</td>
+                <td scope="col">UpdatedOn</td>
+                <td scope="col">ViewStatus</td>
+                <td scope="col">CreatedByStaffID</td>
+            </tr>
+        </thead>
+
+            <tbody>
+                @{
+                    if (Model.Surveys != null)
+                    {
+                        foreach (var survey in Model.Surveys)
+                        {
+                                <tr>
+                                    <td>@survey.SurveyUUID</td>
+                                    <td>@survey.Category</td>
+                                    <td>@survey.Title</td>
+                                    <td>@survey.Description</td>
+                                    <td>@survey.CreatedOn</td>
+                                    <td>@survey.UpdatedOn</td>
+                                    <td>@survey.ViewStatus</td>
+                                    <td>@survey.CreatedByStaffID</td>
+                                </tr>
+                        }
+                    }
+                }
+            </tbody>
+    </table>
+</div>

@@ -12,30 +12,27 @@ namespace EDP_Project.Models.Survey
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        public string SurveyUUID { get; set; }
+
+        [Required(ErrorMessage ="Please enter a category")]
         public string Category { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Please enter a title")]
         public string Title { get; set; }
 
         public string Description { get; set; }
 
-        [Required]
         public DateTime CreatedOn { get; set; }
 
-        [Required]
         public DateTime UpdatedOn { get; set; }
 
-        [Required]
         public bool ViewStatus { get; set; }
 
         /** Need to have ID attribute in User model**/
-        //[Required]
         //[ForeignKey("CreatedByStaffID")]
         //public User CreatedByStaffID { get; set; }
 
         // Alternative
-        [Required]
         public int CreatedByStaffID { get; set; }
 
     }

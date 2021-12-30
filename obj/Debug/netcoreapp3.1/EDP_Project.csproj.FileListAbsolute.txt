@@ -291,3 +291,4 @@ C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.csproj
 C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.genruntimeconfig.cache
 C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\Razor\Pages\Staff\Survey\Create.cshtml.g.cs
 C:\Users\User\Desktop\EDP\EDP_Project\bin\Debug\netcoreapp3.1\MySql.EntityFrameworkCore.dll
+C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\Razor\Pages\Staff\Survey\View.cshtml.g.cs

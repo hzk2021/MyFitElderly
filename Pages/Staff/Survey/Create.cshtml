@@ -1,6 +1,45 @@
 ﻿@page
 @model EDP_Project.Pages.Staff.Survey.CreateSurveyModel
 @{
+    ViewData["Title"] = "Create Survey - Admin";
 }
 
-<h1>@Model.test</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center text-dark mt-5">Create Survey</h1>
+
+            <div class="card p-3">
+                <form class="row" asp-action="" method="post">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="col-12 my-3">
+                        <label class="form-label">Category</label>
+                        @Html.DropDownListFor(m => m.newSurvey.Category, new SelectList(Enum.GetValues(typeof(Models.Survey.SurveyCategory))), new { @class = "form-control" })
+                        <span asp-validation-for="@Model.newSurvey.Category" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12 my-3">
+                        <label class="form-label">Title</label>
+                        <input class="form-control" type="text" asp-for="newSurvey.Title" />
+                        <span asp-validation-for="@Model.newSurvey.Title" class="text-danger"></span>
+                    </div>
+                    <div class="col-12 my-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" asp-for="newSurvey.Description"></textarea>
+                        <span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12 my-3 text-center">
+                        <input type="submit" value="Create" class="btn btn-dark ml-auto" />
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>

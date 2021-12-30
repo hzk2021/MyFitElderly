@@ -17,6 +17,11 @@ namespace EDP_Project.Services.Survey
             _dbcontext = context;
         }
 
+        public void AddSurvey(Models.Survey.Survey survey)
+        {
+            _dbcontext.Survey.Add(survey);
+            _dbcontext.SaveChanges();
+        }
 
         public List<Models.Survey.Survey> GetAllSurveys()
         {
