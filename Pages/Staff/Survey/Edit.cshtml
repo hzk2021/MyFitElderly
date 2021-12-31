@@ -22,77 +22,123 @@
         border-bottom: 1px solid black;
         border-radius: 10px 10px 0 0;
     }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: white;
+        border: 2px solid grey;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
 </style>
 
-<div class="container" id="mainContainer">
+<div class="container">
     <h1 class="text-center text-dark mt-5">Edit Survey </h1>
     <div class="row">
         <div class="col-md-12">
-            <div class="card p-3">
+            <div class="p-3">
                 @{
                     if (Model.svy != null)
                     {
-                        <form class="row" asp-action="" method="post">
+                        <input type="submit" value="+" class="btnCustom" id="addQnsButton" />
+                        <form asp-action="" method="post" id="mainContainerForm">
+                            <div class="col-12 my-3 text-center">
+                                <input type="submit" value="Update" class="btn btn-dark ml-auto" />
 
-                            <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div class="card p-3">
+                                        <div asp-validation-summary="All" class="text-danger"></div>
 
-                            <div class="col-12 my-3">
-                                <label class="form-label">SurveyUUID: </label>
-                                <label class="form-label">@Model.svy.SurveyUUID</label>
+                                        <div class="col-12 my-3">
+                                            <input hidden class="form-label" asp-for="@Model.svy.SurveyUUID" value="@Model.svy.SurveyUUID"/>
+                                        </div>
+
+                                        <div class="col-12 my-3">
+                                            <label class="form-label">Category</label>
+                                            @Html.DropDownListFor(m => m.svy.Category, Enum.GetNames(typeof(Models.Survey.SurveyCategory)).Select(e => new SelectListItem { Text = e }), new { @class = "form-control" })
+                                            <span asp-validation-for="@Model.svy.Category" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="col-12 my-3">
+                                            <label class="form-label">Title</label>
+                                            <input class="form-control" type="text" asp-for="svy.Title" />
+                                            <span asp-validation-for="@Model.svy.Title" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-12 my-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" asp-for="svy.Description"></textarea>
+                                            <span asp-validation-for="@Model.svy.Description" class="text-danger"></span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             </div>
 
-                            <div class="col-12 my-3">
-                                <label class="form-label">Category</label>
-                                @Html.DropDownListFor(m => m.svy.Category, Enum.GetNames(typeof(Models.Survey.SurveyCategory)).Select(e => new SelectListItem { Text = e }), new { @class = "form-control" })
-                                <span asp-validation-for="@Model.svy.Category" class="text-danger"></span>
-                            </div>
+                            @{ 
+                                if (Model.qnsOptionList != null && Model.qnsOptionList.Count != 0)
+                                {
+                                    Model.qnsOptionList.Clear();
+                                }
+                            }
 
-                            <div class="col-12 my-3">
-                                <label class="form-label">Title</label>
-                                <input class="form-control" type="text" asp-for="svy.Title" />
-                                <span asp-validation-for="@Model.svy.Title" class="text-danger"></span>
-                            </div>
-                            <div class="col-12 my-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" asp-for="svy.Description"></textarea>
-                                <span asp-validation-for="@Model.svy.Description" class="text-danger"></span>
-                            </div>
+                            @{
+                                if (Model.qnsList != null)
+                                {
+                                    for (int i = 0; i < Model.qnsList.Count; i++)
+                                    {
+                                        <div class="row mt-4">
+                                            <div class="col-md-12">
+                                                <div class="card p-3">
+                                                    <input hidden asp-for="@Model.qnsList[i].QuestionUUID" value="@Model.qnsList[i].QuestionUUID"/>
+                                                    <input class="form-control mt-3 qnsTB" type="text" value="@Model.qnsList[i].Text" asp-for="@Model.qnsList[i].Text" placeholder="Question Text" />
+                                                    <input hidden asp-for="@Model.qnsList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID"/>
 
+                                                    @{ 
+                                                        Model.qnsOptionList.Add(Model.qnsList[i].QuestionUUID, Model._srv.GetOptionsFromAQuestion(@Model.qnsList[i].QuestionUUID));
+                                                    }
+
+                                                    @{
+                                                        var qnsOptions = Model.qnsOptionList[Model.qnsList[i].QuestionUUID.ToString()];
+
+                                                        
+
+                                                        if (qnsOptions != null)
+                                                        {
+
+                                                            foreach (var option in qnsOptions)
+                                                            {
+                                                                <div class="form-inline">
+                                                                    @*<label class="dot my-1 mr-2 mt-3"></label>*@
+                                                                    <input class="form-control mt-3" type="text" asp-for="@option.Text" value="@option.Text" placeholder="Option Text" />
+                                                                </div>
+                                                            }
+
+                                                            <input hidden="hidden" asp-for="@Model.qnsOptionList[Model.qnsList[i].QuestionUUID.ToString()]" value="@qnsOptions"/>
+
+                                                        }
+
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                            }
                         </form>
 
-                        <input type="submit" value="+" class="btnCustom" id="addQnsButton"/>
                     }
                 }
 
             </div>
         </div>
     </div>
-
-    @{
-        if (Model.qnsList != null)
-        {
-            foreach (var qns in Model.qnsList)
-            {
-                <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="card p-3">
-                                <input class="form-control mt-3 qnsTB" type="text" value="@qns.Text" placeholder="Question Text" />
-
-                                @{
-                                    if (Model._srv.GetOptionsFromAQuestion(qns.QuestionUUID) != null)
-                                    {
-                                        foreach (var option in Model._srv.GetOptionsFromAQuestion(qns.QuestionUUID))
-                                        {
-                                             <input class="form-control mt-3 qnsTB" type="text" value="@option.Text" placeholder="Option Text" />
-                                        }
-                                    }
-                                }
-                            </div>
-                        </div>
-                </div>
-            }
-        }
-    }
 
 </div>
 
@@ -112,10 +158,17 @@
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
 
+        var questionTB = document.createElement("input");
+        questionTB.classList.add("form-control");
+        questionTB.classList.add("mt-3");
+        questionTB.classList.add("qnsTB");
+        questionTB.placeholder = "Question Text"
+
+        cardP_3.appendChild(questionTB);
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
 
-        document.getElementById("mainContainer").appendChild(rowDiv);
+        document.getElementById("mainContainerForm").appendChild(rowDiv);
 
     }
 </script>

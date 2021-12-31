@@ -32,6 +32,22 @@ namespace EDP_Project.Services.Survey
         {
             return _dbcontext.Survey.FirstOrDefault(c => c.SurveyUUID == surveyUUID);
         }
+
+        public void UpdateSurvey(Models.Survey.Survey survey)
+        {
+            var originalSurvey = _dbcontext.Survey.FirstOrDefault(s => s.SurveyUUID == survey.SurveyUUID);
+            if (originalSurvey != null)
+            {
+                originalSurvey.Category = survey.Category;
+                originalSurvey.Title = survey.Title;
+                originalSurvey.Description = survey.Description;
+                originalSurvey.UpdatedOn = DateTime.Now;
+
+                _dbcontext.SaveChanges();
+
+            }
+        }
+
         public void AddQuestionToSurvey(string questionText, string surveyUUID)
         {
             Models.Survey.Question qns = new Models.Survey.Question()
@@ -48,6 +64,17 @@ namespace EDP_Project.Services.Survey
         public List<Models.Survey.Question> GetQuestionsFromASurvey(string surveyUUID)
         {
             return _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToList();
+        }
+
+        public void UpdateQuestion(Models.Survey.Question question)
+        {
+            var originalQuestion = _dbcontext.Question.FirstOrDefault(q => q.QuestionUUID == question.QuestionUUID);
+            if (originalQuestion != null)
+            {
+                originalQuestion.Text = question.Text;
+
+                _dbcontext.SaveChanges();
+            }
         }
 
         public void AddOptionToQuestion(string questionOptionText, string questionUUID)
