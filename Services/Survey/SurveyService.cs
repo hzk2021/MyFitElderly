@@ -45,5 +45,29 @@ namespace EDP_Project.Services.Survey
             _dbcontext.SaveChanges();
         }
 
+        public List<Models.Survey.Question> GetQuestionsFromASurvey(string surveyUUID)
+        {
+            return _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToList();
+        }
+
+        public void AddOptionToQuestion(string questionOptionText, string questionUUID)
+        {
+            Models.Survey.QuestionOption qnsOption = new Models.Survey.QuestionOption()
+            {
+                OptionUUID = Guid.NewGuid().ToString(),
+                Text = questionOptionText,
+                BelongsToQuestionID = questionUUID
+            };
+
+            _dbcontext.QuestionOption.Add(qnsOption);
+            _dbcontext.SaveChanges();
+
+        }
+
+        public List<Models.Survey.QuestionOption> GetOptionsFromAQuestion(string questionUUID)
+        {
+            return _dbcontext.QuestionOption.Where(q => q.BelongsToQuestionID == questionUUID).ToList();
+        }
+
     }
 }

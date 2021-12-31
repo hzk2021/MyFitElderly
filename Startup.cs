@@ -35,6 +35,7 @@ namespace EDP_Project
             //string lel_fml = @"DROP TABLE IF EXISTS user";
             //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
             //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
+            //string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
 
 
             //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
@@ -43,11 +44,13 @@ namespace EDP_Project
             //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
             //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
             //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+            //    MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
 
             //    conn.Open();
             //    cmd.ExecuteNonQuery();
             //    dst.ExecuteNonQuery();
             //    dqt.ExecuteNonQuery();
+            //    dqot.ExecuteNonQuery();
 
             //}
 
@@ -92,7 +95,7 @@ namespace EDP_Project
             FOREIGN KEY (`Date`) REFERENCES caloriesIntake(`Date`)
             );", con);
 
-            MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE Survey (
+            MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Survey (
             `Id`                INT            AUTO_INCREMENT  NOT NULL,
             `SurveyUUID`        CHAR(36)      NOT NULL,
             `Category`          NCHAR(30)     NOT NULL,
@@ -107,7 +110,7 @@ namespace EDP_Project
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
             );", con);
 
-            MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE Question (
+            MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Question (
             `Id`                INT            AUTO_INCREMENT  NOT NULL,
             `QuestionUUID`      CHAR(36)       NOT NULL,
             `Text`              NCHAR(255)     NOT NULL,
@@ -117,12 +120,23 @@ namespace EDP_Project
             FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
             );", con);
 
+            MySqlCommand create_questionOptionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS QuestionOption (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `OptionUUID`      CHAR(36)       NOT NULL,
+            `Text`              NCHAR(255)     NOT NULL,
+            `BelongsToQuestionID` CHAR(36)      NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (OptionUUID),
+            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID)
+            );", con);
+
 
             try
             {
                 Create_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
                 create_questionTable.ExecuteNonQuery();
+                create_questionOptionTable.ExecuteNonQuery();
                 Create_caloriesIntake.ExecuteNonQuery();
                 Create_foodList.ExecuteNonQuery();
                 Create_mealItems.ExecuteNonQuery();

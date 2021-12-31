@@ -37,5 +37,7 @@ namespace Pract2.Models
         public DbSet<CaloriesIntakes> CaloriesIntakes { get; set; }
         public DbSet<Food> Food { get; set; }
         public DbSet<Meals> Meals { get; set; }
+
+        public DbSet<QuestionOption> QuestionOption { get; set; }
     }
 }

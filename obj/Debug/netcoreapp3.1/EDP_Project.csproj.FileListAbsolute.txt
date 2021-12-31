@@ -103,3 +103,4 @@ C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.dll
 C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.pdb
 C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.genruntimeconfig.cache
 C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.csproj.CopyComplete
+C:\Users\User\Desktop\EDP\EDP_Project\obj\Debug\netcoreapp3.1\EDP_Project.csproj.AssemblyReference.cache
