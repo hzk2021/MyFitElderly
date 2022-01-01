@@ -42,16 +42,18 @@ namespace EDP_Project.Pages.Staff.Survey
 
         public IActionResult OnPost()
         {
-
             if (ModelState.IsValid)
             {
                 _srv.UpdateSurvey(svy); // Title, Description, Category...
 
                 _srv.DeleteQuestionsWithSurveyUUID(svy.SurveyUUID);
 
-                foreach (var qns in AllQuestionList)
+                for (int i = 0; i < AllQuestionList.Count; i++)
                 {
-                    _srv.AddQuestionToSurvey(qns.QuestionUUID, qns.Text, qns.BelongsToSurveyID);
+                    AllQuestionList[i].QuestionUUID = Guid.NewGuid().ToString();
+                    AllQuestionList[i].BelongsToSurveyID = svy.SurveyUUID;
+
+                    _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
                 }
 
                 foreach (var t in qnsANDoptions)

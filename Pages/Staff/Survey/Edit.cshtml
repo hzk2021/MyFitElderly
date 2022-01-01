@@ -89,12 +89,12 @@
                                         <div class="row mt-4">
                                             <div class="col-md-12">
                                                 <div class="card p-3">
-                                                    <input hidden asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />
+                                                    @*<input hidden asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />*@
                                                     <input class="form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" asp-for="@Model.AllQuestionList[i].Text" placeholder="Question Text" />
-                                                    <input hidden asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />
+                                                    @*<input hidden asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />*@
 
 
-                                                @{ 
+                                                @*@{ 
                                                 
                                                     var n = Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
                                                     if (n != null)
@@ -109,7 +109,7 @@
                                                             </div>
                                                         }
                                                     }
-                                                }
+                                                }*@
                                                 </div>
                                             </div>
                                         </div>
@@ -132,6 +132,9 @@
     var addQuestionButton = document.getElementById("addQnsButton");
     addQuestionButton.addEventListener("click", addNewQuestionForm);
 
+
+    var qnsCount = @Model.AllQuestionList.Count;
+
     function addNewQuestionForm() {
         var rowDiv = document.createElement("div");
         rowDiv.classList.add("row");
@@ -144,13 +147,10 @@
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
 
-
-        var qnsCount = @Model.AllQuestionList.Count;
-
-        var questionUUIDHidden = document.createElement("input");
+        @*var questionUUIDHidden = document.createElement("input");
         questionUUIDHidden.hidden = true;
         questionUUIDHidden.name = `AllQuestionList[${qnsCount}].QuestionUUID`;
-        questionUUIDHidden.setAttribute("value",'@Guid.NewGuid().ToString()');
+        questionUUIDHidden.setAttribute("value",'@Guid.NewGuid().ToString()');*@
 
         var questionTB = document.createElement("input");
         questionTB.classList.add("form-control");
@@ -159,19 +159,20 @@
         questionTB.placeholder = "Question Text"
         questionTB.name = `AllQuestionList[${qnsCount}].Text`;
 
-        var questionBelongsToUUIDHidden = document.createElement("input");
+        @*var questionBelongsToUUIDHidden = document.createElement("input");
         questionBelongsToUUIDHidden.hidden = true;
         questionBelongsToUUIDHidden.name = `AllQuestionList[${qnsCount}].BelongsToSurveyID`;
-        questionBelongsToUUIDHidden.setAttribute("value",`@Model.svy.SurveyUUID`);
+        questionBelongsToUUIDHidden.setAttribute("value",`@Model.svy.SurveyUUID`);*@
 
-        cardP_3.appendChild(questionUUIDHidden);
+        //cardP_3.appendChild(questionUUIDHidden);
         cardP_3.appendChild(questionTB);
-        cardP_3.appendChild(questionBelongsToUUIDHidden);
+        //cardP_3.appendChild(questionBelongsToUUIDHidden);
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
 
         document.getElementById("mainContainerForm").appendChild(rowDiv);
 
+        qnsCount++;
     }
 </script>
 
