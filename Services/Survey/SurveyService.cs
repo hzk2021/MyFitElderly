@@ -122,5 +122,39 @@ namespace EDP_Project.Services.Survey
             return _dbcontext.QuestionOption.Where(q => q.BelongsToQuestionID == questionUUID).ToList();
         }
 
+        public void DeleteSurveyQnsAndOptions(string surveyUUID)
+        {
+            var survey = GetASurvey(surveyUUID);
+
+            if (survey != null)
+            {
+                var listOfQns = GetQuestionsFromASurvey(surveyUUID);
+
+                if (listOfQns != null)
+                {
+                    for (int i = 0; i < listOfQns.Count; i++)
+                    {
+                        var listOfOptions = GetOptionsFromAQuestion(listOfQns[i].QuestionUUID);
+
+                        if (listOfOptions != null)
+                        {
+                            foreach (var option in listOfOptions)
+                            {
+                                
+                                _dbcontext.QuestionOption.Remove(option);
+                                _dbcontext.SaveChanges();
+                            }
+                        }
+
+                        _dbcontext.Question.Remove(listOfQns[i]);
+                        _dbcontext.SaveChanges();
+                    }
+                }
+
+                _dbcontext.Survey.Remove(survey);
+                _dbcontext.SaveChanges();
+            }
+        }
+
     }
 }
