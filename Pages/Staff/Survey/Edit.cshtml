@@ -54,7 +54,7 @@
                                         <div asp-validation-summary="All" class="text-danger"></div>
 
                                         <div class="col-12 my-3">
-                                            <input hidden class="form-label" asp-for="@Model.svy.SurveyUUID" value="@Model.svy.SurveyUUID"/>
+                                            <input hidden class="form-label" asp-for="@Model.svy.SurveyUUID" value="@Model.svy.SurveyUUID" />
                                         </div>
 
                                         <div class="col-12 my-3">
@@ -79,51 +79,37 @@
                                 </div>
                             </div>
 
-                            @{ 
-                                if (Model.qnsOptionList != null && Model.qnsOptionList.Count != 0)
-                                {
-                                    Model.qnsOptionList.Clear();
-                                }
-                            }
-
                             @{
-                                if (Model.qnsList != null)
+                                var AllQnsList = Model.AllQuestionList;
+
+                                if (AllQnsList != null)
                                 {
-                                    for (int i = 0; i < Model.qnsList.Count; i++)
+                                    for (int i = 0; i < AllQnsList.Count; i++)
                                     {
                                         <div class="row mt-4">
                                             <div class="col-md-12">
                                                 <div class="card p-3">
-                                                    <input hidden asp-for="@Model.qnsList[i].QuestionUUID" value="@Model.qnsList[i].QuestionUUID"/>
-                                                    <input class="form-control mt-3 qnsTB" type="text" value="@Model.qnsList[i].Text" asp-for="@Model.qnsList[i].Text" placeholder="Question Text" />
-                                                    <input hidden asp-for="@Model.qnsList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID"/>
+                                                    <input hidden asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />
+                                                    <input class="form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" asp-for="@Model.AllQuestionList[i].Text" placeholder="Question Text" />
+                                                    <input hidden asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />
 
-                                                    @{ 
-                                                        Model.qnsOptionList.Add(Model.qnsList[i].QuestionUUID, Model._srv.GetOptionsFromAQuestion(@Model.qnsList[i].QuestionUUID));
-                                                    }
 
-                                                    @{
-                                                        var qnsOptions = Model.qnsOptionList[Model.qnsList[i].QuestionUUID.ToString()];
-
-                                                        
-
-                                                        if (qnsOptions != null)
+                                                @{ 
+                                                
+                                                    var n = Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
+                                                    if (n != null)
+                                                    {
+                                                        for (int k = 0; k < n.Count; k++)
                                                         {
-
-                                                            foreach (var option in qnsOptions)
-                                                            {
-                                                                <div class="form-inline">
-                                                                    @*<label class="dot my-1 mr-2 mt-3"></label>*@
-                                                                    <input class="form-control mt-3" type="text" asp-for="@option.Text" value="@option.Text" placeholder="Option Text" />
-                                                                </div>
-                                                            }
-
-                                                            <input hidden="hidden" asp-for="@Model.qnsOptionList[Model.qnsList[i].QuestionUUID.ToString()]" value="@qnsOptions"/>
-
+                                                            <div class="form-inline">
+                                                                <label class="dot my-1 mr-2 mt-3"></label>
+                                                                <input hidden="hidden" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].OptionUUID" value="@n[k].OptionUUID"/>
+                                                                <input class="form-control mt-3" type="text" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].Text" value="@n[k].Text" placeholder="Option Text" />
+                                                                <input hidden="hidden" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
+                                                            </div>
                                                         }
-
-
                                                     }
+                                                }
                                                 </div>
                                             </div>
                                         </div>
@@ -158,13 +144,29 @@
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
 
+
+        var qnsCount = @Model.AllQuestionList.Count;
+
+        var questionUUIDHidden = document.createElement("input");
+        questionUUIDHidden.hidden = true;
+        questionUUIDHidden.name = `AllQuestionList[${qnsCount}].QuestionUUID`;
+        questionUUIDHidden.setAttribute("value",'@Guid.NewGuid().ToString()');
+
         var questionTB = document.createElement("input");
         questionTB.classList.add("form-control");
         questionTB.classList.add("mt-3");
         questionTB.classList.add("qnsTB");
         questionTB.placeholder = "Question Text"
+        questionTB.name = `AllQuestionList[${qnsCount}].Text`;
 
+        var questionBelongsToUUIDHidden = document.createElement("input");
+        questionBelongsToUUIDHidden.hidden = true;
+        questionBelongsToUUIDHidden.name = `AllQuestionList[${qnsCount}].BelongsToSurveyID`;
+        questionBelongsToUUIDHidden.setAttribute("value",`@Model.svy.SurveyUUID`);
+
+        cardP_3.appendChild(questionUUIDHidden);
         cardP_3.appendChild(questionTB);
+        cardP_3.appendChild(questionBelongsToUUIDHidden);
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
 

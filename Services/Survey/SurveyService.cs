@@ -48,11 +48,33 @@ namespace EDP_Project.Services.Survey
             }
         }
 
-        public void AddQuestionToSurvey(string questionText, string surveyUUID)
+        public void DeleteQuestionsWithSurveyUUID(string surveyUUID)
+        {
+            var listOfQuestions = _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToList();
+            foreach (var qns in listOfQuestions)
+            {
+                DeleteOptionsFromQuestion(qns.QuestionUUID);
+
+                _dbcontext.Question.Remove(qns);
+                _dbcontext.SaveChanges();
+            }
+        }
+
+        public void DeleteOptionsFromQuestion(string questionUUID)
+        {
+            var listOfOptions = _dbcontext.QuestionOption.Where(qo => qo.BelongsToQuestionID == questionUUID).ToList();
+            foreach (var option in listOfOptions)
+            {
+                _dbcontext.QuestionOption.Remove(option);
+                _dbcontext.SaveChanges();
+            }
+        }
+
+        public void AddQuestionToSurvey(string questionUUID, string questionText, string surveyUUID)
         {
             Models.Survey.Question qns = new Models.Survey.Question()
             {
-                QuestionUUID = Guid.NewGuid().ToString(),
+                QuestionUUID = questionUUID,
                 Text = questionText,
                 BelongsToSurveyID = surveyUUID
             };
@@ -77,11 +99,11 @@ namespace EDP_Project.Services.Survey
             }
         }
 
-        public void AddOptionToQuestion(string questionOptionText, string questionUUID)
+        public void AddOptionToQuestion(string optionUUID, string questionOptionText, string questionUUID)
         {
             Models.Survey.QuestionOption qnsOption = new Models.Survey.QuestionOption()
             {
-                OptionUUID = Guid.NewGuid().ToString(),
+                OptionUUID = optionUUID,
                 Text = questionOptionText,
                 BelongsToQuestionID = questionUUID
             };
@@ -91,6 +113,10 @@ namespace EDP_Project.Services.Survey
 
         }
 
+        public List<Models.Survey.QuestionOption> GetAllQuestionOptions()
+        {
+            return _dbcontext.QuestionOption.ToList();
+        }
         public List<Models.Survey.QuestionOption> GetOptionsFromAQuestion(string questionUUID)
         {
             return _dbcontext.QuestionOption.Where(q => q.BelongsToQuestionID == questionUUID).ToList();

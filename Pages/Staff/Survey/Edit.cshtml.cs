@@ -16,14 +16,14 @@ namespace EDP_Project.Pages.Staff.Survey
         public Models.Survey.Survey svy { get; set; }
 
         [BindProperty]
-        public List<Models.Survey.Question> qnsList { get; set; }
+        public List<Models.Survey.Question> AllQuestionList { get; set; }
 
         [BindProperty]
-        public Dictionary<string, List<Models.Survey.QuestionOption>> qnsOptionList { get; set; }
+        public List<Dictionary<string, List<Models.Survey.QuestionOption>>> qnsANDoptions { get; set; }
+
         public EditModel(SurveyService surveySrv)
         {
             _srv = surveySrv;
-            qnsOptionList = new Dictionary<string, List<Models.Survey.QuestionOption>>();
         }
 
         public void OnGet(string sid)
@@ -36,7 +36,7 @@ namespace EDP_Project.Pages.Staff.Survey
             }
             else
             {
-                qnsList = _srv.GetQuestionsFromASurvey(svy.SurveyUUID);
+                AllQuestionList = _srv.GetQuestionsFromASurvey(svy.SurveyUUID);
             }
         }
 
@@ -45,17 +45,27 @@ namespace EDP_Project.Pages.Staff.Survey
 
             if (ModelState.IsValid)
             {
-                _srv.UpdateSurvey(svy);
+                _srv.UpdateSurvey(svy); // Title, Description, Category...
 
-                foreach (var qns in qnsList)
+                _srv.DeleteQuestionsWithSurveyUUID(svy.SurveyUUID);
+
+                foreach (var qns in AllQuestionList)
                 {
-                    _srv.UpdateQuestion(qns);
+                    _srv.AddQuestionToSurvey(qns.QuestionUUID, qns.Text, qns.BelongsToSurveyID);
                 }
 
-                ////foreach (var item in qnsOptionList)
-                ////{
-                ////    _srv.AddOptionToQuestion(qnsOptionList.Count.ToString(), item.Key);
-                ////}
+                foreach (var t in qnsANDoptions)
+                {
+                    foreach (var pair in t)
+                    {
+                        _srv.DeleteOptionsFromQuestion(pair.Key);
+
+                        foreach (var option in pair.Value)
+                        {
+                            _srv.AddOptionToQuestion(option.OptionUUID, option.Text, option.BelongsToQuestionID);
+                        }
+                    }
+                }
             }
             return Page();
         }
