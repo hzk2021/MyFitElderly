@@ -89,12 +89,12 @@
                                         <div class="row mt-4">
                                             <div class="col-md-12">
                                                 <div class="card p-3">
-                                                    @*<input hidden asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />*@
-                                                    <input class="form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" asp-for="@Model.AllQuestionList[i].Text" placeholder="Question Text" />
-                                                    @*<input hidden asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />*@
+                                                    <input hidden class="hiddenQuestionUUIDInput" asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />
+                                                    <input class="qnsInput form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" asp-for="@Model.AllQuestionList[i].Text" placeholder="Question Text" />
+                                                    <input hidden class="hiddenBelongsToSUUIDInput" asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />
 
 
-                                                @*@{ 
+                                                @{ 
                                                 
                                                     var n = Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
                                                     if (n != null)
@@ -103,13 +103,14 @@
                                                         {
                                                             <div class="form-inline">
                                                                 <label class="dot my-1 mr-2 mt-3"></label>
-                                                                <input hidden="hidden" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].OptionUUID" value="@n[k].OptionUUID"/>
-                                                                <input class="form-control mt-3" type="text" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].Text" value="@n[k].Text" placeholder="Option Text" />
-                                                                <input hidden="hidden" asp-for="@Model.qnsANDoptions[i][AllQnsList[i].QuestionUUID][k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
+                                                                <input class="hiddenOptionUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].OptionUUID" value="@n[k].OptionUUID"/>
+                                                                <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
+                                                                <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
                                                             </div>
                                                         }
-                                                    }
-                                                }*@
+                                                    }    
+                                                }
+                                                    <a class="btnCustom" id="addOptionButton" onclick="addNewQuestionInput('@Model.AllQuestionList[i].QuestionUUID')">A</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -129,13 +130,20 @@
 </div>
 
 <script>
+
+    function uuidv4() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
     var addQuestionButton = document.getElementById("addQnsButton");
     addQuestionButton.addEventListener("click", addNewQuestionForm);
 
-
-    var qnsCount = @Model.AllQuestionList.Count;
-
     function addNewQuestionForm() {
+
+        const qUUID = uuidv4();
+
         var rowDiv = document.createElement("div");
         rowDiv.classList.add("row");
         rowDiv.classList.add("mt-4");
@@ -147,32 +155,121 @@
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
 
-        @*var questionUUIDHidden = document.createElement("input");
+        var questionUUIDHidden = document.createElement("input");
+        questionUUIDHidden.classList.add("hiddenQuestionUUIDInput");
         questionUUIDHidden.hidden = true;
-        questionUUIDHidden.name = `AllQuestionList[${qnsCount}].QuestionUUID`;
-        questionUUIDHidden.setAttribute("value",'@Guid.NewGuid().ToString()');*@
+        questionUUIDHidden.setAttribute("value", `${qUUID}`);
 
         var questionTB = document.createElement("input");
+        questionTB.classList.add("qnsInput");
         questionTB.classList.add("form-control");
         questionTB.classList.add("mt-3");
         questionTB.classList.add("qnsTB");
         questionTB.placeholder = "Question Text"
-        questionTB.name = `AllQuestionList[${qnsCount}].Text`;
 
-        @*var questionBelongsToUUIDHidden = document.createElement("input");
+        var questionBelongsToUUIDHidden = document.createElement("input");
+        questionBelongsToUUIDHidden.classList.add("hiddenBelongsToSUUIDInput");
         questionBelongsToUUIDHidden.hidden = true;
-        questionBelongsToUUIDHidden.name = `AllQuestionList[${qnsCount}].BelongsToSurveyID`;
-        questionBelongsToUUIDHidden.setAttribute("value",`@Model.svy.SurveyUUID`);*@
+        questionBelongsToUUIDHidden.setAttribute("value", '@Model.svy.SurveyUUID');
 
-        //cardP_3.appendChild(questionUUIDHidden);
+        cardP_3.appendChild(questionUUIDHidden);
         cardP_3.appendChild(questionTB);
-        //cardP_3.appendChild(questionBelongsToUUIDHidden);
+        cardP_3.appendChild(questionBelongsToUUIDHidden);
+
+
+        var addInputButton = document.createElement("a");
+        addInputButton.className = "btnCustom";
+        addInputButton.id = "addOptionButton";
+        addInputButton.textContent = "A";
+        addInputButton.addEventListener("click", function () {
+            addNewQuestionInput(qUUID);
+        });
+
+        cardP_3.appendChild(addInputButton);
+
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
 
         document.getElementById("mainContainerForm").appendChild(rowDiv);
-
-        qnsCount++;
     }
+
+    function addNewQuestionInput(questionUUID) {
+        var formInlineDiv = document.createElement("div");
+        formInlineDiv.className = "form-inline";
+
+        var circleIconLabel = document.createElement("input");
+        circleIconLabel.classList.add("dot");
+        circleIconLabel.classList.add("my-1");
+        circleIconLabel.classList.add("mr-2");
+        circleIconLabel.classList.add("mt-3");
+
+        var hiddenOptionUUIDInput = document.createElement("input");
+        hiddenOptionUUIDInput.className = "hiddenOptionUUIDInput";
+        hiddenOptionUUIDInput.hidden = true;
+        hiddenOptionUUIDInput.setAttribute("value", `${uuidv4()}`);
+
+        var optionTextInput = document.createElement("input");
+        optionTextInput.classList.add("optionInput");
+        optionTextInput.classList.add("form-control");
+        optionTextInput.classList.add("mt-3");
+        optionTextInput.type = "text";
+
+        var hiddenBelongsToQUUIDInput = document.createElement("input");
+        hiddenBelongsToQUUIDInput.className = "hiddenBelongsToQUUIDInput";
+        hiddenBelongsToQUUIDInput.hidden = true;
+        hiddenBelongsToQUUIDInput.setAttribute("value", questionUUID);
+
+        formInlineDiv.appendChild(circleIconLabel);
+        formInlineDiv.appendChild(hiddenOptionUUIDInput);
+        formInlineDiv.appendChild(optionTextInput);
+        formInlineDiv.appendChild(hiddenBelongsToQUUIDInput);
+
+
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].value == questionUUID) {
+                if (allInputs[i].hidden == true) {
+                    allInputs[i].parentElement.appendChild(formInlineDiv);
+                    break;
+                }
+            }
+        }
+    }
+
+    function resortIndex(e) {
+        //e.preventDefault();
+        var questionInputs = document.getElementsByClassName("qnsInput");
+        var hiddenQuestionUUIDInputs = document.getElementsByClassName("hiddenQuestionUUIDInput");
+        var hiddenBelongsToSUUIDInputs = document.getElementsByClassName("hiddenBelongsToSUUIDInput");
+
+        for (var i = 0; i < questionInputs.length; i++) {
+
+            questionInputs[i].name = `AllQuestionList[${i}].Text`;
+            hiddenQuestionUUIDInputs[i].name = `AllQuestionList[${i}].QuestionUUID`;
+            hiddenBelongsToSUUIDInputs[i].name = `AllQuestionList[${i}].BelongsToSurveyID`;
+
+            //var optionInputs = document.getElementsByClassName("optionInput");
+            //var hiddenOptionInputs = document.getElementsByClassName("hiddenOptionInput");
+
+            //for (var k = 0; k < optionInputs.length; k++) {
+            //    optionInputs[k].name = `qnsOptions[${k}].Text`;
+
+            //    hiddenOptionInputs[k].name = `qnsOptions[${k}].BelongsToQuestionID`;
+            //    hiddenOptionInputs[k].setAttribute("value", `${hiddenQuestionUUIDInputs[i].value}`);
+            //}
+
+        }
+        //$.ajax({
+        //    url: "",
+        //    type: "POST",
+        //    data: $("#mainContainerForm").serialize(),
+        //    success: function () {
+        //        alert('success');
+        //    }
+        //});
+    }
+
+        document.getElementById("mainContainerForm").addEventListener("submit", resortIndex);
 </script>
 

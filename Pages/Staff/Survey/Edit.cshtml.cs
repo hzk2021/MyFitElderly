@@ -19,7 +19,7 @@ namespace EDP_Project.Pages.Staff.Survey
         public List<Models.Survey.Question> AllQuestionList { get; set; }
 
         [BindProperty]
-        public List<Dictionary<string, List<Models.Survey.QuestionOption>>> qnsANDoptions { get; set; }
+        public List<Models.Survey.QuestionOption> qnsOptions { get; set; }
 
         public EditModel(SurveyService surveySrv)
         {
@@ -50,24 +50,17 @@ namespace EDP_Project.Pages.Staff.Survey
 
                 for (int i = 0; i < AllQuestionList.Count; i++)
                 {
-                    AllQuestionList[i].QuestionUUID = Guid.NewGuid().ToString();
-                    AllQuestionList[i].BelongsToSurveyID = svy.SurveyUUID;
-
                     _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
+                    _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
                 }
 
-                foreach (var t in qnsANDoptions)
+                for (int k = 0; k < qnsOptions.Count; k++)
                 {
-                    foreach (var pair in t)
-                    {
-                        _srv.DeleteOptionsFromQuestion(pair.Key);
-
-                        foreach (var option in pair.Value)
-                        {
-                            _srv.AddOptionToQuestion(option.OptionUUID, option.Text, option.BelongsToQuestionID);
-                        }
-                    }
+                    _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
+                        qnsOptions[k].Text,
+                        qnsOptions[k].BelongsToQuestionID);
                 }
+
             }
             return Page();
         }
