@@ -14,7 +14,7 @@ namespace EDP_Project.Models.Survey
 
         public string QuestionUUID { get; set; }
 
-        [Required(ErrorMessage = "Please enter the question")]
+        [Required(ErrorMessage = "Please do not leave any blank(s) in question field")]
         public string Text { get; set; }
 
         public string BelongsToSurveyID { get; set; }

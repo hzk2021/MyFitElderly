@@ -243,21 +243,23 @@
         var hiddenQuestionUUIDInputs = document.getElementsByClassName("hiddenQuestionUUIDInput");
         var hiddenBelongsToSUUIDInputs = document.getElementsByClassName("hiddenBelongsToSUUIDInput");
 
+
+        var hiddenOptionUUIDInputs = document.getElementsByClassName("hiddenOptionUUIDInput");
+        var optionInputs = document.getElementsByClassName("optionInput");
+        var hiddenBelongsToQUUIDInputs = document.getElementsByClassName("hiddenBelongsToQUUIDInput");
+
         for (var i = 0; i < questionInputs.length; i++) {
 
             questionInputs[i].name = `AllQuestionList[${i}].Text`;
             hiddenQuestionUUIDInputs[i].name = `AllQuestionList[${i}].QuestionUUID`;
             hiddenBelongsToSUUIDInputs[i].name = `AllQuestionList[${i}].BelongsToSurveyID`;
 
-            //var optionInputs = document.getElementsByClassName("optionInput");
-            //var hiddenOptionInputs = document.getElementsByClassName("hiddenOptionInput");
+            for (var k = 0; k < optionInputs.length; k++) {
 
-            //for (var k = 0; k < optionInputs.length; k++) {
-            //    optionInputs[k].name = `qnsOptions[${k}].Text`;
-
-            //    hiddenOptionInputs[k].name = `qnsOptions[${k}].BelongsToQuestionID`;
-            //    hiddenOptionInputs[k].setAttribute("value", `${hiddenQuestionUUIDInputs[i].value}`);
-            //}
+                hiddenOptionUUIDInputs[k].name = `qnsOptions[${k}].OptionUUID`;
+                optionInputs[k].name = `qnsOptions[${k}].Text`;
+                hiddenBelongsToQUUIDInputs[k].name = `qnsOptions[${k}].BelongsToQuestionID`;
+            }
 
         }
         //$.ajax({
