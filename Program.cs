@@ -55,7 +55,9 @@ namespace EDP_Project
             logging.ClearProviders();
             logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
         })
-        .UseNLog();  // NLog: Setup NLog for Dependency injection
+        .UseNLog();  
+        
+        // NLog: Setup NLog for Dependency injection
 
 
         //public static IHostBuilder CreateHostBuilder(string[] args) =>

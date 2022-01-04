@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
-using Pract2.Services;
 
 namespace EDP_Project.Pages.Staff.Accounts
 {
