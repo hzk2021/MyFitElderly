@@ -7767,19 +7767,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\Ayres\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
+      "projectUniqueName": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
       "projectName": "EDP_Project",
-      "projectPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\EDP_Project.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\EDP\\EDP_Project\\obj\\",
+      "projectPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\EDP_Project.csproj",
+      "packagesPath": "C:\\Users\\Ayres\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ayres\\Desktop\\Applesauce_Penguin\\Y2S2\\EDP\\EDP_Project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ayres\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7858,7 +7858,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   },
