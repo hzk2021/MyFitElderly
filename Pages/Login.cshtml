@@ -11,18 +11,18 @@
     <link href="~/css/login.css" rel="stylesheet" />
 </head>
 
-<div class="container" style="padding-top: 35px;">
+<div class="container" style="padding-top: 60px;">
     <div class="row">
         <div class="col-lg-10 col-xl-9 mx-auto">
             <div class="card card-signin flex-row my-5">
-                <div class="card-img-left d-none d-md-flex">
+                <div class="card-img-left d-none d-md-flex" style=" background: scroll center url('https://i.ibb.co/42KzZYp/Untitled.jpg'); ">
                     <!-- Background image for card set in CSS! -->
                     <!-- <a class="prev" onclick="plusSlides(-1)" style="margin-top: 200px; color: white;">&#10094;</a>
                     <a class="next" onclick="plusSlides(1)" style="margin-top: 200px; margin-left: 335px; color: white; size: 200%;">&#10095;</a> -->
                 </div>
                 <div class="card-body">
                     <h5 class="card-title text-center">
-                        Welcome to Breadington!
+                        Welcome to MyFitElderly!
 
                     </h5>
 
@@ -30,7 +30,7 @@
                         <div class="text-danger"></div>
                         <div class="form-label-group">
 
-                            <input  type="username"  asp-for="userID" class="form-control" required>
+                            <input type="username" asp-for="userID" class="form-control" required>
                             <label for="inputUserame" class="control-label">Email</label>
                             <span class="text-danger"></span>
 
@@ -46,7 +46,7 @@
 
 
 
-                            <a class="d-block text-center mt-2 small" href="/auth/begin-password-reset">Forgot password?</a>
+                            <a class="d-block text-center mt-2 small" href="/Auth/BeginPasswordReset">Forgot password?</a>
 
                         </div>
 

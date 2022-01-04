@@ -13,6 +13,7 @@ using Microsoft.Data.SqlClient;
 using System.Web;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
+using NLog;
 
 namespace EDP_Project.Pages.Auth
 {
@@ -22,6 +23,12 @@ namespace EDP_Project.Pages.Auth
 
     public class LoginModel : PageModel
     {
+
+
+        private static Logger logger = LogManager.GetLogger("MyAppLoggerRules");
+
+
+
         [BindProperty]
 
         public string userID { get; set; }
@@ -174,8 +181,12 @@ namespace EDP_Project.Pages.Auth
 
 
 
+
         public void OnGet()
         {
+
+
+
 
 
 
@@ -276,15 +287,16 @@ namespace EDP_Project.Pages.Auth
 
 
                             HttpContext.Session.SetString("user", currentUser.Trim());
+                            logger.Info($"{currentUser.Trim()} logged in attempt successful");
                             return RedirectToPage("Index");
 
                         }
 
                         else
                         {
-
+                            logger.Warn($"{currentUser.Trim()} logged in attempt failed");
                             error_msg = "Invalid email or password!";
-                            return Page();
+                                return Page();
                         }
 
 
@@ -300,6 +312,7 @@ namespace EDP_Project.Pages.Auth
 
                 else
                 {
+
 
                     error_msg = "Invalid email or password!";
 

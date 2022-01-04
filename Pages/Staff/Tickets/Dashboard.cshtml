@@ -1,0 +1,413 @@
+﻿@page
+@model EDP_Project.Pages.Staff.Tickets.DashboardModel
+@{
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+
+
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+
+    <!-- Font Awesome -->
+    @*<link rel="stylesheet" href="~/css/all.min.css">*@
+    <!-- Ionicons -->
+    <!-- Tempusdominus Bootstrap 4 -->
+    <!-- iCheck -->
+    <!-- JQVMap -->
+    <!-- Theme style -->
+
+
+
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
+    <link href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" rel="stylesheet" />
+
+
+    @*<link href="~/plugins/jqvmap/jqvmap.css" media="screen" rel="stylesheet" type="text/css">*@
+
+
+
+
+
+</head>
+<body>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+
+
+    <div class="wrapper">
+
+        <!-- Preloader -->
+
+
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+            <div class="col-sm-12">
+                @*<ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>*@
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <h1 style="text-align:center">Support Ticket Dashboard</h1>
+    <br>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>@Model.allTickets.Count()</h3>
+
+
+                            <p>Total Tickets</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            @*<h3>53<sup style="font-size: 20px">%</sup></h3>*@
+                            <h3>@Model.numOpen</h3>
+
+                            <p>Open</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@Model.numResolved</h3>
+
+                            <p>Resolved</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>@Model.numClosed</h3>
+
+                            <p>Closed</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+            <div class="row">
+                <!-- Left col -->
+                <section class="col-lg-12 connectedSortable">
+                    <!-- Custom tabs (Charts with tabs)-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-pie mr-1"></i>
+                                Ticket Backlog
+                            </h3>
+
+                            <div class="card-tools">
+
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content p-0">
+
+
+                                <div id="toolbar">
+                                    @*<a class="btn btn-primary" href="/staff/accounts/createUsers" role="button">Add new user</a>*@
+
+                                </div>
+                                <table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
+                                       data-search="true"
+                                       data-show-columns="true"
+                                       data-show-refresh="true"
+                                       data-show-export="true"
+                                       data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="ticket_Reference_Id" data-sortable="true">Ticket ID</th>
+                                            <th data-field="issueType" data-sortable="true">Issue Type</th>
+                                            <th data-field="dateCreated" data-formatter="dateFormat" data-sortable="true">Date</th>
+                                            <th data-field="status" data-sortable="true">Status</th>
+                                            <th data-field="action" data-formatter="actionFormatter">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                </table>
+
+
+
+
+
+
+
+                            </div>
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                    <!-- solid sales graph -->
+                    <!-- /.card -->
+
+
+                </section>
+                <!-- /.Left col -->
+                <!-- right col (We are only adding the ID to make the widgets sortable)-->
+                <section class="col-lg-5 connectedSortable">
+
+                    <!-- Map card -->
+                    <!-- /.card -->
+
+
+
+
+
+
+                </section>
+                <!-- right col -->
+            </div>
+            <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- /.control-sidebar -->
+    </div>
+
+
+    @*<script src="dist/js/pages/dashboard.js"></script>*@
+
+    <!--<script src="~/plugins/jquery/jquery.min.js"></script>
+
+    <script src="~/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
+
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <!-- jQuery UI 1.11.4 -->
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <!-- Bootstrap 4 -->
+    <!--@*<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+
+    <script src="~/js/dashboard.js"></script>-->
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <!-- Modal for successful login -->
+    <div class="modal fade" id="successmodal" tabindex="-1" role="dialog" aria-labelledby="successful_loginLabel2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#28d279;">
+                    <h5 class="modal-title" id="successful_loginLabel" style="color: white">Success!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: #28d279;">
+                        Your response to the support ticket has been sent!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/plugins/jquery-ui/jquery-ui.js"></script>
+
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+
+
+
+    <!-- Bootstrap 4 -->
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <!-- JQVMap -->
+    <!-- jQuery Knob Chart -->
+    <!-- daterangepicker -->
+    <!-- AdminLTE App -->
+    <!-- AdminLTE for demo purposes -->
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+
+    <script src="~/js/cardwidget.js"></script>
+
+
+
+    <script src="~/js/dashboard.js"></script>
+
+    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
+
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+
+
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+
+
+
+    <script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
+
+
+
+    @{
+        var sentResponse = Request.Query["responseSent"].ToString();
+
+
+
+        if (sentResponse == "true")
+        {
+            <script>
+                $('#successmodal').modal('show');
+            </script>
+
+
+        }
+
+    }
+
+
+    @{
+        var niggerman = @Model.allTickets;
+    }
+
+
+    <script>
+
+
+        function dateFormat(value, row, index) {
+            return moment(value).format('DD/MM/YYYY');
+        }
+
+
+        var datakmfks = @Html.Raw(Json.Serialize(niggerman))
+
+
+            console.log(datakmfks);
+
+
+
+
+        var $table = $('#table')
+        $(function () {
+            var data = datakmfks
+            $table.bootstrapTable({ data: data })
+        })
+
+
+        function actionFormatter(index, row) {
+            var html = []
+            $.each(row, function (key, value) {
+
+                // if username is equal to current username or admin count != 1 and role == guest)
+
+
+                if (key == 'ticket_Reference_Id') {
+
+
+                    html.push('<div style="text-align:center">')
+
+
+
+
+
+                    html.push('<a class="edit" href="https://localhost:44320/Staff/Tickets/Details?id=' + value + '" title="edit"><i class="fa fa-edit"></i></a>')
+                    html.push('<a class="edit" href="https://localhost:44320/Staff/Tickets/Delete?id=' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
+
+                    html.push('</div>')
+
+                }
+
+
+            })
+            return html.join("")
+        }
+    </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

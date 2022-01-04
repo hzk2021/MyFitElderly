@@ -1,0 +1,253 @@
+﻿@page 
+@model EDP_Project.Pages.Staff.Accounts.UpdateModel
+@{
+}
+
+
+
+
+
+
+<head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfLmX8dAAAAAGbTIkC40y7eHl9GptSMiJQDI8L8"></script>
+    <link href="~/css/register.css" rel="stylesheet" />
+
+    <style>
+
+
+        img:hover {
+            cursor: pointer;
+            opacity: 0.3
+        }
+
+        #g-recaptcha-response {
+            display: block !important;
+            position: absolute;
+            margin: -78px 0 0 0 !important;
+            width: 302px !important;
+            height: 76px !important;
+            z-index: -999999;
+            opacity: 0;
+        }
+
+
+
+        input[type="radio"] {
+            margin: 8px 10px 0 10px;
+        }
+    </style>
+
+
+    <script>
+
+        function showInput() {
+            // document.getElementById("fileInput").style.display = "inline"
+            document.getElementById("avatarx").click();
+        }
+
+        function validation(event) {
+            validate(event.target.value)
+        }
+
+        function validate(file) {
+            var ext = file.split(".");
+            ext = ext[ext.length - 1].toLowerCase();
+            var arrayExtensions = ["jpg", "jpeg", "png", "bmp", "gif"];
+
+            if (arrayExtensions.lastIndexOf(ext) == -1) {
+                alert("Only files with following extensions are allowed: .png, .jpg, .jpeg");
+                document.getElementById("avatarx").value = null;
+            }
+
+            else {
+                previewImg(event)
+            }
+
+        }
+
+
+        function previewImg(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('avatarImg');
+                output.src = reader.result;
+
+
+            };
+
+            let img = new Image()
+            img.src = window.URL.createObjectURL(event.target.files[0])
+            img.onload = () => {
+                if (img.width <= 1000 & img.height <= 1000) {
+                    reader.readAsDataURL(event.target.files[0]);
+                    fileChanged = true;
+                }
+                else {
+                    alert("Image too large; try using a smaller image ( 110 x 110 pixels )");
+
+                    document.getElementById('avatarx').value = null;
+
+                }
+
+
+
+            }
+
+
+
+
+
+        }
+
+    </script>
+
+</head>
+
+
+
+<h1 class="display-4">Update Details</h1>
+
+<div class="registration-form" style="margin-bottom:120px;">
+
+
+    @*<form id="subscribeForm" method="POST" action="" enctype="multipart/form-data">*@
+
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+        <div>
+            @*<img id="avatarImg" style="width: 100px; display: block; margin-left: auto; margin-right: auto; margin-bottom: 7px;" src="@Model.myUser.PhotoPath" class="avatar" alt="Avatar">*@
+
+            <div id="pic" onclick="showInput()">
+                @*<i class="fas fa-camera fa-lg" style="position: absolute; margin-left: 220px; margin-top: 50px; display: none;" id="cameraIcon" aria-hidden="true"></i>*@
+
+                @*<img src="@Model.myUser.PhotoPath" class="avatar" alt="Avatar" id="avatarImg" style="  margin-left:170px; margin-bottom:20px; height: 110px; width: 110px;   border-radius: 50%;">*@
+
+                @{ 
+
+                    var imageLink = "\\" + Model.myUser.PhotoPath;
+                }
+
+                <img src="@imageLink" class="avatar" alt="Avatar" id="avatarImg" style="  margin-left:170px; margin-bottom:20px; height: 110px; width: 110px;   border-radius: 50%;">
+            </div>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        </div>
+        <div>
+        </div>
+
+
+        <!-- <div class="custom-file">
+      <input type="file" class="custom-file-input" id="avatar" name="avatar" multiple accept=".jpg, .png, .jpeg" required>
+      <label class="custom-file-label" for="pic">Picture</label>
+    </div> -->
+        @*<div class="form-group">
+            <label>Profile Image</label>
+            <input id="avatarx" class="form-control" type="file" onChange="validation(event)" accept="" name="avatar"
+                   onChange="validate(this.value)" required />
+        </div>*@
+
+        <div class="form-group" style="display:none">
+            <label>Profile Image</label>
+            <input id="avatarx" class="form-control" type="file" onChange="validation(event)" autocomplete="off" accept="" asp-for="myUser.Photo"
+                   onChange="validate(this.value)" />
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label for="name">Username</label>
+            <input asp-for="myUser.Username" type="text" class="form-control" id="username" required>
+            <span asp-validation-for="myUser.Username" class="text-danger"></span>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="name">Gender</label>
+            <div class="d-flex flex-row justify-content-center">
+                @Html.RadioButton("myUser.Gender", "Male") <span>Male</span>
+                @Html.RadioButton("myUser.Gender", "Female") <span>Female</span>
+                <span asp-validation-for="myUser.Gender" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="name">Date of Birth</label>
+            <input asp-for="myUser.DateOfBirth" type="date" class="form-control" id="username" required>
+            <span asp-validation-for="myUser.DateOfBirth" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input asp-for="myUser.Email" type="email" id="email" class="form-control" required>
+            <span asp-validation-for="myUser.Email" class="text-danger"></span>
+        </div>
+
+
+
+
+        @*<div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" minlength="4" id="password" />
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input type="password" asp-for="myUser.Password" class="form-control" minlength="4" id="password_confirm" oninput="check(this)" required>
+            <span asp-validation-for="myUser.Password" class="text-danger"></span>
+
+
+
+        </div>*@
+
+
+        <div class="form-group">
+            <label for="number">Contact Number</label>
+            <input asp-for="myUser.Contact" type="text" id="number" class="form-control" minlength="8" required>
+            <span asp-validation-for="myUser.Contact" class="text-danger"></span>
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <label for="address">Mailing Address</label>
+            <textarea class="form-control" asp-for="myUser.Address" id="exampleFormControlTextarea1" rows="3"
+                      title="5 characters minimum" maxlength="30" minlength="5"></textarea>
+        </div>
+
+        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
+
+
+
+        <div class="form-group">
+
+            @*<button type="submit" onclick="validate();" value="Submit" class="btn btn-block create-account">
+                Send Password Reset
+            </button>*@
+
+            <a class="btn btn-block create-account" asp-page="/Staff/Accounts/Reset-Password" asp-route-username="@Model.myUser.Username"  role="button">
+                Reset
+                password
+            </a>
+
+            <button type="submit" onclick="validate();" value="Submit" class="btn btn-block create-account">
+                Update
+            </button>
+            <br>
+        </div>
+
+
+
+
+    </form>
+    <div class="social-media">
+    </div>
+</div>
+
