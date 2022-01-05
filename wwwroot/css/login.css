@@ -25,8 +25,8 @@ body {
     .card-signin .card-img-left {
         width: 45%;
         /* Link to your background image using in the property below! */
-/*        background: scroll center url('https://pbs.twimg.com/media/CYkbnHcUQAAM1tQ?format=jpg&name=small');
-*/        background: scroll center url('https://images.unsplash.com/photo-1607957608989-515982c071b1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=435&q=80');
+        /*        background: scroll center url('https://pbs.twimg.com/media/CYkbnHcUQAAM1tQ?format=jpg&name=small');*/
+
         background-size: cover;
     }
 

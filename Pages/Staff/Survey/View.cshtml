@@ -18,6 +18,7 @@
                 <td scope="col">UpdatedOn</td>
                 <td scope="col">ViewStatus</td>
                 <td scope="col">CreatedByStaffID</td>
+                <td scope="col" colspan="2" class="text-center">Options</td>
             </tr>
         </thead>
 
@@ -36,6 +37,13 @@
                                     <td>@survey.UpdatedOn</td>
                                     <td>@survey.ViewStatus</td>
                                     <td>@survey.CreatedByStaffID</td>
+                                    <td><a class="btn btn-warning" asp-page="Edit" asp-route-sid="@survey.SurveyUUID">Edit</a></td>
+                                    <td>
+                                        <form asp-page="Delete" method="post" asp-route-sid="@survey.SurveyUUID">
+                                            <button type="submit"class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+
                                 </tr>
                         }
                     }

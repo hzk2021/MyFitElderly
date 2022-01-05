@@ -27,12 +27,15 @@ namespace EDP_Project.Pages
         [BindProperty]
 
         public string cUsername { get; set; }
-        
+
+        [BindProperty]
+
+        public string cVerified { get; set; }
+
 
 
         public bool isStaff(string userID)
         {
-
             var role = "";
 
             string sql = "select * FROM User WHERE Username=@USERID";
@@ -52,6 +55,7 @@ namespace EDP_Project.Pages
                                 role = reader["Role"].ToString();
                             }
                         }
+
                     }
                 }
             }
@@ -90,7 +94,7 @@ namespace EDP_Project.Pages
 
 
                 cUsername = HttpContext.Session.GetString("user");
-                HttpContext.Session.Clear();
+                //HttpContext.Session.Clear();
 
 
 

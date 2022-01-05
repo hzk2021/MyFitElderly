@@ -1,0 +1,521 @@
+﻿@page "{handler?}"
+@model EDP_Project.Pages.ProfileModel
+@{
+}
+
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<link href="~/css/profile.css" rel="stylesheet" />
+
+
+<form method="POST" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="container" style="padding-top: 60px; animation-duration: 1.3s;
+    animation-name: slidein;">
+        <div class="row gutters">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="account-settings">
+                            <div class="user-profile">
+                                <div class="user-avatar" onclick="showInput()">
+
+
+                                    <i class="fas fa-camera fa-lg"
+                                       style="position: absolute; margin-left: 34px; margin-top: 37px; display: none;" id="cameraIcon"
+                                       aria-hidden="true"></i>
+
+
+                                    @*<img src="Images/31325827-64b0-49f6-aa46-095fa262c552_icon.jpg" alt="Profile Picture" id="avatarImg">*@
+                                    <img src="@Model.myUser.PhotoPath" alt="Profile Picture" id="avatarImg">
+
+
+
+
+                                </div>
+                                <h5 class="user-name">@Model.myUser.Username</h5>
+                                <h6 class="user-email">Gender: @Model.myUser.Gender</h6>
+                                <h6 class="user-email">Email: @Model.myUser.Email</h6>
+                                <h6 class="user-email">Date Of Birth: @Model.myUser.DateOfBirth.ToShortDateString()</h6>
+                                @*<h6 class="user-email">Account created on @Model.myUser.DateCreated</h6>*@
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <input class="form-control" style="display: none; " asp-for="myUser.Photo" type="file" accept="" id="avatarx"
+                                            onChange="validation(event)" disabled />
+                                </div>
+                            </div>
+
+                            <div class="about">
+                                <h5>- Mailing Address -</h5>
+                                <p>@Model.myUser.Address</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-2 text-primary">Personal Details</h6>
+
+                            </div>
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+
+                                <div class="form-group">
+                                    <label for="name">Username</label>
+                                    <input type="text" class="form-control" asp-for="myUser.Username" value="@Model.myUser.Username" id="usernameInput"
+                                           pattern="^[a-zA-Z][a-zA-Z ]{5,30}$" title="Username cannot contain special characters." disabled required>
+
+                                    <span asp-validation-for="myUser.Username" class="text-danger"></span>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email"  asp-for="myUser.Email" class="form-control" value="@Model.myUser.Email" id="emailInput" disabled required>
+
+                                    <span asp-validation-for="myUser.Email" class="text-danger"></span>
+
+
+                                </div>
+                                <div id="alert" style="display: inline-block">
+                                    @*<h3 style="color:black; padding-top: 5px; font-size: 80%; border: 3px solid #ec8e75; width: max-content; background-color:#ffebe8 ">
+                                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                            Please <span style=" font-weight: bold;">Verify Your Email.</span>
+                                        </h3>*@
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="number">Contact Number</label>
+                                    <input type="text" asp-for="myUser.Contact" class="form-control" value="@Model.myUser.Contact" id="contactInput"
+                                           pattern="[0-9]{8}" title="Phone number has to be 8 digits." minlength="8" maxlength="8" disabled required>
+
+                                    <span asp-validation-for="myUser.Contact" class="text-danger"></span>
+
+                                </div>
+
+                                <div id="alert2" style="display: inline-block">
+
+                                    <!-- border-color:#ea856a; -->
+                                    <!-- background-color: #ffebe8; -->
+                                    @*<h3 style="color:black; padding-top: 5px; font-size: 80%; border: 3px solid #ec8e75; width: max-content; background-color:#ffebe8 ">
+                                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                            Please <span style=" font-weight: bold;">Verify Your Phone Number.</span>
+                                        </h3>*@
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+
+
+
+                            </div>
+                        </div>
+                        <div class="row gutters" id="row-gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mt-3 mb-2 text-primary">Other Details</h6>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <textarea  class="form-control" asp-for="myUser.Address" id="exampleFormControlTextarea1" rows="3"
+                                               title="5 characters minimum" maxlength="30" minlength="5" disabled>@Model.myUser.</textarea>
+
+                                    <span asp-validation-for="myUser.Address" id="addressE" class="text-danger"></span>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row gutters">
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="form-group">
+
+                                    <div class="text-right">
+                                        <p class="text-danger font-italic float-sm-left" style="font-size: 0.8rem; display: none;"
+                                           id="Pdisclaimer">
+                                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                            Click on your photo to edit your profile image (max: 110 x 110 pixels).
+                                            <br>
+                                            <span class=" float-sm-left">
+                                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                                Accepted file types: PNG, JPEG, JPEG
+                                            </span>
+                                        </p>
+
+                                        <button type="submit" value="Submit" class="btn btn-primary render" style="visibility: hidden;"
+                                                id="updateBtn" asp-page-handler="OnPost">
+                                            Update
+                                        </button>
+
+
+                                        <button class="btn btn-primary" type="button" onclick="cancelEdit()" id="cancelBtn"
+                                                style="visibility: hidden;">
+                                            Cancel
+                                        </button>
+
+                                        <button class="btn btn-primary" type="button" onclick="editInfo()" id="editBtn">Edit</button>
+
+                                        @*<input type="submit" id="editBtn" class="btn btn-primary" value="Submit" onclick="editInfo()"  asp-page-handler="OnPost" />*@
+
+
+                                        <button class="btn btn-primary" type="button" onclick="editPass()" id="ChangePwBtn">
+                                            Change
+                                            Password
+                                        </button>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal for registered email -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: red;">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: white;">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: red;">This email has already been registered. Please use another one.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for registered username -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: red">
+                <h5 class="modal-title" id="exampleModalLabel2" style="color: white;">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: red;">This username has already been registered. Please use another one.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div id="successModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE876;</i>
+                </div>
+                <h4 class="modal-title" style="margin: auto;">Tight!</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Your profile details have been updated.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for changing password -->
+
+<form method="post" >
+
+    <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="verifyNumModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header" style="background-color:
+      #1ca7eb; color: white;">
+
+                    <h5 class="modal-title" id="exampleModalLabel">Change your password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" action="" method="POST">
+                        <div class="form-group mb-2" style="color: black;">
+                    </form>
+
+                    <p>Enter your new<strong> password </strong>below.</p>
+                </div>
+
+
+                @{ 
+                    var myPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
+                }
+
+                <div class="form-group mx-sm-3 mb-2">
+                    <div class="form-group">
+                        <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="4" id="password"
+                               placeholder="Password"  required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input type="password" name="password2" class="form-control" minlength="4" placeholder="Confirm Password"
+                               id="password_confirm" oninput="check(this)" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                @*<a class="btn btn-success mb-2" asp-page="/Change-Password" asp-route-username="@Model.myUser.Username" role="button">
+            Submit
+        </a>*@
+                <input type="submit"  class="btn btn-success mb-2" value="Submit" asp-page-handler="Button2" />
+
+
+                @*<button type="submit" class="btn btn-success mb-2">Submit</button>*@
+            </div>
+        </div>
+    </div>
+    </div>
+
+</form>
+
+
+
+
+<script>
+
+
+  let fileChanged = false;
+
+  function previewImg(event) {
+    // document.getElementById("avatarImg").src = ""
+
+
+    var reader = new FileReader();
+    reader.onload = function () {
+      var output = document.getElementById('avatarImg');
+      output.src = reader.result;
+
+
+    };
+
+    let img = new Image()
+    img.src = window.URL.createObjectURL(event.target.files[0])
+    img.onload = () => {
+      if (img.width <= 110 & img.height <= 110) {
+        reader.readAsDataURL(event.target.files[0]);
+        fileChanged = true;
+      }
+      else {
+        alert("Image too large; try using a smaller image ( 110 x 110 pixels )");
+        document.getElementById("avatar").value = null;
+      }
+
+
+
+    }
+
+
+
+
+
+  }
+
+
+
+  function showInput() {
+    // document.getElementById("fileInput").style.display = "inline"
+    document.getElementById("avatarx").click();
+  }
+
+  function check(input) {
+    if (input.value != document.getElementById('password').value) {
+      input.setCustomValidity('Password Must be Matching.');
+    } else {
+      // input is valid -- reset the error message
+      input.setCustomValidity('');
+    }
+  }
+
+  function editPass() {
+    $('#resetPwModal').modal('show');
+  }
+
+
+  function editInfo() {
+
+
+
+    const x = document.getElementById("avatarImg");
+    x.setAttribute("old-src", x.src);
+    //   document.getElementById("avatarImg").src = getElementById("avatarImg").src
+    document.getElementById("alert").style.display = "none";
+      document.getElementById("alert2").style.display = "none";
+    document.getElementById("updateBtn").style.visibility = "visible";
+    document.getElementById("cancelBtn").style.visibility = "visible";
+    document.getElementById("avatarx").disabled = false;
+    document.getElementById("editBtn").style.display = "none";
+    document.getElementById("ChangePwBtn").style.display = "none";
+    document.getElementById("usernameInput").disabled = false;
+    document.getElementById("emailInput").disabled = false;
+    document.getElementById("contactInput").disabled = false;
+    document.getElementById("Pdisclaimer").style.display = "inline-block";
+    document.getElementById("exampleFormControlTextarea1").disabled = false;
+    document.getElementById("avatarImg").addEventListener("mouseover", function () {
+      document.getElementById("avatarImg").style.cursor = "pointer";
+      document.getElementById("avatarImg").style.opacity = "0.3";
+      document.getElementById("cameraIcon").style.display = "inline-block";
+
+
+    });
+    document.getElementById("avatarImg").addEventListener("mouseout", function () {
+      document.getElementById("avatarImg").style.opacity = "1.0";
+      document.getElementById("cameraIcon").style.display = "none";
+
+    });
+
+
+
+
+      $(function () {
+
+          var addressReg = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9 ]{5,40}$');
+
+      var $form = $('form');
+        var initialState = $form.serialize();
+        var txtareainput = $('#exampleFormControlTextarea1').val();
+
+      $form.submit(function (e) {
+        if (initialState === $form.serialize() && !fileChanged) {
+          e.preventDefault();
+          }
+
+          if (!addressReg.test(txtareainput)) {
+
+              e.preventDefault();
+
+              $('#addressE').text("Please enter a valid address.")
+
+          }
+
+
+
+
+      });
+    });
+
+
+      $("#regForm").submit(function (event) {
+          if ($("#email").val() == "" || $("#password").val() == "" || $("#last_name").val() == "" || $("#first_name").val() == "")
+              event.preventDefault();
+      });
+
+
+  }
+
+
+
+
+  function cancelEdit() {
+    document.getElementById("Pdisclaimer").style.display = "none";
+    document.getElementById("avatarImg").src = document.getElementById("avatarImg").getAttribute("old-src");
+    document.getElementById("updateBtn").style.visibility = "hidden";
+    document.getElementById("cancelBtn").style.visibility = "hidden";
+    document.getElementById("ChangePwBtn").style.display = "inline";
+    document.getElementById("avatarx").disabled = true;
+    document.getElementById("editBtn").style.display = "inline";
+    document.getElementById("usernameInput").disabled = true;
+    document.getElementById("emailInput").disabled = true;
+    document.getElementById("contactInput").disabled = true;
+    document.getElementById("exampleFormControlTextarea1").disabled = true;
+    document.getElementById("alert").style.display = "inline-block";
+    document.getElementById("alert2").style.display = "inline-block";
+    var elem = document.getElementById('avatarImg');
+    elem.replaceWith(elem.cloneNode(true));
+
+    document.getElementById("avatarImg").addEventListener("mouseover", function () {
+      document.getElementById("avatarImg").style.cursor = "";
+    })
+
+
+
+  }
+
+  function validation(event) {
+    validate(event.target.value)
+  }
+
+  function validate(file) {
+    var ext = file.split(".");
+    ext = ext[ext.length - 1].toLowerCase();
+    var arrayExtensions = ["jpg", "jpeg", "png", "bmp", "gif"];
+
+    if (arrayExtensions.lastIndexOf(ext) == -1) {
+      alert("Only files with following extensions are allowed: .png, .jpg, .jpeg");
+      document.getElementById("avatar").value = null;
+    }
+
+    else {
+      previewImg(event)
+    }
+
+  }
+
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
