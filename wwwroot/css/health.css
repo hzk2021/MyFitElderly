@@ -5,3 +5,17 @@
 .health-selectionFooter {
     height: 4.75em;
 }
+
+#health-addFood-table td {
+    border-bottom: 1px solid #CED4DA;
+}
+
+#health-addFood-table .health-addFood-inputGroup > * {
+    margin-bottom:1%;
+}
+
+input.bottom-line-input {
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: black;
+}

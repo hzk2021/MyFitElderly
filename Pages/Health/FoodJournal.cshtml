@@ -1,0 +1,282 @@
+﻿@page
+@model EDP_Project.Pages.Health.FoodJournalModel
+@{
+    ViewData["Title"] = "Health Tracking - Your Food Journal";
+}
+
+<h1>My Food Journal</h1>
+<br />
+
+<div>
+    <a href="#AddSection" data-toggle="collapse" class="btn btn-info btn-lg"><i class="fas fa-plus"></i> Add record to journal</a>
+    <br />
+    <div class="collapse card" id="AddSection">
+        <table class="table table-borderless" id="health-addFood-table">
+            <tr>
+                <td>
+                    <h5>Date</h5>
+                    <input type="date" value="" class="form-control" id="health-addFood-date" />
+                </td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="addFood-tr">
+                <td class="align-top" style="width: 30%"><h5>Breakfast</h5></td>
+                <td id="health-addFood-table-td2" style="width: 40%">
+                    <div class="health-addFood-inputGroup" id="addSection-Breakfast">
+                        <div class="dropdown health-addFood-nameInput">
+                            <div class="health-addFood-input">
+                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
+                                <input type="text" class="form-control foodId-field" hidden readonly />
+                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
+                                    @foreach (var food in Model.AllFood)
+                                    {
+                                        <div class="dropdown-item" onclick="AddFood(this);">
+                                            @food.FoodName <span hidden>@food.FoodId</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-outline-info" onclick="AddInput(1)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
+                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
+                </td>
+                <td style="width: 10%">
+                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
+                </td>
+                <td style="width: 20%">
+                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                </td>
+            </tr>
+            <tr class="addFood-tr">
+                <td class="align-top" style="width: 30%"><h5>Lunch</h5></td>
+                <td id="health-addFood-table-td2" style="width: 40%">
+                    <div class="health-addFood-inputGroup" id="addSection-Lunch">
+                        <div class="dropdown health-addFood-nameInput">
+                            <div class="health-addFood-input">
+                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
+                                <input type="text" class="form-control foodId-field" hidden readonly />
+                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
+                                    @foreach (var food in Model.AllFood)
+                                    {
+                                        <div class="dropdown-item" onclick="AddFood(this);">
+                                            @food.FoodName <span hidden>@food.FoodId</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-outline-info" onclick="AddInput(2)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
+                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
+                </td>
+                <td style="width: 10%">
+                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
+                </td>
+                <td style="width: 20%">
+                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                </td>
+            </tr>
+            <tr class="addFood-tr">
+                <td class="align-top" style="width: 30%"><h5>Dinner</h5></td>
+                <td id="health-addFood-table-td2" style="width: 40%">
+                    <div class="health-addFood-inputGroup" id="addSection-Dinner">
+                        <div class="dropdown health-addFood-nameInput">
+                            <div class="health-addFood-input">
+                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
+                                <input type="text" class="form-control foodId-field" hidden readonly />
+                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
+                                    @foreach (var food in Model.AllFood)
+                                    {
+                                        <div class="dropdown-item" onclick="AddFood(this);">
+                                            @food.FoodName <span hidden>@food.FoodId</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-outline-info" onclick="AddInput(3)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
+                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
+                </td>
+                <td style="width: 10%">
+                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
+                </td>
+                <td style="width: 20%">
+                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><h6>Net calories intake: <span id="health-addFood-totalCalories">0</span></h6></td>
+                <td colspan="2">
+                    <div class="float-right">
+                        <a href="#AddSection" data-toggle="collapse" class="btn btn-secondary">Cancel</a>
+                        <input type="submit" value="Add record" class="btn btn-info" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table id="foodCaloriesTable" hidden>
+            @foreach (var food in Model.AllFood)
+            {
+                <tr>
+                    <td>@food.FoodId</td>
+                    <td>@food.Calories</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<br />
+
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var dropdownCooldown = false;
+
+    function OpenOptions(inp) {
+        dropdownCooldown = true;
+        inp.parentElement.getElementsByClassName("health-addFood-selectList")[0].style.display = "block";
+        setTimeout(function () { dropdownCooldown = false; }, 126)
+    }
+
+    function AddInput(number) {
+        var inputGroup = document.getElementsByClassName("health-addFood-inputGroup")[number - 1];
+
+        var foodNameInputDiv = document.querySelector(".health-addFood-nameInput").cloneNode(true);
+        foodNameInputDiv.querySelector(".health-addFood-displayInput").innerText = "";
+        var foodIdInput = foodNameInputDiv.querySelector(".foodId-field");
+        foodIdInput.readonly = false;
+        foodIdInput.value = "";
+        foodIdInput.readonly = true;
+        inputGroup.appendChild(foodNameInputDiv);
+        
+        var td = document.getElementsByClassName("addFood-tr")[number - 1].getElementsByTagName("td");
+        var quantityInput = document.querySelector(".health-addFood-quantity").cloneNode(true);
+        quantityInput.value = 1;
+        td[2].appendChild(quantityInput);
+        td[3].innerHTML +=
+            `<br />
+            <button class="btn text-primary" onclick="RemoveInput(this)" style="margin-bottom: 2.5%;"><i class="far fa-times-circle"></i></button>`;
+    }
+
+    function RemoveInput(button) {
+        var tr = button.parentElement.parentElement;
+        var allButtons = button.parentElement.querySelectorAll("button");
+        for (var i in allButtons) {
+            if (allButtons[i] === button) {
+                console.log(tr.getElementsByClassName("health-addFood-nameInput"));
+
+                console.log(i);
+                console.log(allButtons);
+                tr.getElementsByClassName("health-addFood-nameInput").item(i).remove();
+                tr.getElementsByClassName("health-addFood-quantity").item(i).remove();
+                button.remove();
+                break;
+            }
+        }
+    }
+
+    function AddFood(div) {
+        var group = div.parentElement.parentElement;
+        // Update name field
+        group.getElementsByClassName("health-addFood-displayInput")[0].innerText = div.innerText;
+
+        var idField = group.getElementsByTagName("input")[0]
+        idField.readonly = false;
+        idField.value = div.getElementsByTagName("span")[0].innerText;
+        idField.readonly = true;
+        div.parentElement.style.display = "none";
+    }
+
+    function ListenersInterrupt() {
+        // Listening for change in aria-expanded
+        var foodCalories = {};
+
+        function UpdateCalories() {
+            var totalCalories = {
+                "addSection-Breakfast" : 0,
+                "addSection-Lunch" : 0,
+                "addSection-Dinner" : 0
+            };
+
+            var allInputs = document.getElementsByClassName("foodId-field");
+            var allQuantity = document.getElementsByClassName("health-addFood-quantity");
+            for (var i in allInputs) {
+                var foodId = allInputs[i].value;
+                
+                if (foodId) {
+                    var inputSectionId = allInputs.item(i).parentElement.parentElement.parentElement.id;
+                    totalCalories[inputSectionId] += foodCalories[allInputs[i].value] * allQuantity[i].value;
+                }
+
+            }
+
+            var netCalories = 0;
+            for (var id in totalCalories) {
+                document.getElementById(id).parentElement.parentElement.querySelector(".health-addFood-calories-span").innerText = totalCalories[id];
+                netCalories += totalCalories[id];
+            }
+            document.querySelector("#health-addFood-totalCalories").innerText = netCalories;
+
+        }
+
+        function InitFunctions() {
+            // Set calories values object
+            var foodCaloriesTable = document.querySelector("#foodCaloriesTable");
+            var allTr = foodCaloriesTable.querySelectorAll("tr");
+            for (var i in allTr) {
+                var allTd = allTr.item(i).querySelectorAll("td");
+                foodCalories[allTd[0].innerText] = parseInt(allTd[1].innerText);
+            }
+            foodCaloriesTable.remove();
+
+            // Default date for new journal record
+            Date.prototype.toDateInputValue = (function () {
+                var local = new Date(this);
+                local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+                return local.toJSON().slice(0, 10);
+            });
+            document.getElementById('health-addFood-date').value = new Date().toDateInputValue();
+
+            console.log(foodCalories);
+        }
+
+        InitFunctions()
+        setInterval(function () {
+            var addSectionExpanded = document.querySelector("#AddSection").classList.contains("show");
+
+            // listening for change in input fields
+            if (addSectionExpanded) {
+                UpdateCalories();
+            }
+        }, 500);
+    }
+
+    window.addEventListener('load', function () {
+        document.addEventListener('click', function (event) {
+            if (!dropdownCooldown) {
+                const allTabs = document.getElementsByClassName("health-addFood-selectList");
+                console.log(allTabs);
+                for (var tab in allTabs) {
+                    allTabs.item(tab).style.display = 'none';
+                }
+            }
+
+        });
+        ListenersInterrupt();
+    });
+
+</script>

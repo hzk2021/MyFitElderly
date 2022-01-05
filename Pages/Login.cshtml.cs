@@ -260,39 +260,39 @@ namespace EDP_Project.Pages.Auth
                     }
 
 
- 
-                        // if password wrong, increase the thing.
+
+                    // if password wrong, increase the thing.
 
 
-                        SHA512Managed hashing = new SHA512Managed();
-                        string pwdWithSalt = userPass + dbSalt;
-                        byte[] hashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pwdWithSalt));
-                        string userHash = Convert.ToBase64String(hashWithSalt);
+                    SHA512Managed hashing = new SHA512Managed();
+                    string pwdWithSalt = userPass + dbSalt;
+                    byte[] hashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(pwdWithSalt));
+                    string userHash = Convert.ToBase64String(hashWithSalt);
 
-                        if (userHash.Equals(dbHash))
-                        {
-
-
-
-
-                            HttpContext.Session.SetString("user", currentUser.Trim());
-                            return RedirectToPage("Index");
-
-                        }
-
-                        else
-                        {
-
-                            error_msg = "Invalid email or password!";
-                            return Page();
-                        }
-
-
-                        //HttpContext.Session.SetString("user", "username");
+                    if (userHash.Equals(dbHash))
+                    {
 
 
 
-                   
+
+                        HttpContext.Session.SetString("user", currentUser.Trim());
+                        return RedirectToPage("Index");
+
+                    }
+
+                    else
+                    {
+
+                        error_msg = "Invalid email or password!";
+                        return Page();
+                    }
+
+
+                    //HttpContext.Session.SetString("user", "username");
+
+
+
+
 
 
 

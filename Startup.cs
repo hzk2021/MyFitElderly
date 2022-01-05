@@ -37,6 +37,7 @@ namespace EDP_Project
             //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
 
 
+
             //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
             //{
 
@@ -129,8 +130,14 @@ namespace EDP_Project
             }
             catch (Exception)
             {
-
+                
             }
+
+
+
+
+
+
 
 
 

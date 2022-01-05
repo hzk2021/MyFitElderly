@@ -12,54 +12,90 @@ namespace EDP_Project.Services
     {
         private readonly UserDbContext _context;
 
-        MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
-
         public HealthService(UserDbContext context)
         {
             _context = context;
         }
 
-        public bool AddFood(Food food)
+        public string AddFood(Food food)
         {
-            MySqlCommand newFood = new MySqlCommand("INSERT INTO food VALUES(NULL, @FoodName, @Category, @Calories)", con);
-            con.Open();
-            newFood.Parameters.AddWithValue("@FoodName", food.FoodName);
-            newFood.Parameters.AddWithValue("@Category", food.Category);
-            newFood.Parameters.AddWithValue("@Calories", food.Calories);
-            newFood.ExecuteNonQuery();
-            con.Close();
-            //if (_context.Food.Any(x => x.FoodId == food.FoodId))
-            //    return false;
-
-            //_context.Food.Add(food);
-            //_context.SaveChanges();
-            return true;
-        }
-
-        public bool UpdateFood(Food food)
-        {
-            if (_context.Food.Any(x => x.FoodId == food.FoodId))
+            try
             {
+                if (_context.Food.Any(x => x.FoodName == food.FoodName))
+                    return $"{food.FoodName} already exists.";
+
                 _context.Food.Add(food);
                 _context.SaveChanges();
-                return true;
+                return "True";
+            }
+            catch (Exception)
+            {
+                return "An error occurred while registering entry. Try again later.";
             }
             
-            return false;
         }
 
-        public List<Food> GetFoodRecords(int page)
+        public string UpdateFood(Food food)
         {
-            int startIndex = page * 15;
+            try
+            {
+                Console.WriteLine(food.FoodId);
+                if (_context.Food.Any(x => x.FoodId == food.FoodId))
+                {
+                    _context.Food.Update(food);
+                    _context.SaveChanges();
+                    return "True";
+                }
+
+                return "Unknown food Id. Please update with a valid food Id";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return "An error occurred while registering entry update. Try again later.";
+            }
+
+        }
+
+        public Food GetFoodById(int id)
+        {
+            return _context.Food.Where(x => x.FoodId == id).ToList()[0];
+        }
+
+        public List<Food> GetFoodRecords(int page, string category, string search)
+        {
+            int startIndex = (page-1) * 15;
             List<Food> records = new List<Food>();
-            records = _context.Food.Skip(startIndex).Take(startIndex + 15).ToList();
+            
+            if (category == "All")
+            {
+                if (String.IsNullOrEmpty(search))
+                    records = _context.Food.Skip(startIndex).Take(startIndex + 15).ToList();
+                else
+                    records = _context.Food.Where(x => x.FoodName.ToLower().Contains(search.ToLower()))
+                        .Skip(startIndex).Take(startIndex + 15).ToList();
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(search))
+                    records = _context.Food.Where(x => x.Category == category).Skip(startIndex).Take(startIndex + 15).ToList();
+                else
+                    records = _context.Food.Where(x => x.Category == category && x.FoodName.ToLower().Contains(search.ToLower())).Skip(startIndex).Take(startIndex + 15).ToList();
+            }
+
             return records;
+        }
+
+        public List<Food> GetAllFoodRecords()
+        {
+            return _context.Food.ToList();
         }
 
         public void RemoveFood(int foodId)
         {
             Food foodItem = _context.Food.Where(x => x.FoodId == foodId).ToList()[0];
             _context.Food.Remove(foodItem);
+            _context.SaveChanges();
         }
     }
 }
