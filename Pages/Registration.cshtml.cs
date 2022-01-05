@@ -88,14 +88,11 @@ namespace EDP_Project.Pages.Auth
             cmd.Parameters.AddWithValue("@Password", finalHash);
             cmd.Parameters.AddWithValue("@ResetPwToken", DBNull.Value);
             cmd.Parameters.AddWithValue("@ResetPwTokenExpiry", DBNull.Value);
-
             cmd.Parameters.AddWithValue("@Gender", myUser.Gender);
             cmd.Parameters.AddWithValue("@DateOfBirth", myUser.DateOfBirth);
-
             cmd.Parameters.AddWithValue("@Contact", myUser.Contact);
             cmd.Parameters.AddWithValue("@Status", "Active");
             cmd.Parameters.AddWithValue("@Role", "Guest");
-
             cmd.Parameters.AddWithValue("@Address", myUser.Address);
 
             var mother = cmd.ExecuteNonQuery();

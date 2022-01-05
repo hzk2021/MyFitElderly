@@ -20,13 +20,13 @@ namespace EDP_Project.Services
 
 
 
-        public List<User> GetAllUsers()
-        {
-            List<User> AllUsers = new List<User>();
-            AllUsers = _context.User.ToList();
-            return AllUsers;
+        //public List<User> GetAllUsers()
+        //{
+        //    List<User> AllUsers = new List<User>();
+        //    AllUsers = _context.User.ToList();
+        //    return AllUsers;
 
-        }
+        //}
 
     }
 

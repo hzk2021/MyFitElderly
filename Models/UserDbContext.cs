@@ -29,7 +29,7 @@ namespace Pract2.Models
         }
 
         // Map employee entity to Employees table in database
-        public DbSet<User> User { get; set; }
+        //public DbSet<User> User { get; set; }
         public DbSet<Survey> Survey { get; set; }
 
         public DbSet<Question> Question { get; set; }
