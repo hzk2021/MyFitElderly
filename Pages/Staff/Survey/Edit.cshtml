@@ -107,13 +107,15 @@
                                                                 <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
                                                                 <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
 
-                                                                <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">D</a>
+                                                                <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">DO</a>
 
                                                             </div>
                                                         }
                                                     }    
                                                 }
                                                     <a class="btnCustom" id="addOptionButton" onclick="addNewQuestionInput('@Model.AllQuestionList[i].QuestionUUID')">A</a>
+
+                                                    <a class="btnCustom" id="deleteQnsButton" onclick="deleteQuestionForm('@Model.AllQuestionList[i].QuestionUUID')">DQ</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -190,6 +192,16 @@
 
         cardP_3.appendChild(addInputButton);
 
+        var deleteQuestionButton = document.createElement("a");
+        deleteQuestionButton.className = "btnCustom";
+        deleteQuestionButton.id = "deleteQnsButton";
+        deleteQuestionButton.textContent = "DQ";
+        deleteQuestionButton.addEventListener("click", function () {
+            deleteQuestionForm(qUUID);
+        });
+
+        cardP_3.appendChild(deleteQuestionButton);
+
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
 
@@ -262,6 +274,22 @@
                     var parentElementOfInput = allInputs[i].parentElement;
 
                     parentElementOfInput.remove();
+                }
+            }
+        }
+    }
+
+    function deleteQuestionForm(questionUUID) {
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].hidden == true) {
+                if (allInputs[i].value == questionUUID) {
+                    var parentCard = allInputs[i].parentElement;
+                    var parentColMD = parentCard.parentElement;
+                    var parentRow = parentColMD.parentElement;
+
+                    parentRow.remove();
                 }
             }
         }
