@@ -36,7 +36,7 @@ namespace EDP_Project.Pages.Staff.Survey
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
                     ViewStatus = false,
-                    CreatedByStaffID = 1 // Temp | change later
+                    CreatedByStaffID = 7 // Temp | change later
                 };
                 _srv.AddSurvey(svy);
 

@@ -106,6 +106,9 @@
                                                                 <input class="hiddenOptionUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].OptionUUID" value="@n[k].OptionUUID"/>
                                                                 <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
                                                                 <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
+
+                                                                <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">D</a>
+
                                                             </div>
                                                         }
                                                     }    
@@ -195,6 +198,9 @@
 
     function addNewQuestionInput(questionUUID) {
         var formInlineDiv = document.createElement("div");
+
+        const optionUUID = uuidv4();
+
         formInlineDiv.className = "form-inline";
 
         var circleIconLabel = document.createElement("input");
@@ -206,7 +212,7 @@
         var hiddenOptionUUIDInput = document.createElement("input");
         hiddenOptionUUIDInput.className = "hiddenOptionUUIDInput";
         hiddenOptionUUIDInput.hidden = true;
-        hiddenOptionUUIDInput.setAttribute("value", `${uuidv4()}`);
+        hiddenOptionUUIDInput.setAttribute("value", `${optionUUID}`);
 
         var optionTextInput = document.createElement("input");
         optionTextInput.classList.add("optionInput");
@@ -224,6 +230,16 @@
         formInlineDiv.appendChild(optionTextInput);
         formInlineDiv.appendChild(hiddenBelongsToQUUIDInput);
 
+        var deleteInputButton = document.createElement("a");
+        deleteInputButton.className = "btnCustom";
+        deleteInputButton.id = "deleteOptionButton";
+        deleteInputButton.textContent = "D";
+        deleteInputButton.addEventListener("click", function () {
+            deleteOptionInput(optionUUID);
+        });
+
+        formInlineDiv.appendChild(deleteInputButton);
+
 
         var allInputs = document.getElementsByTagName("input");
 
@@ -232,6 +248,20 @@
                 if (allInputs[i].hidden == true) {
                     allInputs[i].parentElement.appendChild(formInlineDiv);
                     break;
+                }
+            }
+        }
+    }
+
+    function deleteOptionInput(optionUUID) {
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].hidden == true) {
+                if (allInputs[i].value == optionUUID) {
+                    var parentElementOfInput = allInputs[i].parentElement;
+
+                    parentElementOfInput.remove();
                 }
             }
         }

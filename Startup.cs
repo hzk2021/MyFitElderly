@@ -41,27 +41,27 @@ namespace EDP_Project
             string dropMeals = @"DROP TABLE IF EXISTS meals";
 
 
-            using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
-            {
+            //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
+            //{
 
-                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+            //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+            //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+            //    MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
 
-                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+            //    MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+            //    MySqlCommand dm = new MySqlCommand(dropMeals, conn);
 
-                conn.Open();
-                dm.ExecuteNonQuery();
-                dci.ExecuteNonQuery();
-                dqot.ExecuteNonQuery();
-                dqt.ExecuteNonQuery();
-                dst.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+            //    conn.Open();
+            //    dm.ExecuteNonQuery();
+            //    dci.ExecuteNonQuery();
+            //    dqot.ExecuteNonQuery();
+            //    dqt.ExecuteNonQuery();
+            //    dst.ExecuteNonQuery();
+            //    cmd.ExecuteNonQuery();
 
 
-            }
+            //}
 
 
             MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE `user` (
