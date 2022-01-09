@@ -56,7 +56,7 @@ namespace EDP_Project.Pages.Auth
 
 
         public void createAccount(User user)
-         {
+        {
 
             //Photo.CopyTo("~/Images");
 
@@ -198,7 +198,7 @@ namespace EDP_Project.Pages.Auth
             int userAge = DateTime.Today.Year - dob.Year;
 
 
-            if ( userAge < 13 || userAge > 99 )
+            if (userAge < 13 || userAge > 99)
             {
                 return false;
 
@@ -223,6 +223,46 @@ namespace EDP_Project.Pages.Auth
             }
 
             return true;
+
+
+        }
+
+
+
+        public bool emailExists(string email)
+        {
+
+
+            try
+            {
+                con.Open();
+
+                MySqlCommand cmd = new MySqlCommand("select * FROM User WHERE Email = @EMAIL", con);
+                cmd.Parameters.AddWithValue("@EMAIL", myUser.Email);
+                int emailExistss = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+                if (emailExistss > 0)
+                {
+                    return true;
+                }
+
+
+            }
+            catch (FormatException)
+            {
+                return true;
+            }
+
+            finally
+
+            {
+                con.Close();
+            }
+            
+
+
+            return false;
 
 
         }
@@ -275,11 +315,18 @@ namespace EDP_Project.Pages.Auth
             //}
 
 
-            //if (!emailVerify(myUser.Email))
-            //{
-            //    ModelState.AddModelError("Email", "Please enter a valid email.");
+            if (!emailVerify(myUser.Email))
+            {
+                ModelState.AddModelError("Email", "Please enter a valid email.");
 
-            //}
+            }
+
+
+            if (emailExists(myUser.Email))
+            {
+                ModelState.AddModelError("Email", "This email has already been registered.");
+
+            }
 
 
             //if (!pwMatch.Success)
@@ -319,48 +366,48 @@ namespace EDP_Project.Pages.Auth
 
 
                 if (ValidateCaptcha())
-                    {
+                {
 
 
 
 
 
 
-                        // Retrive password from user input
-                        string password = myUser.Password.ToString().Trim();
+                    // Retrive password from user input
+                    string password = myUser.Password.ToString().Trim();
 
-                        // Make a random salt
-                        RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-                        byte[] saltByte = new byte[8];
+                    // Make a random salt
+                    RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+                    byte[] saltByte = new byte[8];
 
-                        //Fills array of bytes with a cryptographically strong sequence of random values.
-                        rng.GetBytes(saltByte);
-                        salt = Convert.ToBase64String(saltByte);
+                    //Fills array of bytes with a cryptographically strong sequence of random values.
+                    rng.GetBytes(saltByte);
+                    salt = Convert.ToBase64String(saltByte);
 
-                        SHA512Managed hashing = new SHA512Managed();
-                        string passWithSalt = password + salt;
-                        byte[] plainHash = hashing.ComputeHash(Encoding.UTF8.GetBytes(password));
-                        byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
-                        finalHash = Convert.ToBase64String(hashWithSalt);
+                    SHA512Managed hashing = new SHA512Managed();
+                    string passWithSalt = password + salt;
+                    byte[] plainHash = hashing.ComputeHash(Encoding.UTF8.GetBytes(password));
+                    byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
+                    finalHash = Convert.ToBase64String(hashWithSalt);
 
-                        RijndaelManaged cipher = new RijndaelManaged();
-                        cipher.GenerateKey();
-                        Key = cipher.Key;
-                        IV = cipher.IV;
-
-
-
-
-
-                        // Send email here.
+                    RijndaelManaged cipher = new RijndaelManaged();
+                    cipher.GenerateKey();
+                    Key = cipher.Key;
+                    IV = cipher.IV;
 
 
 
 
 
+                    // Send email here.
 
 
-                        createAccount(myUser);
+
+
+
+
+
+                    createAccount(myUser);
 
 
 
@@ -403,24 +450,24 @@ namespace EDP_Project.Pages.Auth
 
 
 
-                        return RedirectToPage("Login");
+                    return RedirectToPage("Login");
 
-                        // On Post, Redirect back to LOGIN .
+                    // On Post, Redirect back to LOGIN .
 
-                        // Save crednetials to DB
-
-
-
-                        // Create session
-
-                        //HttpContext.Session.SetString("SSName", MyEmployee.Name);
-                        //HttpContext.Session.SetString("SSDept", MyEmployee.Department.ToString());
-                        //return RedirectToPage("Confirm");
-
-                    }
+                    // Save crednetials to DB
 
 
-                
+
+                    // Create session
+
+                    //HttpContext.Session.SetString("SSName", MyEmployee.Name);
+                    //HttpContext.Session.SetString("SSDept", MyEmployee.Department.ToString());
+                    //return RedirectToPage("Confirm");
+
+                }
+
+
+
 
             }
 
@@ -428,7 +475,7 @@ namespace EDP_Project.Pages.Auth
 
 
             return Page();
-            }
+        }
 
 
     }

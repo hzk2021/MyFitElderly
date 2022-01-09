@@ -181,6 +181,13 @@
                                     @*<a class="btn btn-primary" href="/staff/accounts/createUsers" role="button">Add new user</a>*@
 
                                 </div>
+
+                                <div class="btn-group mx-auto d-block" role="group" aria-label="Basic example" style="text-align: center;">
+                                    <button id="buttonAll" class="btn btn-secondary">All</button>
+                                    <button id="buttonGeneral" class="btn btn-secondary">General Ticket</button>
+                                    <button id="buttonEmail" class="btn btn-secondary">Email Enquiry</button>
+                                    <button id="buttonThread" class="btn btn-secondary">Support Thread</button>
+                                </div>
                                 <table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
                                        data-search="true"
                                        data-show-columns="true"
@@ -367,6 +374,45 @@
 
 
         var $table = $('#table')
+
+        $(function () {
+            $('#buttonAll').click(function () {
+                $table.bootstrapTable('filterBy', {
+                    issueType: ['General', 'Email', 'Thread']
+                })
+            })
+        })
+
+        $(function () {
+            $('#buttonGeneral').click(function () {
+                $table.bootstrapTable('filterBy', {
+                    issueType: ['General']
+                })
+            })
+        })
+
+        $(function () {
+            $('#buttonEmail').click(function () {
+                $table.bootstrapTable('filterBy', {
+                    issueType: ['Email']
+                })
+            })
+        })
+
+        $(function () {
+            $('#buttonThread').click(function () {
+                $table.bootstrapTable('filterBy', {
+                    category: ['Thread']
+                })
+            })
+        })
+
+
+
+
+
+
+
         $(function () {
             var data = datakmfks
             $table.bootstrapTable({ data: data })
