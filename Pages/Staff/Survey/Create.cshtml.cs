@@ -15,10 +15,18 @@ namespace EDP_Project.Pages.Staff.Survey
         [BindProperty]
         public Models.Survey.Survey newSurvey { get; set; }
 
+        [BindProperty]
+        public List<Models.Survey.Question> AllQuestionList { get; set; }
+
+        [BindProperty]
+        public List<Models.Survey.QuestionOption> qnsOptions { get; set; }
+
         public CreateSurveyModel(SurveyService surveySrv)
         {
             _srv = surveySrv;
         }
+
+        public string surveyUUID = Guid.NewGuid().ToString();
         public void OnGet()
         {
         }
@@ -29,7 +37,7 @@ namespace EDP_Project.Pages.Staff.Survey
             {
                 Models.Survey.Survey svy = new Models.Survey.Survey()
                 {
-                    SurveyUUID = Guid.NewGuid().ToString(),
+                    SurveyUUID = newSurvey.SurveyUUID,
                     Category = newSurvey.Category,
                     Title = newSurvey.Title,
                     Description = newSurvey.Description,
@@ -39,6 +47,19 @@ namespace EDP_Project.Pages.Staff.Survey
                     CreatedByStaffID = 7 // Temp | change later
                 };
                 _srv.AddSurvey(svy);
+
+                for (int i = 0; i < AllQuestionList.Count; i++)
+                {
+                    _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
+                    _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
+                }
+
+                for (int k = 0; k < qnsOptions.Count; k++)
+                {
+                    _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
+                        qnsOptions[k].Text,
+                        qnsOptions[k].BelongsToQuestionID);
+                }
 
                 return Redirect("View");
             }

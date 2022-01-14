@@ -4,42 +4,282 @@
     ViewData["Title"] = "Create Survey - Admin";
 }
 
+<style>
+    .btnCustom {
+        display: inline-block;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        border: 1px solid black;
+        padding-top: 0px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .qnsTB {
+        background-color: #f1f3f4;
+        border: none;
+        border-bottom: 1px solid black;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: white;
+        border: 2px solid grey;
+        border-radius: 50%;
+        display: inline-block;
+    }
+</style>
+
 <div class="container">
+    <h1 class="text-center text-dark mt-5">Create Survey </h1>
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h1 class="text-center text-dark mt-5">Create Survey</h1>
+        <div class="col-md-12">
+            <div class="p-3">
+                @{
+                    <input type="submit" value="+" class="btnCustom" id="addQnsButton" />
+                    <form asp-action="" method="post" id="mainContainerForm">
+                        <div class="col-12 my-3 text-center">
+                            <input type="submit" value="Create" class="btn btn-dark ml-auto" />
 
-            <div class="card p-3">
-                <form class="row" asp-action="" method="post">
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card p-3">
+                                    <div asp-validation-summary="All" class="text-danger"></div>
 
-                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="col-12 my-3">
+                                        <input hidden class="form-label" asp-for="@Model.newSurvey.SurveyUUID" value="@Model.surveyUUID" />
+                                    </div>
 
-                    <div class="col-12 my-3">
-                        <label class="form-label">Category</label>
-                        @Html.DropDownListFor(m => m.newSurvey.Category, new SelectList(Enum.GetValues(typeof(Models.Survey.SurveyCategory))), new { @class = "form-control" })
-                        <span asp-validation-for="@Model.newSurvey.Category" class="text-danger"></span>
-                    </div>
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">Category</label>
+                                        @Html.DropDownListFor(m => m.newSurvey.Category, new SelectList(Enum.GetValues(typeof(Models.Survey.SurveyCategory))), new { @class = "form-control" })
+                                        <span asp-validation-for="@Model.newSurvey.Category" class="text-danger"></span>
+                                    </div>
 
-                    <div class="col-12 my-3">
-                        <label class="form-label">Title</label>
-                        <input class="form-control" type="text" asp-for="newSurvey.Title" />
-                        <span asp-validation-for="@Model.newSurvey.Title" class="text-danger"></span>
-                    </div>
-                    <div class="col-12 my-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" asp-for="newSurvey.Description"></textarea>
-                        <span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>
-                    </div>
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">Title</label>
+                                        <input class="form-control" type="text" asp-for="newSurvey.Title" />
+                                        <span asp-validation-for="@Model.newSurvey.Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" asp-for="newSurvey.Description"></textarea>
+                                        <span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>
+                                    </div>
 
-                    <div class="col-12 my-3 text-center">
-                        <input type="submit" value="Create" class="btn btn-dark ml-auto" />
+                                </div>
 
-                    </div>
+                            </div>
+                        </div>
+                    </form>
 
-                </form>
+                }
 
             </div>
-
         </div>
     </div>
+
 </div>
+
+<script>
+
+    function uuidv4() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    var addQuestionButton = document.getElementById("addQnsButton");
+    addQuestionButton.addEventListener("click", addNewQuestionForm);
+
+    function addNewQuestionForm() {
+
+        const qUUID = uuidv4();
+
+        var rowDiv = document.createElement("div");
+        rowDiv.classList.add("row");
+        rowDiv.classList.add("mt-4");
+
+        var colMD12Div = document.createElement("div");
+        colMD12Div.className = "col-md-12";
+
+        var cardP_3 = document.createElement("div");
+        cardP_3.classList.add("card");
+        cardP_3.classList.add("p-3");
+
+        var questionUUIDHidden = document.createElement("input");
+        questionUUIDHidden.classList.add("hiddenQuestionUUIDInput");
+        questionUUIDHidden.hidden = true;
+        questionUUIDHidden.setAttribute("value", `${qUUID}`);
+
+        var questionTB = document.createElement("input");
+        questionTB.classList.add("qnsInput");
+        questionTB.classList.add("form-control");
+        questionTB.classList.add("mt-3");
+        questionTB.classList.add("qnsTB");
+        questionTB.placeholder = "Question Text"
+
+        var questionBelongsToUUIDHidden = document.createElement("input");
+        questionBelongsToUUIDHidden.classList.add("hiddenBelongsToSUUIDInput");
+        questionBelongsToUUIDHidden.hidden = true;
+        questionBelongsToUUIDHidden.setAttribute("value", '@Model.surveyUUID');
+
+        cardP_3.appendChild(questionUUIDHidden);
+        cardP_3.appendChild(questionTB);
+        cardP_3.appendChild(questionBelongsToUUIDHidden);
+
+
+        var addInputButton = document.createElement("a");
+        addInputButton.className = "btnCustom";
+        addInputButton.id = "addOptionButton";
+        addInputButton.textContent = "A";
+        addInputButton.addEventListener("click", function () {
+            addNewQuestionInput(qUUID);
+        });
+
+        cardP_3.appendChild(addInputButton);
+
+        var deleteQuestionButton = document.createElement("a");
+        deleteQuestionButton.className = "btnCustom";
+        deleteQuestionButton.id = "deleteQnsButton";
+        deleteQuestionButton.textContent = "DQ";
+        deleteQuestionButton.addEventListener("click", function () {
+            deleteQuestionForm(qUUID);
+        });
+
+        cardP_3.appendChild(deleteQuestionButton);
+
+        colMD12Div.appendChild(cardP_3);
+        rowDiv.appendChild(colMD12Div);
+
+        document.getElementById("mainContainerForm").appendChild(rowDiv);
+    }
+
+    function addNewQuestionInput(questionUUID) {
+        var formInlineDiv = document.createElement("div");
+
+        const optionUUID = uuidv4();
+
+        formInlineDiv.className = "form-inline";
+
+        var circleIconLabel = document.createElement("input");
+        circleIconLabel.classList.add("dot");
+        circleIconLabel.classList.add("my-1");
+        circleIconLabel.classList.add("mr-2");
+        circleIconLabel.classList.add("mt-3");
+
+        var hiddenOptionUUIDInput = document.createElement("input");
+        hiddenOptionUUIDInput.className = "hiddenOptionUUIDInput";
+        hiddenOptionUUIDInput.hidden = true;
+        hiddenOptionUUIDInput.setAttribute("value", `${optionUUID}`);
+
+        var optionTextInput = document.createElement("input");
+        optionTextInput.classList.add("optionInput");
+        optionTextInput.classList.add("form-control");
+        optionTextInput.classList.add("mt-3");
+        optionTextInput.type = "text";
+
+        var hiddenBelongsToQUUIDInput = document.createElement("input");
+        hiddenBelongsToQUUIDInput.className = "hiddenBelongsToQUUIDInput";
+        hiddenBelongsToQUUIDInput.hidden = true;
+        hiddenBelongsToQUUIDInput.setAttribute("value", questionUUID);
+
+        formInlineDiv.appendChild(circleIconLabel);
+        formInlineDiv.appendChild(hiddenOptionUUIDInput);
+        formInlineDiv.appendChild(optionTextInput);
+        formInlineDiv.appendChild(hiddenBelongsToQUUIDInput);
+
+        var deleteInputButton = document.createElement("a");
+        deleteInputButton.className = "btnCustom";
+        deleteInputButton.id = "deleteOptionButton";
+        deleteInputButton.textContent = "D";
+        deleteInputButton.addEventListener("click", function () {
+            deleteOptionInput(optionUUID);
+        });
+
+        formInlineDiv.appendChild(deleteInputButton);
+
+
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].value == questionUUID) {
+                if (allInputs[i].hidden == true) {
+                    allInputs[i].parentElement.appendChild(formInlineDiv);
+                    break;
+                }
+            }
+        }
+    }
+
+    function deleteOptionInput(optionUUID) {
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].hidden == true) {
+                if (allInputs[i].value == optionUUID) {
+                    var parentElementOfInput = allInputs[i].parentElement;
+
+                    parentElementOfInput.remove();
+                }
+            }
+        }
+    }
+
+    function deleteQuestionForm(questionUUID) {
+        var allInputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            if (allInputs[i].hidden == true) {
+                if (allInputs[i].value == questionUUID) {
+                    var parentCard = allInputs[i].parentElement;
+                    var parentColMD = parentCard.parentElement;
+                    var parentRow = parentColMD.parentElement;
+
+                    parentRow.remove();
+                }
+            }
+        }
+    }
+
+    function resortIndex(e) {
+        //e.preventDefault();
+        var questionInputs = document.getElementsByClassName("qnsInput");
+        var hiddenQuestionUUIDInputs = document.getElementsByClassName("hiddenQuestionUUIDInput");
+        var hiddenBelongsToSUUIDInputs = document.getElementsByClassName("hiddenBelongsToSUUIDInput");
+
+
+        var hiddenOptionUUIDInputs = document.getElementsByClassName("hiddenOptionUUIDInput");
+        var optionInputs = document.getElementsByClassName("optionInput");
+        var hiddenBelongsToQUUIDInputs = document.getElementsByClassName("hiddenBelongsToQUUIDInput");
+
+        for (var i = 0; i < questionInputs.length; i++) {
+
+            questionInputs[i].name = `AllQuestionList[${i}].Text`;
+            hiddenQuestionUUIDInputs[i].name = `AllQuestionList[${i}].QuestionUUID`;
+            hiddenBelongsToSUUIDInputs[i].name = `AllQuestionList[${i}].BelongsToSurveyID`;
+
+            for (var k = 0; k < optionInputs.length; k++) {
+
+                hiddenOptionUUIDInputs[k].name = `qnsOptions[${k}].OptionUUID`;
+                optionInputs[k].name = `qnsOptions[${k}].Text`;
+                hiddenBelongsToQUUIDInputs[k].name = `qnsOptions[${k}].BelongsToQuestionID`;
+            }
+
+        }
+        //$.ajax({
+        //    url: "",
+        //    type: "POST",
+        //    data: $("#mainContainerForm").serialize(),
+        //    success: function () {
+        //        alert('success');
+        //    }
+        //});
+    }
+
+        document.getElementById("mainContainerForm").addEventListener("submit", resortIndex);
+</script>

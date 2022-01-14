@@ -29,42 +29,42 @@ namespace EDP_Project
 
 
 
-            //  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
+            ////  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
 
-            string lel_fml = @"DROP TABLE IF EXISTS user";
-            string dropLogTable = @"DROP TABLE IF EXISTS log";
-            string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
-            string dropQuestionTable = @"DROP TABLE IF EXISTS question";
-            string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
+            //string lel_fml = @"DROP TABLE IF EXISTS user";
+            //string dropLogTable = @"DROP TABLE IF EXISTS log";
+            //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
+            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
+            //string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
 
-            string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
-            string dropMeals = @"DROP TABLE IF EXISTS meals";
-
-
-            using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
-            {
-
-                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-                MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
-                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
-
-                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
-
-                conn.Open();
-                dlt.ExecuteNonQuery();
-                dm.ExecuteNonQuery();
-                dci.ExecuteNonQuery();
-                dqot.ExecuteNonQuery();
-                dqt.ExecuteNonQuery();
-                dst.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+            //string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
+            //string dropMeals = @"DROP TABLE IF EXISTS meals";
 
 
-            }
+            //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
+            //{
+
+            //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+            //    MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
+            //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+            //    MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+
+            //    MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+            //    MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+
+            //    conn.Open();
+            //    dlt.ExecuteNonQuery();
+            //    dm.ExecuteNonQuery();
+            //    dci.ExecuteNonQuery();
+            //    dqot.ExecuteNonQuery();
+            //    dqt.ExecuteNonQuery();
+            //    dst.ExecuteNonQuery();
+            //    cmd.ExecuteNonQuery();
+
+
+            //}
 
 
             MySqlCommand create_log_table = new MySqlCommand(@"
@@ -169,21 +169,21 @@ CREATE TABLE Log (
             );", con);
 
 
-            try
-            {
-                Create_table.ExecuteNonQuery();
-                create_log_table.ExecuteNonQuery();
-                create_surveyTable.ExecuteNonQuery();
-                create_questionTable.ExecuteNonQuery();
-                create_questionOptionTable.ExecuteNonQuery();
-                Create_caloriesIntake.ExecuteNonQuery();
-                Create_foodList.ExecuteNonQuery();
-                Create_mealItems.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+            //try
+            //{
+            //    Create_table.ExecuteNonQuery();
+            //    create_log_table.ExecuteNonQuery();
+            //    create_surveyTable.ExecuteNonQuery();
+            //    create_questionTable.ExecuteNonQuery();
+            //    create_questionOptionTable.ExecuteNonQuery();
+            //    Create_caloriesIntake.ExecuteNonQuery();
+            //    Create_foodList.ExecuteNonQuery();
+            //    Create_mealItems.ExecuteNonQuery();
+            //}
+            //catch (Exception)
+            //{
                 
-            }
+            //}
 
 
 
