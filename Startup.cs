@@ -33,6 +33,7 @@ namespace EDP_Project
 
 
             string lel_fml = @"DROP TABLE IF EXISTS user";
+            string dropLogTable = @"DROP TABLE IF EXISTS log";
             string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
             string dropQuestionTable = @"DROP TABLE IF EXISTS question";
             string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
@@ -41,27 +42,44 @@ namespace EDP_Project
             string dropMeals = @"DROP TABLE IF EXISTS meals";
 
 
-            //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
-            //{
+            using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
+            {
 
-            //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-            //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-            //    MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+                MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
+                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
 
-            //    MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-            //    MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
 
-            //    conn.Open();
-            //    dm.ExecuteNonQuery();
-            //    dci.ExecuteNonQuery();
-            //    dqot.ExecuteNonQuery();
-            //    dqt.ExecuteNonQuery();
-            //    dst.ExecuteNonQuery();
-            //    cmd.ExecuteNonQuery();
+                conn.Open();
+                dlt.ExecuteNonQuery();
+                dm.ExecuteNonQuery();
+                dci.ExecuteNonQuery();
+                dqot.ExecuteNonQuery();
+                dqt.ExecuteNonQuery();
+                dst.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
 
-            //}
+            }
+
+
+            MySqlCommand create_log_table = new MySqlCommand(@"
+CREATE TABLE Log (
+   `ID` int AUTO_INCREMENT NOT NULL,
+   `MachineName` nvarchar(200) NULL,
+   `Logged` datetime NOT NULL,
+   `Level` varchar(5) NOT NULL,
+   `Message` Longtext NOT NULL,
+   `Logger` nvarchar(300) NULL,
+   `Properties` Longtext NULL,
+   `Callsite` nvarchar(300) NULL,
+   `Exception` Longtext NULL,
+	PRIMARY KEY (`ID` ASC) 
+);", con);
 
 
             MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE `user` (
@@ -154,6 +172,7 @@ namespace EDP_Project
             try
             {
                 Create_table.ExecuteNonQuery();
+                create_log_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
                 create_questionTable.ExecuteNonQuery();
                 create_questionOptionTable.ExecuteNonQuery();
