@@ -173,8 +173,8 @@ CREATE TABLE Log (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
             `Content`     NVARCHAR (50)    NULL,
-            PRIMARY KEY (`Id` ASC)
-            FOREIGN KEY (`User_D`) REFERENCES user(Id)
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`User_ID`) REFERENCES user(Id)
             );", con);
 
             //try
