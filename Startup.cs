@@ -169,6 +169,14 @@ CREATE TABLE Log (
             );", con);
 
 
+            MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS blog (
+            `Id`       INT              AUTO_INCREMENT  NOT NULL,
+            `Title`     NVARCHAR (50)    NOT NULL,
+            `Content`     NVARCHAR (50)    NULL,
+            PRIMARY KEY (`Id` ASC)
+            FOREIGN KEY (`User_D`) REFERENCES user(Id)
+            );", con);
+
             //try
             //{
             //    Create_table.ExecuteNonQuery();
@@ -182,7 +190,7 @@ CREATE TABLE Log (
             //}
             //catch (Exception)
             //{
-                
+
             //}
 
 

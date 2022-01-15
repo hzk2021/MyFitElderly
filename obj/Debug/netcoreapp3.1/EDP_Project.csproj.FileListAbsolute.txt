@@ -397,6 +397,3 @@ C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\EDP_Project
 C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\EDP_Project.pdb
 C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\EDP_Project.genruntimeconfig.cache
 C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\EDP_Project.csproj.CopyComplete
-C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\Razor\Pages\Staff\Forum\Dashboard.cshtml.g.cs
-C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\Razor\Pages\Forum\Create.cshtml.g.cs
-C:\Users\exwhy\Documents\sem2\EDP\assignment\obj\Debug\netcoreapp3.1\Razor\Pages\Forum\Home.cshtml.g.cs

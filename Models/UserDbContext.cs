@@ -1,4 +1,5 @@
 ﻿using EDP_Project.Models;
+using EDP_Project.Models.Blog;
 using EDP_Project.Models.Survey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,5 +40,6 @@ namespace Pract2.Models
         public DbSet<Meals> Meals { get; set; }
 
         public DbSet<QuestionOption> QuestionOption { get; set; }
+        public DbSet<Post> Blog { get; set; }
     }
 }
