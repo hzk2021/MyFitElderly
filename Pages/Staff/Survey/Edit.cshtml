@@ -6,7 +6,7 @@
 
 <style>
     .btnCustom {
-        display:inline-block;
+        display: inline-block;
         height: 50px;
         width: 50px;
         border-radius: 50%;
@@ -16,7 +16,7 @@
         font-weight: bold;
     }
 
-    .qnsTB{
+    .qnsTB {
         background-color: #f1f3f4;
         border: none;
         border-bottom: 1px solid black;
@@ -31,8 +31,15 @@
         border-radius: 50%;
         display: inline-block;
     }
-
 </style>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a asp-page="View">Survey</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
 
 <div class="container">
     <h1 class="text-center text-dark mt-5">Edit Survey </h1>
@@ -94,25 +101,25 @@
                                                     <input hidden class="hiddenBelongsToSUUIDInput" asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />
 
 
-                                                @{ 
-                                                
-                                                    var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
-                                                    if (n != null)
-                                                    {
-                                                        for (int k = 0; k < n.Count; k++)
+                                                    @{
+
+                                                        var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
+                                                        if (n != null)
                                                         {
-                                                            <div class="form-inline">
-                                                                <label class="dot my-1 mr-2 mt-3"></label>
-                                                                <input class="hiddenOptionUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].OptionUUID" value="@n[k].OptionUUID"/>
-                                                                <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
-                                                                <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID"/>
+                                                            for (int k = 0; k < n.Count; k++)
+                                                            {
+                                                                <div class="form-inline">
+                                                                    <label class="dot my-1 mr-2 mt-3"></label>
+                                                                    <input class="hiddenOptionUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].OptionUUID" value="@n[k].OptionUUID" />
+                                                                    <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
+                                                                    <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID" />
 
-                                                                <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">DO</a>
+                                                                    <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">DO</a>
 
-                                                            </div>
+                                                                </div>
+                                                            }
                                                         }
-                                                    }    
-                                                }
+                                                    }
                                                     <a class="btnCustom" id="addOptionButton" onclick="addNewQuestionInput('@Model.AllQuestionList[i].QuestionUUID')">A</a>
 
                                                     <a class="btnCustom" id="deleteQnsButton" onclick="deleteQuestionForm('@Model.AllQuestionList[i].QuestionUUID')">DQ</a>

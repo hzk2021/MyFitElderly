@@ -5,6 +5,13 @@
 }
 
 <div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Survey</li>
+        </ol>
+    </nav>
+
     <h1>Survey List</h1>
 
     <table class="table table-hover">
@@ -22,32 +29,32 @@
             </tr>
         </thead>
 
-            <tbody>
-                @{
-                    if (Model.Surveys != null)
+        <tbody>
+            @{
+                if (Model.Surveys != null)
+                {
+                    foreach (var survey in Model.Surveys)
                     {
-                        foreach (var survey in Model.Surveys)
-                        {
-                                <tr>
-                                    <td>@survey.SurveyUUID</td>
-                                    <td>@survey.Category</td>
-                                    <td>@survey.Title</td>
-                                    <td>@survey.Description</td>
-                                    <td>@survey.CreatedOn</td>
-                                    <td>@survey.UpdatedOn</td>
-                                    <td>@survey.ViewStatus</td>
-                                    <td>@survey.CreatedByStaffID</td>
-                                    <td><a class="btn btn-warning" asp-page="Edit" asp-route-sid="@survey.SurveyUUID">Edit</a></td>
-                                    <td>
-                                        <form asp-page="Delete" method="post" asp-route-sid="@survey.SurveyUUID">
-                                            <button type="submit"class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                        <tr>
+                            <td>@survey.SurveyUUID</td>
+                            <td>@survey.Category</td>
+                            <td>@survey.Title</td>
+                            <td>@survey.Description</td>
+                            <td>@survey.CreatedOn</td>
+                            <td>@survey.UpdatedOn</td>
+                            <td>@survey.ViewStatus</td>
+                            <td>@survey.CreatedByStaffID</td>
+                            <td><a class="btn btn-warning" asp-page="Edit" asp-route-sid="@survey.SurveyUUID">Edit</a></td>
+                            <td>
+                                <form asp-page="Delete" method="post" asp-route-sid="@survey.SurveyUUID">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
 
-                                </tr>
-                        }
+                        </tr>
                     }
                 }
-            </tbody>
+            }
+        </tbody>
     </table>
 </div>
