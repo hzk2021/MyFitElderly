@@ -4,6 +4,15 @@
     ViewData["Title"] = "View Survey - Admin";
 }
 
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
+<style>
+    .page-item.active .page-link {
+        background-color: black !important;
+    }
+</style>
+
 <div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -12,34 +21,50 @@
         </ol>
     </nav>
 
-    <h1>Survey List</h1>
+    <div class="toolbar">
+        <a class="btn btn-primary" asp-page="Create">Create Survey</a>
+    </div>
 
-    <table class="table table-hover">
-        <thead class="thead-dark">
+    <h1 class="text-center">Existing Surveys</h1>
+
+    <table
+          data-toggle="table"
+          data-search="true"
+          data-show-columns="true"
+          data-pagination= "true"
+          data-filter-control="true"
+          data-buttons-class="dark"
+          data-page-size="5"
+          data-page-list="5,10,20"
+          data-page-list-class="dark"
+          data-toolbar=".toolbar"
+          data-toolbar-align="left"
+          data-pagination-pre-text="<"
+          data-pagination-next-text=">">
+
+        <thead>
             <tr>
-                <td scope="col">SurveyUUID</td>
-                <td scope="col">Category</td>
-                <td scope="col">Title</td>
-                <td scope="col">Description</td>
-                <td scope="col">CreatedOn</td>
-                <td scope="col">UpdatedOn</td>
-                <td scope="col">ViewStatus</td>
-                <td scope="col">CreatedByStaffID</td>
-                <td scope="col" colspan="2" class="text-center">Options</td>
+                <th>Category</th>
+                <th>Title</th>
+                <th>CreatedOn</th>
+                <th>UpdatedOn</th>
+                <th>ViewStatus</th>
+                <th>CreatedByStaffID (change to staffName later)</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
             </tr>
         </thead>
 
         <tbody>
+
             @{
                 if (Model.Surveys != null)
                 {
                     foreach (var survey in Model.Surveys)
                     {
                         <tr>
-                            <td>@survey.SurveyUUID</td>
                             <td>@survey.Category</td>
                             <td>@survey.Title</td>
-                            <td>@survey.Description</td>
                             <td>@survey.CreatedOn</td>
                             <td>@survey.UpdatedOn</td>
                             <td>@survey.ViewStatus</td>
@@ -57,4 +82,5 @@
             }
         </tbody>
     </table>
+
 </div>
