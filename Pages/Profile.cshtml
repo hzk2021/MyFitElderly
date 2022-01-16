@@ -438,13 +438,13 @@
           e.preventDefault();
           }
 
-          if (!addressReg.test(txtareainput)) {
+          //if (!addressReg.test(txtareainput)) {
 
-              e.preventDefault();
+          //    e.preventDefault();
 
-              $('#addressE').text("Please enter a valid address.")
+          //    $('#addressE').text("Please enter a valid address.")
 
-          }
+          //}
 
 
 
@@ -496,8 +496,7 @@
   function validate(file) {
     var ext = file.split(".");
     ext = ext[ext.length - 1].toLowerCase();
-    var arrayExtensions = ["jpg", "jpeg", "png", "bmp", "gif"];
-
+      var arrayExtensions = ["jpg", "jpeg"];
     if (arrayExtensions.lastIndexOf(ext) == -1) {
       alert("Only files with following extensions are allowed: .png, .jpg, .jpeg");
       document.getElementById("avatar").value = null;

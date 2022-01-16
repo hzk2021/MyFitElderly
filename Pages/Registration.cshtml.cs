@@ -69,6 +69,9 @@ namespace EDP_Project.Pages.Auth
 
             string photoPath = Path.Combine("Images", uniqueName);
 
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+
             myUser.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
 
 

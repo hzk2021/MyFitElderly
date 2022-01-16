@@ -24,6 +24,10 @@ namespace EDP_Project.Pages.Staff.Accounts
 
         public string userID { get; set; }
 
+        [BindProperty]
+
+        public string originalPath { get; set; }
+
 
 
         public void updateUserAccount(string userId)
@@ -31,6 +35,75 @@ namespace EDP_Project.Pages.Staff.Accounts
 
             if (myUser.Photo != null)
             {
+
+
+
+                string sqlz = "select PhotoPath FROM User WHERE Username = @USERID";
+                MySqlCommand commandz = new MySqlCommand(sqlz, con);
+                commandz.Parameters.AddWithValue("@USERID", userId);
+                try
+                {
+                    con.Open();
+                    using (MySqlDataReader reader = commandz.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            if (reader["PhotoPath"] != null)
+                            {
+
+
+                                if (reader["PhotoPath"] != DBNull.Value)
+                                {
+                                    originalPath = reader["PhotoPath"].ToString();
+                                }
+
+
+                            }
+
+
+
+
+                        }
+                    }
+
+                }
+
+
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+
+
+
+                FileInfo file = new FileInfo(Path.Combine("wwwroot", originalPath));
+
+                if (file.Exists)//check file exists
+                {
+                    //file.Delete();
+
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
+
+                    System.IO.File.Delete(Path.Combine("wwwroot", originalPath));
+                }
+
+
+
+
+
+
+
+
+
+
+
 
 
                 string uploadsFolder = "wwwroot/Images";

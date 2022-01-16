@@ -36,6 +36,11 @@ namespace EDP_Project.Pages
 
         public String inputPass { get; set; }
 
+        [BindProperty]
+
+
+        public String originalPath { get; set; }
+
 
 
         public User retrieverUserFromSession(string userID)
@@ -58,11 +63,15 @@ namespace EDP_Project.Pages
 
                         if (reader["PhotoPath"] != null)
                         {
+
+
                             if (reader["PhotoPath"] != DBNull.Value)
                             {
                                 theUser.PhotoPath = reader["PhotoPath"].ToString();
                                 //theUser.PhotoPath = @"~\Images\ff5eb79e-1d3e-42d9-a035-2150bd7bf6df_icon.jpg";
                             }
+
+
                         }
 
 
@@ -169,6 +178,9 @@ namespace EDP_Project.Pages
 
             myUser = retrieverUserFromSession(HttpContext.Session.GetString("user"));
 
+            originalPath = myUser.PhotoPath;
+
+
 
         }
 
@@ -265,6 +277,11 @@ namespace EDP_Project.Pages
 
 
 
+
+
+
+
+
             //  server side scrutiny
 
             var usernamePattern = "^[a-zA-Z][a-zA-Z ]{5,30}$";
@@ -320,24 +337,88 @@ namespace EDP_Project.Pages
 
 
 
-
-
+            // Given there's a photo submission...
 
                 if (myUser.Photo != null)
                 {
 
 
 
-                    // Sql statement, update where username = @
+                string sqlz = "select PhotoPath FROM User WHERE Username = @USERID";
+                MySqlCommand commandz = new MySqlCommand(sqlz, con);
+                commandz.Parameters.AddWithValue("@USERID", HttpContext.Session.GetString("user"));
+                try
+                {
+                    con.Open();
+                    using (MySqlDataReader reader = commandz.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+
+                            if (reader["PhotoPath"] != null)
+                            {
 
 
-                    string uploadsFolder = "wwwroot/Images";
+                                if (reader["PhotoPath"] != DBNull.Value)
+                                {
+                                    originalPath = reader["PhotoPath"].ToString();
+                                }
+
+
+                            }
+
+
+
+
+                        }
+                    }
+
+                }
+
+
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+
+
+                FileInfo file = new FileInfo(Path.Combine("wwwroot", originalPath));
+
+                if (file.Exists)//check file exists
+                {
+                    //file.Delete();
+
+                    System.GC.Collect();
+                    System.GC.WaitForPendingFinalizers();
+
+                    System.IO.File.Delete(Path.Combine("wwwroot", originalPath));
+                }
+
+
+
+                string uploadsFolder = "wwwroot/Images";
                     string uniqueName = Guid.NewGuid().ToString() + "_" + myUser.Photo.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueName);
 
                     string photoPath = Path.Combine("Images", uniqueName);
 
                     myUser.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+
+
+
+
+
+
+
+
+
+
+
 
                     try
                     {
