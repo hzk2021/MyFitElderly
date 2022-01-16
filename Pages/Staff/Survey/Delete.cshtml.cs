@@ -22,11 +22,11 @@ namespace EDP_Project.Pages.Staff.Survey
             Response.Redirect("/Staff/Survey/View");
         }
 
-        public IActionResult OnPost(string sid)
+        public async Task<IActionResult> OnPost(string sid)
         {
             if (sid != null && sid != string.Empty)
             {
-                _srv.DeleteSurveyQnsAndOptions(sid);
+                await _srv.DeleteSurveyQnsAndOptions(sid);
             }
 
             return Redirect("/Staff/Survey/View");

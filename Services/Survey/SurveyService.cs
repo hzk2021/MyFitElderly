@@ -1,4 +1,5 @@
-﻿using Pract2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Pract2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,23 +18,23 @@ namespace EDP_Project.Services.Survey
             _dbcontext = context;
         }
 
-        public void AddSurvey(Models.Survey.Survey survey)
+        public async Task AddSurvey(Models.Survey.Survey survey)
         {
-            _dbcontext.Survey.Add(survey);
-            _dbcontext.SaveChanges();
+            await _dbcontext.Survey.AddAsync(survey);
+            await _dbcontext.SaveChangesAsync();
         }
 
-        public List<Models.Survey.Survey> GetAllSurveys()
+        public async Task<List<Models.Survey.Survey>> GetAllSurveys()
         {
-            return _dbcontext.Survey.ToList(); // Test
+            return await _dbcontext.Survey.ToListAsync(); // Test
         }
 
-        public Models.Survey.Survey GetASurvey(string surveyUUID)
+        public async Task<Models.Survey.Survey> GetASurvey(string surveyUUID)
         {
-            return _dbcontext.Survey.FirstOrDefault(c => c.SurveyUUID == surveyUUID);
+            return await _dbcontext.Survey.FirstOrDefaultAsync(c => c.SurveyUUID == surveyUUID);
         }
 
-        public void UpdateSurvey(Models.Survey.Survey survey)
+        public async Task UpdateSurvey(Models.Survey.Survey survey)
         {
             var originalSurvey = _dbcontext.Survey.FirstOrDefault(s => s.SurveyUUID == survey.SurveyUUID);
             if (originalSurvey != null)
@@ -43,34 +44,34 @@ namespace EDP_Project.Services.Survey
                 originalSurvey.Description = survey.Description;
                 originalSurvey.UpdatedOn = DateTime.Now;
 
-                _dbcontext.SaveChanges();
+                await _dbcontext.SaveChangesAsync();
 
             }
         }
 
-        public void DeleteQuestionsWithSurveyUUID(string surveyUUID)
+        public async Task DeleteQuestionsWithSurveyUUID(string surveyUUID)
         {
             var listOfQuestions = _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToList();
             foreach (var qns in listOfQuestions)
             {
-                DeleteOptionsFromQuestion(qns.QuestionUUID);
+                await DeleteOptionsFromQuestion(qns.QuestionUUID);
 
                 _dbcontext.Question.Remove(qns);
-                _dbcontext.SaveChanges();
+                await _dbcontext.SaveChangesAsync();
             }
         }
 
-        public void DeleteOptionsFromQuestion(string questionUUID)
+        public async Task DeleteOptionsFromQuestion(string questionUUID)
         {
             var listOfOptions = _dbcontext.QuestionOption.Where(qo => qo.BelongsToQuestionID == questionUUID).ToList();
             foreach (var option in listOfOptions)
             {
                 _dbcontext.QuestionOption.Remove(option);
-                _dbcontext.SaveChanges();
+                await _dbcontext.SaveChangesAsync();
             }
         }
 
-        public void AddQuestionToSurvey(string questionUUID, string questionText, string surveyUUID)
+        public async Task AddQuestionToSurvey(string questionUUID, string questionText, string surveyUUID)
         {
             Models.Survey.Question qns = new Models.Survey.Question()
             {
@@ -79,27 +80,27 @@ namespace EDP_Project.Services.Survey
                 BelongsToSurveyID = surveyUUID
             };
 
-            _dbcontext.Question.Add(qns);
-            _dbcontext.SaveChanges();
+            await _dbcontext.Question.AddAsync(qns);
+            await _dbcontext.SaveChangesAsync();
         }
 
-        public List<Models.Survey.Question> GetQuestionsFromASurvey(string surveyUUID)
+        public async Task<List<Models.Survey.Question>> GetQuestionsFromASurvey(string surveyUUID)
         {
-            return _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToList();
+            return await _dbcontext.Question.Where(q => q.BelongsToSurveyID == surveyUUID).ToListAsync();
         }
 
-        public void UpdateQuestion(Models.Survey.Question question)
+        public async Task UpdateQuestion(Models.Survey.Question question)
         {
             var originalQuestion = _dbcontext.Question.FirstOrDefault(q => q.QuestionUUID == question.QuestionUUID);
             if (originalQuestion != null)
             {
                 originalQuestion.Text = question.Text;
 
-                _dbcontext.SaveChanges();
+                await _dbcontext.SaveChangesAsync();
             }
         }
 
-        public void AddOptionToQuestion(string optionUUID, string questionOptionText, string questionUUID)
+        public async Task AddOptionToQuestion(string optionUUID, string questionOptionText, string questionUUID)
         {
             Models.Survey.QuestionOption qnsOption = new Models.Survey.QuestionOption()
             {
@@ -108,33 +109,33 @@ namespace EDP_Project.Services.Survey
                 BelongsToQuestionID = questionUUID
             };
 
-            _dbcontext.QuestionOption.Add(qnsOption);
-            _dbcontext.SaveChanges();
+            await _dbcontext.QuestionOption.AddAsync(qnsOption);
+            await _dbcontext.SaveChangesAsync();
 
         }
 
-        public List<Models.Survey.QuestionOption> GetAllQuestionOptions()
+        public async Task<List<Models.Survey.QuestionOption>> GetAllQuestionOptions()
         {
-            return _dbcontext.QuestionOption.ToList();
+            return await _dbcontext.QuestionOption.ToListAsync();
         }
-        public List<Models.Survey.QuestionOption> GetOptionsFromAQuestion(string questionUUID)
+        public async Task<List<Models.Survey.QuestionOption>> GetOptionsFromAQuestion(string questionUUID)
         {
-            return _dbcontext.QuestionOption.Where(q => q.BelongsToQuestionID == questionUUID).ToList();
+            return await _dbcontext.QuestionOption.Where(q => q.BelongsToQuestionID == questionUUID).ToListAsync();
         }
 
-        public void DeleteSurveyQnsAndOptions(string surveyUUID)
+        public async Task DeleteSurveyQnsAndOptions(string surveyUUID)
         {
-            var survey = GetASurvey(surveyUUID);
+            var survey = await GetASurvey(surveyUUID);
 
             if (survey != null)
             {
-                var listOfQns = GetQuestionsFromASurvey(surveyUUID);
+                var listOfQns = await GetQuestionsFromASurvey(surveyUUID);
 
                 if (listOfQns != null)
                 {
                     for (int i = 0; i < listOfQns.Count; i++)
                     {
-                        var listOfOptions = GetOptionsFromAQuestion(listOfQns[i].QuestionUUID);
+                        var listOfOptions = await GetOptionsFromAQuestion(listOfQns[i].QuestionUUID);
 
                         if (listOfOptions != null)
                         {
@@ -152,7 +153,7 @@ namespace EDP_Project.Services.Survey
                 }
 
                 _dbcontext.Survey.Remove(survey);
-                _dbcontext.SaveChanges();
+                await _dbcontext.SaveChangesAsync();
             }
         }
 

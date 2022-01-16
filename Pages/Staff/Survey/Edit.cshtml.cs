@@ -26,9 +26,9 @@ namespace EDP_Project.Pages.Staff.Survey
             _srv = surveySrv;
         }
 
-        public void OnGet(string sid)
+        public async void OnGet(string sid)
         {
-            svy = _srv.GetASurvey(sid);
+            svy = await _srv.GetASurvey(sid);
 
             if (svy == null)
             {
@@ -36,27 +36,27 @@ namespace EDP_Project.Pages.Staff.Survey
             }
             else
             {
-                AllQuestionList = _srv.GetQuestionsFromASurvey(svy.SurveyUUID);
+                AllQuestionList = await _srv.GetQuestionsFromASurvey(svy.SurveyUUID);
             }
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
-                _srv.UpdateSurvey(svy); // Title, Description, Category...
+                await _srv.UpdateSurvey(svy); // Title, Description, Category...
 
-                _srv.DeleteQuestionsWithSurveyUUID(svy.SurveyUUID);
+                await _srv.DeleteQuestionsWithSurveyUUID(svy.SurveyUUID);
 
                 for (int i = 0; i < AllQuestionList.Count; i++)
                 {
-                    _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
-                    _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
+                    await _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
+                    await _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
                 }
 
                 for (int k = 0; k < qnsOptions.Count; k++)
                 {
-                    _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
+                    await _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
                         qnsOptions[k].Text,
                         qnsOptions[k].BelongsToQuestionID);
                 }

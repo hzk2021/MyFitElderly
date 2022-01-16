@@ -18,9 +18,9 @@ namespace EDP_Project.Pages.Staff.Survey
             _srv = surveySrv;
         }
 
-        public void OnGet()
+        public async void OnGet()
         {
-            Surveys = _srv.GetAllSurveys();
+            Surveys = await _srv.GetAllSurveys();
         }
     }
 }

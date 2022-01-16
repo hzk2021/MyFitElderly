@@ -96,7 +96,7 @@
 
                                                 @{ 
                                                 
-                                                    var n = Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
+                                                    var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
                                                     if (n != null)
                                                     {
                                                         for (int k = 0; k < n.Count; k++)

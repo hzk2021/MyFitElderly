@@ -31,7 +31,7 @@ namespace EDP_Project.Pages.Staff.Survey
         {
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (ModelState.IsValid)
             {
@@ -46,17 +46,17 @@ namespace EDP_Project.Pages.Staff.Survey
                     ViewStatus = false,
                     CreatedByStaffID = 7 // Temp | change later
                 };
-                _srv.AddSurvey(svy);
+                await _srv.AddSurvey(svy);
 
                 for (int i = 0; i < AllQuestionList.Count; i++)
                 {
-                    _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
-                    _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
+                    await _srv.AddQuestionToSurvey(AllQuestionList[i].QuestionUUID, AllQuestionList[i].Text, AllQuestionList[i].BelongsToSurveyID);
+                    await _srv.DeleteOptionsFromQuestion(AllQuestionList[i].QuestionUUID);
                 }
 
                 for (int k = 0; k < qnsOptions.Count; k++)
                 {
-                    _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
+                    await _srv.AddOptionToQuestion(qnsOptions[k].OptionUUID,
                         qnsOptions[k].Text,
                         qnsOptions[k].BelongsToQuestionID);
                 }
