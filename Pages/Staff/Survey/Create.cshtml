@@ -4,34 +4,8 @@
     ViewData["Title"] = "Create Survey - Admin";
 }
 
-<style>
-    .btnCustom {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-        border: 1px solid black;
-        padding-top: 0px;
-        font-size: 30px;
-        font-weight: bold;
-    }
 
-    .qnsTB {
-        background-color: #f1f3f4;
-        border: none;
-        border-bottom: 1px solid black;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .dot {
-        height: 25px;
-        width: 25px;
-        background-color: white;
-        border: 2px solid grey;
-        border-radius: 50%;
-        display: inline-block;
-    }
-</style>
+<link href="~/css/surveystyle.css" rel="stylesheet" />
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -42,20 +16,20 @@
 </nav>
 
 <div class="container">
-    <h1 class="text-center text-dark mt-5">Create Survey </h1>
     <div class="row">
         <div class="col-md-12">
             <div class="p-3">
                 @{
-                    <input type="submit" value="+" class="btnCustom" id="addQnsButton" />
                     <form asp-action="" method="post" id="mainContainerForm">
                         <div class="col-12 my-3 text-center">
-                            <input type="submit" value="Create" class="btn btn-dark ml-auto" />
+                            <input type="submit" value="Create" class="btn btn-primary ml-auto" />
 
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-12">
-                                <div class="card p-3">
+                                <div class="card p-3 form-1 form-group">
+                                    <h1 class="text-center text-dark mt-5">Create New Survey </h1>
+
                                     <div asp-validation-summary="All" class="text-danger"></div>
 
                                     <div class="col-12 my-3">
@@ -84,6 +58,12 @@
                             </div>
                         </div>
                     </form>
+
+
+                    <div class="addqnsGroup" id="addQnsButton">
+                        <input type="submit" value="+" class="btnCustom"/>
+                        <span><u><b>Add Question</b></u></span>
+                    </div>
 
                 }
 
@@ -118,6 +98,7 @@
         var cardP_3 = document.createElement("div");
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
+        cardP_3.classList.add("form-2");
 
         var questionUUIDHidden = document.createElement("input");
         questionUUIDHidden.classList.add("hiddenQuestionUUIDInput");
@@ -140,26 +121,41 @@
         cardP_3.appendChild(questionTB);
         cardP_3.appendChild(questionBelongsToUUIDHidden);
 
+        var divforInputOption = document.createElement("div");
+        divforInputOption.className = "mb-4"
 
         var addInputButton = document.createElement("a");
-        addInputButton.className = "btnCustom";
+        addInputButton.className = "addOptionLink";
         addInputButton.id = "addOptionButton";
-        addInputButton.textContent = "A";
+        addInputButton.textContent = "Add Option";
         addInputButton.addEventListener("click", function () {
             addNewQuestionInput(qUUID);
         });
 
-        cardP_3.appendChild(addInputButton);
+        divforInputOption.appendChild(addInputButton);
 
-        var deleteQuestionButton = document.createElement("a");
-        deleteQuestionButton.className = "btnCustom";
+        cardP_3.appendChild(divforInputOption);
+
+        var line = document.createElement("hr");
+        line.className = "hruler";
+
+        var divforDeleteQnsOption = document.createElement("div");
+        divforDeleteQnsOption.className = "mb-4"
+
+        var deleteQuestionButton = document.createElement("span");
+        deleteQuestionButton.classList.add("fas");
+        deleteQuestionButton.classList.add("fa-trash-alt");
+        deleteQuestionButton.classList.add("fa-2x");
+
         deleteQuestionButton.id = "deleteQnsButton";
-        deleteQuestionButton.textContent = "DQ";
         deleteQuestionButton.addEventListener("click", function () {
             deleteQuestionForm(qUUID);
         });
 
-        cardP_3.appendChild(deleteQuestionButton);
+        cardP_3.appendChild(line);
+
+        divforDeleteQnsOption.appendChild(deleteQuestionButton);
+        cardP_3.appendChild(divforDeleteQnsOption);
 
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
@@ -174,7 +170,7 @@
 
         formInlineDiv.className = "form-inline";
 
-        var circleIconLabel = document.createElement("input");
+        var circleIconLabel = document.createElement("span");
         circleIconLabel.classList.add("dot");
         circleIconLabel.classList.add("my-1");
         circleIconLabel.classList.add("mr-2");
@@ -187,7 +183,7 @@
 
         var optionTextInput = document.createElement("input");
         optionTextInput.classList.add("optionInput");
-        optionTextInput.classList.add("form-control");
+        optionTextInput.classList.add("form-control-md");
         optionTextInput.classList.add("mt-3");
         optionTextInput.type = "text";
 
@@ -201,10 +197,12 @@
         formInlineDiv.appendChild(optionTextInput);
         formInlineDiv.appendChild(hiddenBelongsToQUUIDInput);
 
-        var deleteInputButton = document.createElement("a");
-        deleteInputButton.className = "btnCustom";
+        var deleteInputButton = document.createElement("span");
+        deleteInputButton.classList.add("fas");
+        deleteInputButton.classList.add("fa-times");
+        deleteInputButton.classList.add("fa-lg");
+
         deleteInputButton.id = "deleteOptionButton";
-        deleteInputButton.textContent = "D";
         deleteInputButton.addEventListener("click", function () {
             deleteOptionInput(optionUUID);
         });
@@ -217,7 +215,7 @@
         for (var i = 0; i < allInputs.length; i++) {
             if (allInputs[i].value == questionUUID) {
                 if (allInputs[i].hidden == true) {
-                    allInputs[i].parentElement.appendChild(formInlineDiv);
+                    allInputs[i].parentElement.insertBefore(formInlineDiv, allInputs[i].parentElement.getElementsByClassName("hruler")[0]);
                     break;
                 }
             }

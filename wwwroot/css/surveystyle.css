@@ -1,0 +1,71 @@
+﻿.btnCustom {
+    height: 45px;
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid black;
+    padding-top: 0px;
+    padding-bottom: 47px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.qnsTB {
+    background-color: #f1f3f4;
+    border: none;
+    border-radius: 10px 10px 0 0;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: white;
+    border: 2px solid grey;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.form-1 {
+    border-top: 8px solid purple;
+    width: 70%;
+    margin: auto;
+    border-radius: 10px;
+    background: #f9f9f9;
+}
+
+.form-2 {
+    border-left: 5px solid #4285f4;
+    width: 70%;
+    margin: auto;
+    background: #f9f9f9;
+}
+
+.addqnsGroup {
+    width: 200px;
+    margin: 20px auto 0 auto;
+}
+
+a:not([href]):not([tabindex]).addOptionLink {
+    text-decoration: underline;
+    color: #4eb4fc;
+    position: absolute;
+    margin-right: 20px;
+    right: 0px;
+}
+
+.hruler {
+    border-top: 1px solid black;
+}
+
+#deleteQnsButton {
+    position: absolute;
+    margin-right: 20px;
+    right: 0px;
+}
+
+#deleteOptionButton {
+    margin: 15px 0 0 5px;
+}
+
+.optionInput {
+    width: 70%;
+}
