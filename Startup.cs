@@ -169,29 +169,33 @@ CREATE TABLE Log (
             );", con);
 
 
-            MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS blog (
+            MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
             `Content`     NVARCHAR (50)    NULL,
-            PRIMARY KEY (`Id` ASC),
-            FOREIGN KEY (`User_ID`) REFERENCES user(Id)
+            `Category`     NVARCHAR (50)    NULL,
+            `Created`         DATETIME       NOT NULL,
+            PRIMARY KEY (`Id` ASC)
+
             );", con);
 
-            //try
-            //{
-            //    Create_table.ExecuteNonQuery();
-            //    create_log_table.ExecuteNonQuery();
-            //    create_surveyTable.ExecuteNonQuery();
-            //    create_questionTable.ExecuteNonQuery();
-            //    create_questionOptionTable.ExecuteNonQuery();
-            //    Create_caloriesIntake.ExecuteNonQuery();
-            //    Create_foodList.ExecuteNonQuery();
-            //    Create_mealItems.ExecuteNonQuery();
-            //}
-            //catch (Exception)
-            //{
+            try
+            {
+                Create_Blog.ExecuteNonQuery();
 
-            //}
+                Create_table.ExecuteNonQuery();
+                create_log_table.ExecuteNonQuery();
+                create_surveyTable.ExecuteNonQuery();
+                create_questionTable.ExecuteNonQuery();
+                create_questionOptionTable.ExecuteNonQuery();
+                Create_caloriesIntake.ExecuteNonQuery();
+                Create_foodList.ExecuteNonQuery();
+                Create_mealItems.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+
+            }
 
 
 
@@ -216,6 +220,7 @@ CREATE TABLE Log (
             services.AddTransient<HealthService>();
 
             services.AddTransient<SurveyService>();
+            services.AddTransient<BlogService>();
 
             services.AddRazorPages();
 

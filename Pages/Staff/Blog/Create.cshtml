@@ -1,0 +1,41 @@
+﻿@page
+@model EDP_Project.Pages.Staff.Blog.CreateModel
+@{
+}
+<form method="post">
+    <div class="card">
+        <h1 style="padding:2%;">Add New Blog</h1>
+        @if (!String.IsNullOrEmpty(Model.ErrorMsg))
+        {
+            <p class="alert alert-danger">@Model.ErrorMsg</p>
+        }
+        <br />
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Title</label>
+            <input asp-for="BlogModel.Title" required />
+            <span asp-validation-for="BlogModel.Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Category</label>
+            <input asp-for="BlogModel.Category" required />
+            <span asp-validation-for="BlogModel.Category" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Content</label>
+            <input asp-for="BlogModel.Content" required />
+            <span asp-validation-for="BlogModel.Content" class="text-danger"></span>
+        </div>
+
+
+    </div>
+    <br style="margin-bottom:5%;" />
+
+    <a asp-page="~/Pages/Staff/Health/FoodList" class="btn btn-secondary">Discard</a>
+    <input class="btn btn-success float-right" type="submit" value="Create" />
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

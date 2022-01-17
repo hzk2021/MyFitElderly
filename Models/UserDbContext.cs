@@ -40,6 +40,6 @@ namespace Pract2.Models
         public DbSet<Meals> Meals { get; set; }
 
         public DbSet<QuestionOption> QuestionOption { get; set; }
-        public DbSet<Post> Blog { get; set; }
+        public DbSet<Post> Post { get; set; }
     }
 }
