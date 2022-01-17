@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http;
+@using MySql.Data.MySqlClient;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +7,7 @@
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EDP_Project</title>
+    <title>@ViewData["Title"] - MyFitElderly</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     @*<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">*@
@@ -20,38 +21,168 @@
 
 
 
+
+
+
+
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">EDP_Project</a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">MyFitElderly</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
-                        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
                         @{
+
+
                             if (@Context.Session.GetString("user") != null)
                             {
-                                <li class="nav-item ml-auto">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
-                                        <i class="fa fa-sign-out fa-lg"></i>
-                                    </a>
-                                </li>
+                                string userRole = "Guest";
+                                MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+                                string sql = "SELECT * FROM User WHERE Username=@USER";
+                                MySqlCommand command = new MySqlCommand(sql, con);
+                                command.Parameters.AddWithValue("@USER", @Context.Session.GetString("user"));
+                                try
+                                {
+                                    con.Open();
+                                    using (MySqlDataReader reader = command.ExecuteReader())
+                                    {
+                                        while (reader.Read())
+                                        {
+
+                                            if (reader["Role"] != DBNull.Value)
+                                            {
+                                                userRole = reader["Role"].ToString();
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception(ex.ToString());
+                                }
+
+                                finally
+                                {
+                                    con.Close();
+                                }
+
+
+                                // Guest navbar (logged in)
+
+                                if (userRole != "Admin")
+                                {
+
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="">Fries</a>
+                                    </li>
+                                    <li class="nav-item ml-auto">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
+                                            <i class="fa fa-sign-out fa-lg"></i>
+                                        </a>
+                                    </li>
+
+
+                                }
+                                else
+
+                                // Administrative navbar
+
+                                {
+
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/">Hamburger</a>
+                                    </li>
+                                    <li class="nav-item ml-auto">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
+                                            <i class="fa fa-sign-out fa-lg"></i>
+                                        </a>
+                                    </li>
+
+                                }
                             }
 
+                            // Unloggedin guest navbar
+
+                            else
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="Contact">Contact</a>
+                                </li>
+
+
+                            }
+
+
+
+
+
+
+
+
                         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

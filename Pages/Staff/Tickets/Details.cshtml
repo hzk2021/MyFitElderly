@@ -20,34 +20,47 @@
             </div>
         </div>
     </div>
-    <div class="invoice-body">
-        <!--<div class="row">
-            <div class="col-xs-5">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Company Details</h3>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            <dt>Name</dt>
-                            <dd><strong>Acme Corporation</strong></dd>
-                            <dt>Industry</dt>
-                            <dd>Software Development</dd>
-                            <dt>Address</dt>
-                            <dd>Field 3, Moon</dd>
-                            <dt>Phone</dt>
-                            <dd>123.4456.4567</dd>
-                            <dt>Email</dt>
-                            <dd>mainl@acme.com</dd>
-                            <dt>Tax NO</dt>
-                            <dd class="mono">123456789</dd>
-                            <dt>Tax Office</dt>
-                            <dd>A' Moon</dd>
-                    </div>
-                </div>
-            </div>-->
 
-            @*<div class="col-xs-7">
+
+
+
+    <div class="invoice-body">
+
+        <div style="padding-bottom: 30px;">
+            <a class="nav-link text-dark" href="javascript:history.go(-1)">
+                <i class="fa fa-times fa-xl" style="float:right;" aria-hidden="true"></i>
+            </a>
+
+        </div>
+
+
+
+        <!--<div class="row">
+        <div class="col-xs-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Company Details</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Name</dt>
+                        <dd><strong>Acme Corporation</strong></dd>
+                        <dt>Industry</dt>
+                        <dd>Software Development</dd>
+                        <dt>Address</dt>
+                        <dd>Field 3, Moon</dd>
+                        <dt>Phone</dt>
+                        <dd>123.4456.4567</dd>
+                        <dt>Email</dt>
+                        <dd>mainl@acme.com</dd>
+                        <dt>Tax NO</dt>
+                        <dd class="mono">123456789</dd>
+                        <dt>Tax Office</dt>
+                        <dd>A' Moon</dd>
+                </div>
+            </div>
+        </div>-->
+        @*<div class="col-xs-7">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Customer Details</h3>
@@ -76,13 +89,12 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Services / Products</h3>
+                <h3 class="panel-title">Ticket ID #@Model.myTicket.Ticket_Reference_Id (@Model.myTicket.Status) </h3>
             </div>
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th>Ticket / Details</th>
-                        <th class="text-center colfix">Name</th>
+                        <th class="text-center colfix">Customer Name</th>
                         <th class="text-center colfix">Email</th>
                         <th class="text-center colfix">Contact</th>
                         <th class="text-center colfix">Issue Type</th>
@@ -91,32 +103,27 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            Lorem Ipsum Dolor
-                            <br>
-                            <small class="text-muted">The best lorem in town, try it now or leave forever</small>
-                        </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             <span class="mono">@Model.myTicket.CustomerName</span>
                             <br>
                             @*<small class="text-muted">Before Tax</small>*@
                         </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             <span class="mono">@Model.myTicket.CustomerEmail</span>
                             <br>
                             @*<small class="text-muted">18 Units</small>*@
                         </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             <span class="mono">@Model.myTicket.CustomerContact</span>
                             <br>
                             @*<small class="text-muted">Special -10%</small>*@
                         </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             <span class="mono">@Model.myTicket.IssueType</span>
                             <br>
                             @*<small class="text-muted">VAT 20%</small>*@
                         </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             <strong class="mono">@Model.myTicket.DateCreated</strong>
                             <br>
                             @*<small class="text-muted mono">$16,200.00</small>*@
@@ -135,7 +142,6 @@
                     </div>
 
                     <tr>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -152,11 +158,26 @@
         <div class="row">
             <div class="col-xs-12 text-center">
 
-                @{ 
+
+
+                @{
                     var responseLink = "/Staff/Tickets/Response?id=" + Model.myTicket.Ticket_Reference_Id;
                 }
 
-                <a href="@responseLink" class="btn btn-primary" style="min-width: 250px;" role="button" aria-disabled="true">Response</a>
+
+                @{
+
+                    if (@Model.myTicket.Status == "Open")
+                    {
+
+                        <a href="@responseLink" class="btn btn-primary" style="min-width: 250px;" role="button" aria-disabled="true">Respond</a>
+
+                        @*<a href="#" class="btn btn-success" style="min-width: 250px;" role="button" aria-disabled="true">Forward</a>*@
+
+                    }
+
+
+                }
 
                 <a href="/Staff/Tickets/Dashboard" class="btn btn-danger" style="min-width: 250px;" role="button" aria-disabled="true">Cancel</a>
 
@@ -167,12 +188,12 @@
 
             @*<div class="col-xs-6 ">
 
-                <button type="button" class="btn btn-primary">Primary</button>
+                    <button type="button" class="btn btn-primary">Primary</button>
 
-                <button type="button" class="btn btn-primary">Primary</button>
+                    <button type="button" class="btn btn-primary">Primary</button>
 
 
-            </div>*@
+                </div>*@
 
 
         </div>
