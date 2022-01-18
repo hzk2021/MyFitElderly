@@ -4,34 +4,7 @@
     ViewData["Title"] = "Edit Survey - Admin";
 }
 
-<style>
-    .btnCustom {
-        display: inline-block;
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-        border: 1px solid black;
-        padding-top: 0px;
-        font-size: 30px;
-        font-weight: bold;
-    }
-
-    .qnsTB {
-        background-color: #f1f3f4;
-        border: none;
-        border-bottom: 1px solid black;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .dot {
-        height: 25px;
-        width: 25px;
-        background-color: white;
-        border: 2px solid grey;
-        border-radius: 50%;
-        display: inline-block;
-    }
-</style>
+<link href="~/css/surveystyle.css" rel="stylesheet" />
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -42,22 +15,22 @@
 </nav>
 
 <div class="container">
-    <h1 class="text-center text-dark mt-5">Edit Survey </h1>
     <div class="row">
         <div class="col-md-12">
             <div class="p-3">
                 @{
                     if (Model.svy != null)
                     {
-                        <input type="submit" value="+" class="btnCustom" id="addQnsButton" />
                         <form asp-action="" method="post" id="mainContainerForm">
                             <div class="col-12 my-3 text-center">
-                                <input type="submit" value="Update" class="btn btn-dark ml-auto" />
+                                <input type="submit" value="Update" class="btn btn-warning ml-auto" />
 
                             </div>
                             <div class="row mt-4">
                                 <div class="col-md-12">
-                                    <div class="card p-3">
+                                    <div class="card p-3 form-1 form-group">
+                                        <h1 class="text-center text-dark mt-5">Edit Survey</h1>
+
                                         <div asp-validation-summary="All" class="text-danger"></div>
 
                                         <div class="col-12 my-3">
@@ -95,11 +68,14 @@
                                     {
                                         <div class="row mt-4">
                                             <div class="col-md-12">
-                                                <div class="card p-3">
+                                                <div class="card p-3 form-2">
                                                     <input hidden class="hiddenQuestionUUIDInput" asp-for="@Model.AllQuestionList[i].QuestionUUID" value="@Model.AllQuestionList[i].QuestionUUID" />
                                                     <input class="qnsInput form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" asp-for="@Model.AllQuestionList[i].Text" placeholder="Question Text" />
                                                     <input hidden class="hiddenBelongsToSUUIDInput" asp-for="@Model.AllQuestionList[i].BelongsToSurveyID" value="@Model.svy.SurveyUUID" />
 
+                                                    <div class="mb-4">
+                                                        <a class="addOptionLink" id="addOptionButton" onclick="addNewQuestionInput('@Model.AllQuestionList[i].QuestionUUID')">Add Option</a>
+                                                    </div>
 
                                                     @{
 
@@ -111,18 +87,24 @@
                                                                 <div class="form-inline">
                                                                     <label class="dot my-1 mr-2 mt-3"></label>
                                                                     <input class="hiddenOptionUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].OptionUUID" value="@n[k].OptionUUID" />
-                                                                    <input class="optionInput form-control mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
+                                                                    <input class="optionInput form-control-md mt-3" type="text" asp-for="@Model.qnsOptions[k].Text" value="@n[k].Text" placeholder="Option Text" />
                                                                     <input class="hiddenBelongsToQUUIDInput" hidden="hidden" asp-for="@Model.qnsOptions[k].BelongsToQuestionID" value="@n[k].BelongsToQuestionID" />
 
-                                                                    <a class="btnCustom" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')">DO</a>
+                                                                    <span class="fas fa-times fa-lg" id="deleteOptionButton" onclick="deleteOptionInput('@n[k].OptionUUID')"></span>
 
                                                                 </div>
                                                             }
                                                         }
                                                     }
-                                                    <a class="btnCustom" id="addOptionButton" onclick="addNewQuestionInput('@Model.AllQuestionList[i].QuestionUUID')">A</a>
 
-                                                    <a class="btnCustom" id="deleteQnsButton" onclick="deleteQuestionForm('@Model.AllQuestionList[i].QuestionUUID')">DQ</a>
+                                                    <hr class="hruler" />
+
+                                                    <div class="mb-4">
+                                                        <span class="fas fa-trash-alt fa-2x" id="deleteQnsButton" onclick="deleteQuestionForm('@Model.AllQuestionList[i].QuestionUUID')"></span>
+                                                    </div>
+
+
+
                                                 </div>
                                             </div>
                                         </div>
@@ -131,6 +113,11 @@
                                 }
                             }
                         </form>
+
+                        <div class="addqnsGroup" id="addQnsButton">
+                            <input type="submit" value="+" class="btnCustom" />
+                            <span><u><b>Add Question</b></u></span>
+                        </div>
 
                     }
                 }
@@ -166,6 +153,7 @@
         var cardP_3 = document.createElement("div");
         cardP_3.classList.add("card");
         cardP_3.classList.add("p-3");
+        cardP_3.classList.add("form-2");
 
         var questionUUIDHidden = document.createElement("input");
         questionUUIDHidden.classList.add("hiddenQuestionUUIDInput");
@@ -188,26 +176,41 @@
         cardP_3.appendChild(questionTB);
         cardP_3.appendChild(questionBelongsToUUIDHidden);
 
+        var divforInputOption = document.createElement("div");
+        divforInputOption.className = "mb-4";
 
         var addInputButton = document.createElement("a");
-        addInputButton.className = "btnCustom";
+        addInputButton.className = "addOptionLink";
         addInputButton.id = "addOptionButton";
-        addInputButton.textContent = "A";
+        addInputButton.textContent = "Add Option";
         addInputButton.addEventListener("click", function () {
             addNewQuestionInput(qUUID);
         });
 
-        cardP_3.appendChild(addInputButton);
+        divforInputOption.appendChild(addInputButton);
 
-        var deleteQuestionButton = document.createElement("a");
-        deleteQuestionButton.className = "btnCustom";
+        cardP_3.appendChild(divforInputOption);
+
+        var line = document.createElement("hr");
+        line.className = "hruler";
+
+        var divforDeleteQnsOption = document.createElement("div");
+        divforDeleteQnsOption.className = "mb-4"
+
+        var deleteQuestionButton = document.createElement("span");
+        deleteQuestionButton.classList.add("fas");
+        deleteQuestionButton.classList.add("fa-trash-alt");
+        deleteQuestionButton.classList.add("fa-2x");
+
         deleteQuestionButton.id = "deleteQnsButton";
-        deleteQuestionButton.textContent = "DQ";
         deleteQuestionButton.addEventListener("click", function () {
             deleteQuestionForm(qUUID);
         });
 
-        cardP_3.appendChild(deleteQuestionButton);
+        cardP_3.appendChild(line);
+
+        divforDeleteQnsOption.appendChild(deleteQuestionButton);
+        cardP_3.appendChild(divforDeleteQnsOption);
 
         colMD12Div.appendChild(cardP_3);
         rowDiv.appendChild(colMD12Div);
@@ -222,7 +225,7 @@
 
         formInlineDiv.className = "form-inline";
 
-        var circleIconLabel = document.createElement("input");
+        var circleIconLabel = document.createElement("span");
         circleIconLabel.classList.add("dot");
         circleIconLabel.classList.add("my-1");
         circleIconLabel.classList.add("mr-2");
@@ -235,7 +238,7 @@
 
         var optionTextInput = document.createElement("input");
         optionTextInput.classList.add("optionInput");
-        optionTextInput.classList.add("form-control");
+        optionTextInput.classList.add("form-control-md");
         optionTextInput.classList.add("mt-3");
         optionTextInput.type = "text";
 
@@ -249,10 +252,13 @@
         formInlineDiv.appendChild(optionTextInput);
         formInlineDiv.appendChild(hiddenBelongsToQUUIDInput);
 
-        var deleteInputButton = document.createElement("a");
-        deleteInputButton.className = "btnCustom";
+        var deleteInputButton = document.createElement("span");
+        deleteInputButton.classList.add("fas");
+        deleteInputButton.classList.add("fa-times");
+        deleteInputButton.classList.add("fa-lg");
+
         deleteInputButton.id = "deleteOptionButton";
-        deleteInputButton.textContent = "D";
+
         deleteInputButton.addEventListener("click", function () {
             deleteOptionInput(optionUUID);
         });
@@ -265,7 +271,7 @@
         for (var i = 0; i < allInputs.length; i++) {
             if (allInputs[i].value == questionUUID) {
                 if (allInputs[i].hidden == true) {
-                    allInputs[i].parentElement.appendChild(formInlineDiv);
+                    allInputs[i].parentElement.insertBefore(formInlineDiv, allInputs[i].parentElement.getElementsByClassName("hruler")[0]);
                     break;
                 }
             }

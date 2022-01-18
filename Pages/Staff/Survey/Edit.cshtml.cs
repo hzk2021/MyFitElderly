@@ -61,6 +61,8 @@ namespace EDP_Project.Pages.Staff.Survey
                         qnsOptions[k].BelongsToQuestionID);
                 }
 
+                return RedirectToPage("View");
+
             }
             return Page();
         }
