@@ -26,16 +26,23 @@ namespace EDP_Project.Services
 
 
         }
-
+        public Post GetPostId(int id)
+        {
+            return _context.Post.Where(x => x.Id == id).ToList()[0];
+        }
         public List<Post> GetAllBlogPost()
         {
             return _context.Post.ToList();
         }
 
-        public void UpdatePost(Post post)
+        public string UpdatePost(Post post)
         {
-            _context.Post.Update(post);
-            _context.SaveChanges();
+            if (_context.Post.Any(x => x.Id == post.Id))
+            {
+                _context.Post.Update(post);
+                _context.SaveChanges();
+            }
+                return "True";
         }
 
         public void RemovePost(int postId)
