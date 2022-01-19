@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
@@ -35,6 +36,11 @@ namespace EDP_Project.Pages
 
 
         public String inputPass { get; set; }
+
+
+        [BindProperty]
+
+        public List<Log> userAct { get; set; }
 
         [BindProperty]
 
@@ -173,10 +179,62 @@ namespace EDP_Project.Pages
         public void OnGet()
         {
 
-
-
-
             myUser = retrieverUserFromSession(HttpContext.Session.GetString("user"));
+
+
+
+            userAct = new List<Log>();
+            con.Open();
+            string query2 = $"select * from log where `message` like '%{myUser.Username}%'";
+            MySqlCommand cmd2 = new MySqlCommand(query2, con);
+            //cmd2.Parameters.AddWithValue("@ELAINE", myUser.Username);
+            MySqlDataReader dataReader2 = cmd2.ExecuteReader();
+
+            try
+            {
+                //Create Command
+                //Create a data reader and Execute the command
+
+                //Read the data and store them in the list
+                while (dataReader2.Read())
+                {
+                    userAct.Add(new Log
+                    {
+
+                        MachineName = dataReader2["MachineName"].ToString(),
+
+                        Logged = (DateTime)dataReader2["Logged"],
+
+                        Level = dataReader2["Level"].ToString(),
+
+                        Message = dataReader2["Message"].ToString(),
+
+                        Logger = dataReader2["Logger"].ToString(),
+
+
+                        Properties = (dataReader2["Properties"] == DBNull.Value) ? string.Empty : dataReader2["Properties"].ToString(),
+
+
+                        Callsite = dataReader2["Callsite"].ToString(),
+
+                        Exception = dataReader2["Exception"].ToString(),
+
+
+                    });
+                }
+
+            }
+            catch (WebException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                dataReader2.Close();
+                con.Close();
+
+
+            }
 
             originalPath = myUser.PhotoPath;
 
