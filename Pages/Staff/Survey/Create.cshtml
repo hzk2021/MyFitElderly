@@ -45,7 +45,7 @@
                                             <i class="fas fa-file-image fa-2x"></i> <span><u><b>Add Survey Image</b></u></span>
 
                                         </label>
-                                        <input type="file" asp-for="@Model.imgFile" name="imgFile" id="file-upload" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])"/>
+                                        <input type="file" asp-for="@Model.imgFile" accept="image/*" name="imgFile" id="file-upload" onchange="var outputFile = document.getElementById('output'); outputFile.src = window.URL.createObjectURL(this.files[0]); if (!this.files[0].type.includes('image')) { alert('Please only upload image file!'); this.value=''}"/>
                                     </div>
 
                                     <div class="col-12 my-3">
