@@ -141,7 +141,7 @@ CREATE TABLE Log (
             `Description`       LONGTEXT      NULL,
             `CreatedOn`         DATETIME       NOT NULL,
             `UpdatedOn`         DATETIME       NOT NULL,
-            `ViewStatus`        BIT            NOT NULL,
+            `ViewStatus`        NCHAR(30)            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),

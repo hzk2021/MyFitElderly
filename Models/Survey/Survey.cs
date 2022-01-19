@@ -26,7 +26,7 @@ namespace EDP_Project.Models.Survey
 
         public DateTime UpdatedOn { get; set; }
 
-        public bool ViewStatus { get; set; }
+        public string ViewStatus { get; set; } = "Hidden";
 
         /** Need to have ID attribute in User model**/
         //[ForeignKey("CreatedByStaffID")]

@@ -54,7 +54,38 @@
                                             <span asp-validation-for="@Model.svy.Description" class="text-danger"></span>
                                         </div>
 
+                                        <div class="col-12 my-3">
+                                        <label class="form-label">View Status</label>
+
+                                        @{ 
+                                            if (Model.svy.ViewStatus == "Visible")
+                                            {
+                                                <div>
+                                                    <label>
+                                                        <input type="radio" class="viewStatus" value="Visible" asp-for="@Model.svy.ViewStatus" checked/> Visible
+                                                    </label>
+
+                                                    <label class="ml-4">
+                                                        <input type="radio" class="viewStatus" value="Hidden" asp-for="@Model.svy.ViewStatus" /> Hidden
+                                                    </label>
+                                                </div>
+                                            } else { 
+                                                <div>
+                                                    <label>
+                                                        <input type="radio" class="viewStatus" value="Visible" asp-for="@Model.svy.ViewStatus"/> Visible
+                                                    </label>
+
+                                                    <label class="ml-4">
+                                                        <input type="radio" class="viewStatus" value="Hidden" asp-for="@Model.svy.ViewStatus" checked /> Hidden
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
                                     </div>
+
+
+                                    </div>
+
 
                                 </div>
                             </div>

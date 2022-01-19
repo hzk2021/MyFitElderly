@@ -43,7 +43,7 @@ namespace EDP_Project.Pages.Staff.Survey
                     Description = newSurvey.Description,
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
-                    ViewStatus = false,
+                    ViewStatus = newSurvey.ViewStatus,
                     CreatedByStaffID = 7 // Temp | change later
                 };
                 await _srv.AddSurvey(svy);
