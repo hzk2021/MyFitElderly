@@ -81,7 +81,7 @@
             }
 </style>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST"  enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="container" style="padding-top: 60px; animation-duration: 1.3s;
@@ -293,7 +293,7 @@
                                         </p>
 
                                         <button type="submit" value="Submit" class="btn btn-primary render" style="visibility: hidden;"
-                                                id="updateBtn" asp-page-handler="OnPost">
+                                                id="updateBtn">
                                             Update
                                         </button>
 
@@ -505,9 +505,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-inline" action="" method="POST">
                         <div class="form-group mb-2" style="color: black;">
-                    </form>
 
                     <p>Enter your new<strong> password </strong>below.</p>
                 </div>

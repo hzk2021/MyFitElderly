@@ -418,44 +418,45 @@ namespace EDP_Project.Pages.Auth
 
 
                     //string to = "ktykuang@gmail.com"; //To address    
-                    //    string from = "contact.breadington.official@gmail.com"; //From address    
-                    //    MailMessage message = new MailMessage(from, to);
+                    //string from = "contact.breadington.official@gmail.com"; //From address    
+                    //MailMessage message = new MailMessage(from, to);
 
-                    //    string mailbody = "<b>Thank you for your registration! <br> please verify your account here:</b> https://localhost:44320/Auth/EmailVerification?token=" + GenerateNewToken();
-                    //    message.Subject = "MyFitElderly Account Registration ✔ ";
-                    //    message.Body = mailbody;
-                    //    message.BodyEncoding = Encoding.UTF8;
-                    //    message.IsBodyHtml = true;
-                    //    SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
-                    //    System.Net.NetworkCredential basicCredential1 = new
-                    //    System.Net.NetworkCredential("contact.breadington.official@gmail.com", "DawnInTheEast@Breadington");
-                    //    client.EnableSsl = true;
-                    //    client.UseDefaultCredentials = false;
-                    //    client.Credentials = basicCredential1;
-                    //    try
-                    //    {
-                    //        client.Send(message);
-                    //    }
+                    //string mailbody = "<b>Thank you for your registration! <br> please verify your account here:</b> https://localhost:44320/Auth/EmailVerification?token=" + GenerateNewToken();
+                    //message.Subject = "MyFitElderly Account Registration ✔ ";
+                    //message.Body = mailbody;
+                    //message.BodyEncoding = Encoding.UTF8;
+                    //message.IsBodyHtml = true;
+                    //SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+                    //System.Net.NetworkCredential basicCredential1 = new
+                    //System.Net.NetworkCredential("contact.breadington.official@gmail.com", "DawnInTheEast@Breadington");
+                    //client.EnableSsl = true;
+                    //client.UseDefaultCredentials = false;
+                    //client.Credentials = basicCredential1;
+                    //try
+                    //{
+                    //    client.Send(message);
+                    //}
 
-                    //    catch (Exception ex)
-                    //    {
-                    //        throw ex;
-                    //    }
+                    //catch (Exception ex)
+                    //{
+                    //    throw ex;
+                    //}
 
-                    //    finally
-                    //    {
-                    //        Response.Redirect("Login.aspx", false);
-                    //    }
-
-
+                    //finally
+                    //{
+                    //    Response.Redirect("Login", false);
+                    //}
 
 
 
 
+                    Response.Redirect("Login", false);
 
-                    return RedirectToPage("Login");
 
-                    // On Post, Redirect back to LOGIN .
+
+                    //return RedirectToPage("Login");
+
+                    //On Post, Redirect back to LOGIN.
 
                     // Save crednetials to DB
 

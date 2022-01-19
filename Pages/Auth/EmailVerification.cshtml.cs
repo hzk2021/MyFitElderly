@@ -146,11 +146,19 @@ namespace EDP_Project.Pages
         public IActionResult OnGet()
         {
 
-            if (compareUserToken(HttpContext.Request.Query["token"]))
+
+            if (HttpContext.Request.Query["token"].ToString() != "")
             {
-                return Redirect("~/");
+                if (compareUserToken(HttpContext.Request.Query["token"]))
+                {
+                    return Redirect("~/");
+                }
+                else return RedirectToPage("VerificationFailed");
+
             }
-            else return RedirectToPage("VerificationFailed");
+
+
+            return Page();
 
 
 
@@ -163,6 +171,12 @@ namespace EDP_Project.Pages
         {
 
             // TODO: Send email here
+
+
+
+
+
+
 
             return Page();
 

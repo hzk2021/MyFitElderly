@@ -24,6 +24,7 @@ namespace EDP_Project.Pages.Staff.Accounts
 
         public string userID { get; set; }
 
+
         [BindProperty]
 
         public string originalPath { get; set; }
@@ -153,6 +154,8 @@ namespace EDP_Project.Pages.Staff.Accounts
             {
                 try
                 {
+
+                
 
                     string Query = "update user set Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where Email= @CUSER";
 
@@ -322,6 +325,8 @@ namespace EDP_Project.Pages.Staff.Accounts
         public IActionResult OnPost()
         {
             userID = HttpContext.Request.Query["id"];
+
+
 
             updateUserAccount(userID);
 
