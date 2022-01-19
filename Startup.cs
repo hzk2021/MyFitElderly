@@ -143,6 +143,7 @@ CREATE TABLE Log (
             `UpdatedOn`         DATETIME       NOT NULL,
             `ViewStatus`        NCHAR(30)            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
+            `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
