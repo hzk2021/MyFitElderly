@@ -172,7 +172,8 @@ CREATE TABLE Log (
             MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
-            `Content`     NVARCHAR (50)    NULL,
+            `Header`     NVARCHAR (500)    NULL,
+            `Content`     NVARCHAR (4000)    NULL,
             `Category`     NVARCHAR (50)    NULL,
             `Created`         DATETIME       NOT NULL,
             PRIMARY KEY (`Id` ASC)
