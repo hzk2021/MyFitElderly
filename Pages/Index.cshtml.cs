@@ -34,6 +34,44 @@ namespace EDP_Project.Pages
 
 
 
+
+        public int retrieveuserid(string userID)
+        {
+            int uruserid = 0;
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["Id"] != null)
+                        {
+                            if (reader["Id"] != DBNull.Value)
+                            {
+                                uruserid = (int)reader["Id"];
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+            return uruserid;
+
+        }
+
+
         public bool isStaff(string userID)
         {
             var role = "";
@@ -82,8 +120,22 @@ namespace EDP_Project.Pages
         public IActionResult OnGet()
         {
 
+            int userid = retrieveuserid(HttpContext.Session.GetString("user"));
+
+
+
+
             if (HttpContext.Session.GetString("user") != null)
             {
+
+
+
+
+
+
+
+
+
 
 
                 if (isStaff(HttpContext.Session.GetString("user")))
