@@ -36,6 +36,20 @@
                                         <div class="col-12 my-3">
                                             <input hidden class="form-label" asp-for="@Model.svy.SurveyUUID" value="@Model.svy.SurveyUUID" />
                                         </div>
+            
+
+                                        @{ 
+                                            if (Model.svy.ImgBytes != null)
+                                                {
+                                                    <div class="imgDiv">
+                                                        @{ 
+                                                            var base64 = Convert.ToBase64String(Model.svy.ImgBytes);
+                                                            var userImage = String.Format("data:image/gif;base64,{0}", base64);
+                                                            <img src="@userImage" alt="Survey Image" class="surveyImage"/>
+                                                        }
+                                                    </div>
+                                                }
+                                        }
 
                                         <div class="col-12 my-3">
                                             <label class="form-label">Category</label>
@@ -81,8 +95,7 @@
                                                 </div>
                                             }
                                         }
-                                    </div>
-
+                                        </div>
 
                                     </div>
 
