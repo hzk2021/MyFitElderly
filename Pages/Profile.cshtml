@@ -8,8 +8,78 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+
 <link href="~/css/profile.css" rel="stylesheet" />
 
+
+
+<style>
+
+
+    .help-tip {
+        position: absolute;
+        top: 40px;
+        right: 115px;
+        text-align: center;
+        background-color: #BCDBEA;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        line-height: 26px;
+        cursor: default;
+    }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .help-tip p { /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 300px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: -4px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+            .help-tip p:before { /* The pointer of the tooltip */
+                position: absolute;
+                content: '';
+                width: 0;
+                height: 0;
+                border: 6px solid transparent;
+                border-bottom-color: #1E2021;
+                right: 10px;
+                top: -12px;
+            }
+
+            .help-tip p:after { /* Prevents the tooltip from being hidden */
+                width: 100%;
+                height: 40px;
+                content: '';
+                position: absolute;
+                top: -40px;
+                left: 0;
+            }
+</style>
 
 <form method="POST" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -44,7 +114,7 @@
                                 @*<h6 class="user-email">Account created on @Model.myUser.DateCreated</h6>*@
                                 <div class="form-group" style="margin-top: 10px;">
                                     <input class="form-control" style="display: none; " asp-for="myUser.Photo" type="file" accept="" id="avatarx"
-                                            onChange="validation(event)" disabled />
+                                           onChange="validation(event)" disabled />
                                 </div>
                             </div>
 
@@ -58,12 +128,38 @@
                 </div>
             </div>
             <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+
+
+
+
                 <div class="card h-100">
-                    <div class="card-body">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Profile</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">My Activities</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab"></div>
+                        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+                    </div>
+
+
+
+
+
+
+                    <div class="card-body" id="mainContent">
                         <div class="row gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <h6 class="mb-2 text-primary">Personal Details</h6>
-
+                                <hr />
                             </div>
 
 
@@ -86,7 +182,7 @@
 
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email"  asp-for="myUser.Email" class="form-control" value="@Model.myUser.Email" id="emailInput" disabled required>
+                                    <input type="email" asp-for="myUser.Email" class="form-control" value="@Model.myUser.Email" id="emailInput" disabled required>
 
                                     <span asp-validation-for="myUser.Email" class="text-danger"></span>
 
@@ -114,6 +210,8 @@
 
                                 </div>
 
+
+
                                 <div id="alert2" style="display: inline-block">
 
                                     <!-- border-color:#ea856a; -->
@@ -128,6 +226,29 @@
 
 
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch" style="margin-top:40px">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                        <label class="custom-control-label" for="customSwitch1">Two-Factor Authentication</label>
+                                    </div>
+                                    <div class="help-tip">
+                                        <p>This is the inline help tip! It can contain all kinds of HTML. Style it as you please.</p>
+                                    </div>
+                                </div>
+
+                                <div id="alert" style="display: inline-block">
+                                    @*<h3 style="color:black; padding-top: 5px; font-size: 80%; border: 3px solid #ec8e75; width: max-content; background-color:#ffebe8 ">
+                                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                            Please <span style=" font-weight: bold;">Verify Your Email.</span>
+                                        </h3>*@
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 
 
 
@@ -136,13 +257,14 @@
                         <div class="row gutters" id="row-gutters">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <h6 class="mt-3 mb-2 text-primary">Other Details</h6>
+                                <hr />
                             </div>
 
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="address">Address</label>
-                                    <textarea  class="form-control" asp-for="myUser.Address" id="exampleFormControlTextarea1" rows="3"
-                                               title="5 characters minimum" maxlength="30" minlength="5" disabled>@Model.myUser.</textarea>
+                                    <textarea class="form-control" asp-for="myUser.Address" id="exampleFormControlTextarea1" rows="3"
+                                              title="5 characters minimum" maxlength="30" minlength="5" disabled>@Model.myUser.</textarea>
 
                                     <span asp-validation-for="myUser.Address" id="addressE" class="text-danger"></span>
 
@@ -198,11 +320,105 @@
                             </div>
                         </div>
                     </div>
+
+
+
+                    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
+                    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+
+
+
+
+
+
+                    <div class="card-body" id="mainContent2">
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-2 text-primary">My User Activities</h6>
+                                <hr />
+
+
+                                @*table here*@
+
+
+
+                                <table id="table2" data-search="true" data-pagination="true"
+                                       data-search="true"
+                                       data-show-columns="true"
+                                       data-show-refresh="true"
+                                       data-show-export="true"
+                                       data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
+                                    <thead>
+                                        <tr>
+                                            <th data-field="machineName" data-sortable="true">Host</th>
+                                            <th data-field="level" data-sortable="true">Category</th>
+                                            <th data-field="logged" data-formatter="dateFormat" data-sortable="true">Date and Time</th>
+                                            <th data-field="message" data-sortable="true">Operation</th>
+
+
+                                        </tr>
+                                    </thead>
+                                </table>
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </form>
+
+@{
+
+    var niggerman2 = @Model.userAct;
+
+}
+
+
+<script>
+
+         var datakmfkslogs = @Html.Raw(Json.Serialize(niggerman2))
+
+
+    var tab1 = document.getElementById("home-tab");
+    var tab2 = document.getElementById("profile-tab");
+    var mainContent = document.getElementById("mainContent");
+
+
+    tab2.addEventListener("click", function () {
+        tab1.className = "nav-link";
+        tab2.className = "nav-link active";
+        mainContent.style.display = "none";
+        mainContent2.style.display = "inline-block";
+    });
+
+    tab1.addEventListener("click", function () {
+        tab2.className = "nav-link";
+        tab1.className = "nav-link active";
+        mainContent.style.display = "inline-block";
+        mainContent2.style.display = "none";
+    });
+
+
+
+    function dateFormat(value, row, index) {
+        return moment(value).format('DD/MM/YYYY HH:mm:ss');
+    }
+
+
+    var $table2 = $('#table2')
+    $(function () {
+        var data = datakmfkslogs
+        $table2.bootstrapTable({ data: data })
+    })
+
+
+</script>
 
 <!-- Modal for registered email -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -270,7 +486,7 @@
 
 <!-- Modal for changing password -->
 
-<form method="post" >
+<form method="post">
 
     <div class="modal fade" id="resetPwModal" tabindex="-1" role="dialog" aria-labelledby="verifyNumModalLabel"
          aria-hidden="true">
@@ -294,14 +510,14 @@
                 </div>
 
 
-                @{ 
+                @{
                     var myPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
                 }
 
                 <div class="form-group mx-sm-3 mb-2">
                     <div class="form-group">
                         <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="4" id="password"
-                               placeholder="Password"  required>
+                               placeholder="Password" required>
                     </div>
                     <br>
                     <div class="form-group">
@@ -314,9 +530,9 @@
 
             <div class="modal-footer">
                 @*<a class="btn btn-success mb-2" asp-page="/Change-Password" asp-route-username="@Model.myUser.Username" role="button">
-            Submit
-        </a>*@
-                <input type="submit"  class="btn btn-success mb-2" value="Submit" asp-page-handler="Button2" />
+                        Submit
+                    </a>*@
+                <input type="submit" class="btn btn-success mb-2" value="Submit" asp-page-handler="Button2" />
 
 
                 @*<button type="submit" class="btn btn-success mb-2">Submit</button>*@
@@ -333,31 +549,37 @@
 <script>
 
 
-  let fileChanged = false;
+    let fileChanged = false;
 
-  function previewImg(event) {
-    // document.getElementById("avatarImg").src = ""
-
-
-    var reader = new FileReader();
-    reader.onload = function () {
-      var output = document.getElementById('avatarImg');
-      output.src = reader.result;
+    function previewImg(event) {
+        // document.getElementById("avatarImg").src = ""
 
 
-    };
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('avatarImg');
+            output.src = reader.result;
 
-    let img = new Image()
-    img.src = window.URL.createObjectURL(event.target.files[0])
-    img.onload = () => {
-      if (img.width <= 110 & img.height <= 110) {
-        reader.readAsDataURL(event.target.files[0]);
-        fileChanged = true;
-      }
-      else {
-        alert("Image too large; try using a smaller image ( 110 x 110 pixels )");
-        document.getElementById("avatar").value = null;
-      }
+
+        };
+
+        let img = new Image()
+        img.src = window.URL.createObjectURL(event.target.files[0])
+        img.onload = () => {
+            if (img.width <= 110 & img.height <= 110) {
+                reader.readAsDataURL(event.target.files[0]);
+                fileChanged = true;
+            }
+            else {
+                alert("Image too large; try using a smaller image ( 110 x 110 pixels )");
+                document.getElementById("avatar").value = null;
+            }
+
+
+
+        }
+
+
 
 
 
@@ -365,148 +587,142 @@
 
 
 
-
-
-  }
-
-
-
-  function showInput() {
-    // document.getElementById("fileInput").style.display = "inline"
-    document.getElementById("avatarx").click();
-  }
-
-  function check(input) {
-    if (input.value != document.getElementById('password').value) {
-      input.setCustomValidity('Password Must be Matching.');
-    } else {
-      // input is valid -- reset the error message
-      input.setCustomValidity('');
-    }
-  }
-
-  function editPass() {
-    $('#resetPwModal').modal('show');
-  }
-
-
-  function editInfo() {
-
-
-
-    const x = document.getElementById("avatarImg");
-    x.setAttribute("old-src", x.src);
-    //   document.getElementById("avatarImg").src = getElementById("avatarImg").src
-    document.getElementById("alert").style.display = "none";
-      document.getElementById("alert2").style.display = "none";
-    document.getElementById("updateBtn").style.visibility = "visible";
-    document.getElementById("cancelBtn").style.visibility = "visible";
-    document.getElementById("avatarx").disabled = false;
-    document.getElementById("editBtn").style.display = "none";
-    document.getElementById("ChangePwBtn").style.display = "none";
-    document.getElementById("usernameInput").disabled = false;
-    document.getElementById("emailInput").disabled = false;
-    document.getElementById("contactInput").disabled = false;
-    document.getElementById("Pdisclaimer").style.display = "inline-block";
-    document.getElementById("exampleFormControlTextarea1").disabled = false;
-    document.getElementById("avatarImg").addEventListener("mouseover", function () {
-      document.getElementById("avatarImg").style.cursor = "pointer";
-      document.getElementById("avatarImg").style.opacity = "0.3";
-      document.getElementById("cameraIcon").style.display = "inline-block";
-
-
-    });
-    document.getElementById("avatarImg").addEventListener("mouseout", function () {
-      document.getElementById("avatarImg").style.opacity = "1.0";
-      document.getElementById("cameraIcon").style.display = "none";
-
-    });
-
-
-
-
-      $(function () {
-
-          var addressReg = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9 ]{5,40}$');
-
-      var $form = $('form');
-        var initialState = $form.serialize();
-        var txtareainput = $('#exampleFormControlTextarea1').val();
-
-      $form.submit(function (e) {
-        if (initialState === $form.serialize() && !fileChanged) {
-          e.preventDefault();
-          }
-
-          //if (!addressReg.test(txtareainput)) {
-
-          //    e.preventDefault();
-
-          //    $('#addressE').text("Please enter a valid address.")
-
-          //}
-
-
-
-
-      });
-    });
-
-
-      $("#regForm").submit(function (event) {
-          if ($("#email").val() == "" || $("#password").val() == "" || $("#last_name").val() == "" || $("#first_name").val() == "")
-              event.preventDefault();
-      });
-
-
-  }
-
-
-
-
-  function cancelEdit() {
-    document.getElementById("Pdisclaimer").style.display = "none";
-    document.getElementById("avatarImg").src = document.getElementById("avatarImg").getAttribute("old-src");
-    document.getElementById("updateBtn").style.visibility = "hidden";
-    document.getElementById("cancelBtn").style.visibility = "hidden";
-    document.getElementById("ChangePwBtn").style.display = "inline";
-    document.getElementById("avatarx").disabled = true;
-    document.getElementById("editBtn").style.display = "inline";
-    document.getElementById("usernameInput").disabled = true;
-    document.getElementById("emailInput").disabled = true;
-    document.getElementById("contactInput").disabled = true;
-    document.getElementById("exampleFormControlTextarea1").disabled = true;
-    document.getElementById("alert").style.display = "inline-block";
-    document.getElementById("alert2").style.display = "inline-block";
-    var elem = document.getElementById('avatarImg');
-    elem.replaceWith(elem.cloneNode(true));
-
-    document.getElementById("avatarImg").addEventListener("mouseover", function () {
-      document.getElementById("avatarImg").style.cursor = "";
-    })
-
-
-
-  }
-
-  function validation(event) {
-    validate(event.target.value)
-  }
-
-  function validate(file) {
-    var ext = file.split(".");
-    ext = ext[ext.length - 1].toLowerCase();
-      var arrayExtensions = ["jpg", "jpeg"];
-    if (arrayExtensions.lastIndexOf(ext) == -1) {
-      alert("Only files with following extensions are allowed: .png, .jpg, .jpeg");
-      document.getElementById("avatar").value = null;
+    function showInput() {
+        // document.getElementById("fileInput").style.display = "inline"
+        document.getElementById("avatarx").click();
     }
 
-    else {
-      previewImg(event)
+    function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
     }
 
-  }
+    function editPass() {
+        $('#resetPwModal').modal('show');
+    }
+
+
+    function editInfo() {
+
+
+
+        const x = document.getElementById("avatarImg");
+        x.setAttribute("old-src", x.src);
+        //   document.getElementById("avatarImg").src = getElementById("avatarImg").src
+        document.getElementById("alert").style.display = "none";
+        document.getElementById("alert2").style.display = "none";
+        document.getElementById("updateBtn").style.visibility = "visible";
+        document.getElementById("cancelBtn").style.visibility = "visible";
+        document.getElementById("avatarx").disabled = false;
+        document.getElementById("editBtn").style.display = "none";
+        document.getElementById("ChangePwBtn").style.display = "none";
+        document.getElementById("usernameInput").disabled = false;
+        document.getElementById("emailInput").disabled = false;
+        document.getElementById("contactInput").disabled = false;
+        document.getElementById("Pdisclaimer").style.display = "inline-block";
+        document.getElementById("exampleFormControlTextarea1").disabled = false;
+        document.getElementById("avatarImg").addEventListener("mouseover", function () {
+            document.getElementById("avatarImg").style.cursor = "pointer";
+            document.getElementById("avatarImg").style.opacity = "0.3";
+            document.getElementById("cameraIcon").style.display = "inline-block";
+
+
+        });
+        document.getElementById("avatarImg").addEventListener("mouseout", function () {
+            document.getElementById("avatarImg").style.opacity = "1.0";
+            document.getElementById("cameraIcon").style.display = "none";
+
+        });
+
+
+
+
+        $(function () {
+
+            var addressReg = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9 ]{5,40}$');
+
+            var $form = $('form');
+            var initialState = $form.serialize();
+            var txtareainput = $('#exampleFormControlTextarea1').val();
+
+            $form.submit(function (e) {
+                if (initialState === $form.serialize() && !fileChanged) {
+                    e.preventDefault();
+                }
+
+                //if (!addressReg.test(txtareainput)) {
+
+                //    e.preventDefault();
+
+                //    $('#addressE').text("Please enter a valid address.")
+
+                //}
+
+
+
+
+            });
+        });
+
+
+        $("#regForm").submit(function (event) {
+            if ($("#email").val() == "" || $("#password").val() == "" || $("#last_name").val() == "" || $("#first_name").val() == "")
+                event.preventDefault();
+        });
+
+
+    }
+
+
+
+
+    function cancelEdit() {
+        document.getElementById("Pdisclaimer").style.display = "none";
+        document.getElementById("avatarImg").src = document.getElementById("avatarImg").getAttribute("old-src");
+        document.getElementById("updateBtn").style.visibility = "hidden";
+        document.getElementById("cancelBtn").style.visibility = "hidden";
+        document.getElementById("ChangePwBtn").style.display = "inline";
+        document.getElementById("avatarx").disabled = true;
+        document.getElementById("editBtn").style.display = "inline";
+        document.getElementById("usernameInput").disabled = true;
+        document.getElementById("emailInput").disabled = true;
+        document.getElementById("contactInput").disabled = true;
+        document.getElementById("exampleFormControlTextarea1").disabled = true;
+        document.getElementById("alert").style.display = "inline-block";
+        document.getElementById("alert2").style.display = "inline-block";
+        var elem = document.getElementById('avatarImg');
+        elem.replaceWith(elem.cloneNode(true));
+
+        document.getElementById("avatarImg").addEventListener("mouseover", function () {
+            document.getElementById("avatarImg").style.cursor = "";
+        })
+
+
+
+    }
+
+    function validation(event) {
+        validate(event.target.value)
+    }
+
+    function validate(file) {
+        var ext = file.split(".");
+        ext = ext[ext.length - 1].toLowerCase();
+        var arrayExtensions = ["jpg", "jpeg"];
+        if (arrayExtensions.lastIndexOf(ext) == -1) {
+            alert("Only files with following extensions are allowed: .png, .jpg, .jpeg");
+            document.getElementById("avatar").value = null;
+        }
+
+        else {
+            previewImg(event)
+        }
+
+    }
 
 
 </script>

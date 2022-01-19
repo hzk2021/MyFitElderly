@@ -26,7 +26,10 @@ namespace EDP_Project.Models.Survey
 
         public DateTime UpdatedOn { get; set; }
 
-        public bool ViewStatus { get; set; }
+        public string ViewStatus { get; set; } = "Hidden";
+
+        [MaxLength]
+        public byte[] ImgBytes { get; set; }
 
         /** Need to have ID attribute in User model**/
         //[ForeignKey("CreatedByStaffID")]

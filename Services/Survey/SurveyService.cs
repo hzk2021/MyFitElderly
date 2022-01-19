@@ -42,6 +42,7 @@ namespace EDP_Project.Services.Survey
                 originalSurvey.Category = survey.Category;
                 originalSurvey.Title = survey.Title;
                 originalSurvey.Description = survey.Description;
+                originalSurvey.ViewStatus = survey.ViewStatus;
                 originalSurvey.UpdatedOn = DateTime.Now;
 
                 await _dbcontext.SaveChangesAsync();

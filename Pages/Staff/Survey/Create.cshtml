@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="p-3">
                 @{
-                    <form asp-action="" method="post" id="mainContainerForm">
+                    <form asp-action="" method="post" id="mainContainerForm" enctype="multipart/form-data">
                         <div class="col-12 my-3 text-center">
                             <input type="submit" value="Create" class="btn btn-primary ml-auto" />
 
@@ -34,6 +34,18 @@
 
                                     <div class="col-12 my-3">
                                         <input hidden class="form-label" asp-for="@Model.newSurvey.SurveyUUID" value="@Model.surveyUUID" />
+                                    </div>
+
+                                    <div class="imgDiv">
+                                        <img id="output" src="" class="surveyImage" />
+                                    </div>
+
+                                    <div class="addImageDiv">
+                                        <label for="file-upload" class="custom-file-upload">
+                                            <i class="fas fa-file-image fa-2x"></i> <span><u><b>Add Survey Image</b></u></span>
+
+                                        </label>
+                                        <input type="file" asp-for="@Model.imgFile" accept="image/*" name="imgFile" id="file-upload" onchange="var outputFile = document.getElementById('output'); outputFile.src = window.URL.createObjectURL(this.files[0]); if (!this.files[0].type.includes('image')) { alert('Please only upload image file!'); this.value=''}"/>
                                     </div>
 
                                     <div class="col-12 my-3">
@@ -53,17 +65,29 @@
                                         <span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>
                                     </div>
 
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">View Status</label>
+                                        <div>
+                                            <label>
+                                                <input type="radio" class="viewStatus" value="Visible" asp-for="@Model.newSurvey.ViewStatus" /> Visible
+                                            </label>
+
+                                            <label class="ml-4">
+                                                <input type="radio" class="viewStatus" value="Hidden" asp-for="@Model.newSurvey.ViewStatus" checked /> Hidden
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
                         </div>
                     </form>
 
-
                     <div class="addqnsGroup" id="addQnsButton">
-                        <input type="submit" value="+" class="btnCustom"/>
+                        <input type="submit" value="+" class="btnCustom" />
                         <span><u><b>Add Question</b></u></span>
                     </div>
+
 
                 }
 

@@ -68,7 +68,7 @@ namespace EDP_Project
 
 
             MySqlCommand create_log_table = new MySqlCommand(@"
-CREATE TABLE Log (
+CREATE TABLE IF NOT EXISTS Log (
    `ID` int AUTO_INCREMENT NOT NULL,
    `MachineName` nvarchar(200) NULL,
    `Logged` datetime NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE Log (
 );", con);
 
 
-            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE `user` (
+            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS `user` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `PhotoPath` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Username` char(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
@@ -141,8 +141,9 @@ CREATE TABLE Log (
             `Description`       LONGTEXT      NULL,
             `CreatedOn`         DATETIME       NOT NULL,
             `UpdatedOn`         DATETIME       NOT NULL,
-            `ViewStatus`        BIT            NOT NULL,
+            `ViewStatus`        NCHAR(30)            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
+            `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
