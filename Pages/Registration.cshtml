@@ -95,7 +95,7 @@
 
     @*<form id="subscribeForm" method="POST" action="" enctype="multipart/form-data">*@
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" onsubmit="return validatexx()">
         <div asp-validation-summary="All" class="text-danger"></div>
 
 
@@ -132,7 +132,7 @@ width: 100px;
 
         <div class="form-group">
             <label for="name">Username</label>
-            <input asp-for="myUser.Username" type="text" class="form-control" id="username" autocomplete="off" required>
+            <input asp-for="myUser.Username" type="text" class="form-control" pattern="^[a-zA-Z][a-zA-Z ]{5,30}$" title="Username must be between 5 to 30 characters long, with no special characters." id="username" autocomplete="off" required>
             <span asp-validation-for="myUser.Username" class="text-danger"></span>
 
         </div>
@@ -142,24 +142,24 @@ width: 100px;
     <div class="form-group">
         <label for="name">Gender</label>
 
-        <div class="d-flex flex-row justify-content-center" >
+        <div class="d-flex flex-row justify-content-center">
 
             @Html.RadioButton("myUser.Gender", "Male") <span>Male</span>
             @Html.RadioButton("myUser.Gender", "Female") <span>Female</span>
-            <span asp-validation-for="myUser.Gender" class="text-danger"></span>
 
 
 
         </div>
 
 
+        <span asp-validation-for="myUser.Gender" class="text-danger"></span>
 
 
-            @*<input asp-for="myUser.Gender" type="text" class="form-control" id="username" required>
-            <span asp-validation-for="myUser.Gender" class="text-danger"></span>*@
+        @*<input asp-for="myUser.Gender" type="text" class="form-control" id="username" required>
+        <span asp-validation-for="myUser.Gender" class="text-danger"></span>*@
 
 
-        </div>
+    </div>
 
 
         @* Calender *@
@@ -179,10 +179,13 @@ width: 100px;
             <span asp-validation-for="myUser.Email" class="text-danger"></span>
         </div>
 
+        @{
+            var pwPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
+            }
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" autocomplete="off" name="password" class="form-control" minlength="4" id="password" />
+            <input pattern="@pwPattern" title="Password has to be at least 8 characters, contains a special character, an upper case, a lower case & a digit. " type="password" autocomplete="off" name="password" class="form-control" minlength="4" id="password" />
 
         </div>
 
@@ -199,7 +202,7 @@ width: 100px;
 
         <div class="form-group">
             <label for="number">Contact Number</label>
-            <input autocomplete="off" placeholder="12345678" asp-for="myUser.Contact" type="text" id="number" class="form-control" minlength="8" maxlength="8" pattern="[0-9]{8}" required>
+            <input autocomplete="off" placeholder="12345678" asp-for="myUser.Contact" type="text" id="number" class="form-control" minlength="8" maxlength="8" title="Contact number has to be 8 digits." pattern="[0-9]{8}" required>
             <span asp-validation-for="myUser.Contact" class="text-danger"></span>
         </div>
 
@@ -239,6 +242,11 @@ width: 100px;
 
 
 <script>
+
+
+
+
+
 
     grecaptcha.ready(function () {
         grecaptcha.execute('6LfLmX8dAAAAAGbTIkC40y7eHl9GptSMiJQDI8L8', { action: 'Login' }).then(function (token) {
