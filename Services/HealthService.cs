@@ -102,18 +102,43 @@ namespace EDP_Project.Services
         {
             try
             {
-                foreach (var meal in meals)
-                {
-                    Console.WriteLine(meal.UserId);
-                    _context.Meals.Add(meal);
-                }
+                _context.Meals.AddRange(meals);
                 _context.SaveChanges();
                 return "True";
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return "An error occurred while registering your record. Try again later.";
+            }
+        }
+
+        public string UpdateMeals(List<Meals> meals)
+        {
+            try
+            {
+                _context.Meals.UpdateRange(meals);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception e)
+            {
+                return "An error occurred while registering your record. Try again later.";
+            }
+        }
+
+        public string RemoveMeals(int userId)
+        {
+            try
+            {
+                List<Meals> userTodayMeals = _context.Meals.Where(x => x.UserId == userId && x.Date == DateTime.Today).ToList();
+
+                _context.Meals.RemoveRange(userTodayMeals);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception e)
+            {
+                return "An error occurred while resetting today's record. Try again later.";
             }
         }
 
@@ -136,16 +161,24 @@ namespace EDP_Project.Services
             return mealsList;
         }
 
-        public UnionList<List<Meals>, List<string>> GetMealsRecord()
+        public List<Meals> GetMealsRecord(int userId)
         {
-            List<Meals> mealsList = _context.Meals.Where(x => x.Date >= DateTime.Today.AddDays(-7)).ToList();
-            List<int> foodIds = mealsList.Select(x => x.FoodId).ToList();
-            List<string> foodNames = _context.Food.Where(x => foodIds.Contains(x.FoodId))
-                                                  .Select(x => x.FoodName)
-                                                  .ToList();
-
-            var unionList = new UnionList<List<Meals>, List<string>>(mealsList, foodNames);
-            return unionList;
+            List<Meals> mealsList = _context.Meals.Where(m => m.UserId == userId)
+                                                .Join(_context.Food,
+                                                m => m.FoodId,
+                                                f => f.FoodId,
+                                                (m, f) => new Meals
+                                                {
+                                                    Id = m.Id,
+                                                    UserId = m.UserId,
+                                                    FoodId = m.FoodId,
+                                                    MealType = m.MealType,
+                                                    Quantity = m.Quantity,
+                                                    Date = m.Date,
+                                                    FoodDetails = f
+                                                })
+                                                .ToList();
+            return mealsList;
         }
     }
 

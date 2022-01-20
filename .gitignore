@@ -363,3 +363,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.vs/EDP_Project/DesignTimeBuild/.dtbcache.v2
+.vs/EDP_Project/DesignTimeBuild/.dtbcache.v2
