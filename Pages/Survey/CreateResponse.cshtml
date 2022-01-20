@@ -1,0 +1,102 @@
+﻿@page "{sid}"
+@model EDP_Project.Pages.Survey.CreateResponseModel
+@{
+    ViewData["Title"] = "Taking a Survey";
+}
+
+<link href="~/css/surveystyle.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="p-3">
+                @{
+                    <form asp-action="" method="post" id="mainContainerForm">
+                        <div class="col-12 my-3 text-center">
+                            <input type="submit" value="Submit survey" class="btn btn-primary ml-auto" />
+
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card p-3 form-1 form-group">
+                                    <h1 class="text-center text-dark mt-5">Taking a Survey </h1>
+
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                                    @if (Model.survey.ImgBytes != null)
+                                    {
+                                        <div class="imgDiv">
+                                            @{
+                                                var base64 = Convert.ToBase64String(Model.survey.ImgBytes);
+                                                var userImage = String.Format("data:image/gif;base64,{0}", base64);
+                                                <img src="@userImage" alt="Survey Image" class="surveyImage" />
+                                            }
+                                        </div>
+                                    }
+
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">Title</label>
+                                        <label class="form-control" type="text" />@Model.survey.Title
+                                    </div>
+                                    <div class="col-12 my-3">
+                                        <label class="form-label">Description</label>
+                                        <label class="form-control" type="text" />@Model.survey.Description
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                            @{
+                                var AllQnsList = Model.AllQuestionList;
+
+                                if (AllQnsList != null)
+                                {
+                                    for (int i = 0; i < AllQnsList.Count; i++)
+                                    {
+                                        <div class="row mt-4">
+                                            <div class="col-md-12">
+                                                <div class="card p-3 form-2">
+
+                                                    <input hidden asp-for="@Model.survey_response[i].ReferenceToSurveyID" value="@Model.AllQuestionList[i].BelongsToSurveyID" />
+                                                    <input class="qnsInput form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" readonly />
+                                                    <input hidden readonly asp-for="@Model.survey_response[i].Question_Text" value="@Model.AllQuestionList[i].Text" />
+
+
+
+                                                    @{
+
+                                                        var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
+                                                        if (n != null)
+                                                        {
+                                                            for (int k = 0; k < n.Count; k++)
+                                                            {
+                                                                <div class="form-inline">
+                                                                    <input class="dot my-1 mr-2 mt-3" id="@i.ToString()-@k.ToString()" type="radio" value="@n[k].Text" asp-for="@Model.survey_response[i].Response_Text"/>
+
+                                                                    <label for="@i.ToString()-@k.ToString()"class="form-control-md mt-3"/> @n[k].Text
+
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+
+                                                    <hr class="hruler" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                            }
+
+                    </form>
+
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>

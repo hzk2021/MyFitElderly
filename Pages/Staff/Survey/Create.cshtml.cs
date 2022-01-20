@@ -53,7 +53,7 @@ namespace EDP_Project.Pages.Staff.Survey
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
                     ViewStatus = newSurvey.ViewStatus,
-                    CreatedByStaffID = _usrv.retrieveuserid(HttpContext.Session.GetString("user")) // Temp | change later
+                    CreatedByStaffID = 7 // _usrv.retrieveuserid(HttpContext.Session.GetString("user")) // Temp | change later
                 };
 
                 if (imgFile != null)

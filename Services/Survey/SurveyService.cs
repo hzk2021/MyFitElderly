@@ -158,5 +158,11 @@ namespace EDP_Project.Services.Survey
             }
         }
 
+        public async Task AddSurveyResponse(Models.Survey.SurveyResponse srv_response)
+        {
+            await _dbcontext.SurveyResponse.AddAsync(srv_response);
+            await _dbcontext.SaveChangesAsync();
+        }
+
     }
 }

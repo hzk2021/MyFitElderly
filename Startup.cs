@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
-            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
+            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Question (
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToSurveyID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (QuestionUUID),
-            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
+            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionOptionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS QuestionOption (
@@ -187,7 +187,20 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToQuestionID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (OptionUUID),
-            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID)
+            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID) ON DELETE CASCADE
+            );", con);
+
+            MySqlCommand create_surveyResponseTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS SurveyResponse (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `SurveyResponseUUID`      CHAR(36)       NOT NULL,
+            `Question_Text`      NCHAR(255)       NOT NULL,
+            `Response_Text`              NCHAR(255)     NOT NULL,
+            `ReferenceToSurveyID`      CHAR(36)       NOT NULL,
+            `SubmittedByCustomerID`      INT       NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (SurveyResponseUUID),
+            FOREIGN KEY (`ReferenceToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE,
+            FOREIGN KEY (`SubmittedByCustomerID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
 
@@ -217,6 +230,8 @@ CREATE TABLE IF NOT EXISTS Log (
                 Create_mealItems.ExecuteNonQuery();
                 Create_exerciseRoutines.ExecuteNonQuery();
                 Create_caloriesIntake.ExecuteNonQuery();
+
+                create_surveyResponseTable.ExecuteNonQuery();
             }
             catch (Exception e)
             {

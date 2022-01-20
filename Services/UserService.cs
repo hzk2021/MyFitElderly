@@ -68,7 +68,7 @@ namespace EDP_Project.Services
 
         public string GetStaffUserName(string id_pk)
         {
-            string username = string.Empty;
+            string username = "Invalid staffID";
 
             string sql = "select * FROM User WHERE Id=@ID";
             MySqlCommand command = new MySqlCommand(sql, con);

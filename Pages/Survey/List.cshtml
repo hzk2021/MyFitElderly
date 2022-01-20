@@ -1,0 +1,32 @@
+﻿@page
+@model EDP_Project.Pages.Survey.ListModel
+@{
+    ViewData["Title"] = "List of Available Surveys";
+}
+
+
+@{
+    <h1 class="text-center">Available Surveys</h1>
+    foreach (var survey in Model.Surveys)
+    {
+        <div style="border: 1px solid black; text-align: center;">
+            @if (survey.ImgBytes != null)
+            {
+                <div class="">
+                    @{
+                        var base64 = Convert.ToBase64String(survey.ImgBytes);
+                        var userImage = String.Format("data:image/gif;base64,{0}", base64);
+                        <img src="@userImage" alt="Survey Image" width="200" />
+                    }
+                </div>
+            }
+            <p>Title: @survey.Title</p>
+            <p>Description: @survey.Description</p>
+
+            <form asp-page="CreateResponse" method="get" asp-route-sid="@survey.SurveyUUID">
+                <button type="submit" class="btn btn-primary">Take this survey</button>
+            </form>
+        </div>
+    }
+}
+
