@@ -68,7 +68,7 @@ namespace EDP_Project
 
 
             MySqlCommand create_log_table = new MySqlCommand(@"
-CREATE TABLE Log (
+CREATE TABLE IF NOT EXISTS Log (
    `ID` int AUTO_INCREMENT NOT NULL,
    `MachineName` nvarchar(200) NULL,
    `Logged` datetime NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE Log (
 );", con);
 
 
-            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE `user` (
+            MySqlCommand Create_table = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS `user` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `PhotoPath` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Username` char(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE Log (
 
             MySqlCommand Create_caloriesIntake = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS caloriesIntake (
             `Date`              DATETIME        NOT NULL,
-            `UserId`                INT             NOT NULL,
+            `UserId`            INT             NOT NULL,
             `Day`               NVARCHAR (15)   NOT NULL,
             `CaloriesIntake`    INT             NULL,
             PRIMARY KEY (`Date` ASC),
@@ -124,13 +124,34 @@ CREATE TABLE Log (
             );", con);
 
             MySqlCommand Create_mealItems = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS meals (
-            `ItemId`       INT            AUTO_INCREMENT  NOT NULL,
+            `Id`           INT            AUTO_INCREMENT  NOT NULL,
+            `UserId`       INT            NOT NULL,
             `FoodId`       INT            NOT NULL,
             `MealType`     NVARCHAR (20)  NOT NULL,
-            `Date`         DATETIME       NULL,
-            PRIMARY KEY (`ItemId` ASC),
+            `Quantity`     INT            NOT NULL,
+            `Date`         DATETIME       NOT NULL,
+            PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`FoodId`) REFERENCES food(`FoodId`),
-            FOREIGN KEY (`Date`) REFERENCES caloriesIntake(`Date`)
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
+            );", con);
+
+            MySqlCommand Create_exerciseList = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS exercise (
+            `ExerciseId`            INT              AUTO_INCREMENT  NOT NULL,
+            `ExerciseName`          NVARCHAR (50)    NOT NULL,
+            `Measurement`           NVARCHAR (20)    NOT NULL,
+            `CaloriesBurnPerUnit`   INT              NOT NULL,
+            PRIMARY KEY (`ExerciseId` ASC)
+            );", con);
+
+            MySqlCommand Create_exerciseRoutines = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS exerciseRoutines (
+            `RoutineId`             INT              AUTO_INCREMENT  NOT NULL,
+            `UserId`                INT              NOT NULL,
+            `ExerciseId`            INT              NOT NULL,
+            `Intensity`             DOUBLE           NOT NULL,
+            `Day`                   NVARCHAR(15)     NOT NULL,
+            PRIMARY KEY (`RoutineId` ASC),
+            FOREIGN KEY (`ExerciseId`) REFERENCES exercise(`ExerciseId`),
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
             );", con);
 
             MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Survey (
@@ -188,13 +209,16 @@ CREATE TABLE Log (
                 create_surveyTable.ExecuteNonQuery();
                 create_questionTable.ExecuteNonQuery();
                 create_questionOptionTable.ExecuteNonQuery();
-                Create_caloriesIntake.ExecuteNonQuery();
-                Create_foodList.ExecuteNonQuery();
-                Create_mealItems.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
 
+                Create_foodList.ExecuteNonQuery();
+                Create_exerciseList.ExecuteNonQuery();
+                Create_mealItems.ExecuteNonQuery();
+                Create_exerciseRoutines.ExecuteNonQuery();
+                Create_caloriesIntake.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
 

@@ -5,130 +5,130 @@
 }
 
 <h1>My Food Journal</h1>
+@if (Model.TodayRecord.Count == 0)
+{
+    <h5>You have yet to add your record for today. </h5>
+    <a href="#AddSection" data-toggle="collapse" class="btn btn-info btn-lg"><i class="fas fa-plus"></i> Add record to journal</a>
+}
+else
+{
+    <div class="card">
+        <h4>Today's record</h4>
+        @{ string[] mealTypes = { "Breakfast", "Lunch", "Dinner" };}
+        @foreach (var type in mealTypes)
+        {
+            <div>
+                <h5>@type</h5>
+                <ol class="health-todayRecord-li">
+                    @foreach (var meal in Model.TodayRecord.Where(x => x.MealType == type))
+                    {
+                        <li>
+                            @meal.FoodDetails.FoodName
+                            @if (meal.Quantity > 1)
+                            {
+                                <span>x @meal.Quantity</span>
+                            }
+                        </li>
+                    }
+                </ol>
+            </div>
+        }
+
+        <div class="row">
+            <div class="float-right col-xl-6">
+                <button class="btn btn-warning"><i class="far fa-edit"></i></button>
+            </div>  
+            <div class="float-right col-xl-6">
+                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    </div>
+}
+
 <br />
 
 <div>
-    <a href="#AddSection" data-toggle="collapse" class="btn btn-info btn-lg"><i class="fas fa-plus"></i> Add record to journal</a>
+    <div asp-validation-summary="All"></div>
     <br />
     <div class="collapse card" id="AddSection">
-        <table class="table table-borderless" id="health-addFood-table">
-            <tr>
-                <td>
-                    <h5>Date</h5>
-                    <input type="date" value="" class="form-control" id="health-addFood-date" />
-                </td>
-                <td colspan="3"></td>
-            </tr>
-            <tr class="addFood-tr">
-                <td class="align-top" style="width: 30%"><h5>Breakfast</h5></td>
-                <td id="health-addFood-table-td2" style="width: 40%">
-                    <div class="health-addFood-inputGroup" id="addSection-Breakfast">
-                        <div class="dropdown health-addFood-nameInput">
-                            <div class="health-addFood-input">
-                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
-                                <input type="text" class="form-control foodId-field" hidden readonly />
-                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
-                                    @foreach (var food in Model.AllFood)
-                                    {
-                                        <div class="dropdown-item" onclick="AddFood(this);">
-                                            @food.FoodName <span hidden>@food.FoodId</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-outline-info" onclick="AddInput(1)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
-                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
-                </td>
-                <td style="width: 10%">
-                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
-                </td>
-                <td style="width: 20%">
-                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
-                </td>
-            </tr>
-            <tr class="addFood-tr">
-                <td class="align-top" style="width: 30%"><h5>Lunch</h5></td>
-                <td id="health-addFood-table-td2" style="width: 40%">
-                    <div class="health-addFood-inputGroup" id="addSection-Lunch">
-                        <div class="dropdown health-addFood-nameInput">
-                            <div class="health-addFood-input">
-                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
-                                <input type="text" class="form-control foodId-field" hidden readonly />
-                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
-                                    @foreach (var food in Model.AllFood)
-                                    {
-                                        <div class="dropdown-item" onclick="AddFood(this);">
-                                            @food.FoodName <span hidden>@food.FoodId</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-outline-info" onclick="AddInput(2)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
-                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
-                </td>
-                <td style="width: 10%">
-                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
-                </td>
-                <td style="width: 20%">
-                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
-                </td>
-            </tr>
-            <tr class="addFood-tr">
-                <td class="align-top" style="width: 30%"><h5>Dinner</h5></td>
-                <td id="health-addFood-table-td2" style="width: 40%">
-                    <div class="health-addFood-inputGroup" id="addSection-Dinner">
-                        <div class="dropdown health-addFood-nameInput">
-                            <div class="health-addFood-input">
-                                <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this)" style="margin-bottom: 1%;"></div>
-                                <input type="text" class="form-control foodId-field" hidden readonly />
-                                <div class="health-addFood-selectList dropdown-menu" style="display:none;">
-                                    @foreach (var food in Model.AllFood)
-                                    {
-                                        <div class="dropdown-item" onclick="AddFood(this);">
-                                            @food.FoodName <span hidden>@food.FoodId</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-outline-info" onclick="AddInput(3)" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
-                    <p>Calories: <span class="health-addFood-calories-span">0</span></p>
-                </td>
-                <td style="width: 10%">
-                    <input type="number" value="1" class="form-control health-addFood-quantity" style="margin-bottom: 5%;"/>
-                </td>
-                <td style="width: 20%">
-                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><h6>Net calories intake: <span id="health-addFood-totalCalories">0</span></h6></td>
-                <td colspan="2">
-                    <div class="float-right">
-                        <a href="#AddSection" data-toggle="collapse" class="btn btn-secondary">Cancel</a>
-                        <input type="submit" value="Add record" class="btn btn-info" />
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table id="foodCaloriesTable" hidden>
-            @foreach (var food in Model.AllFood)
-            {
+        <form id="addFood-form" method="post">
+            <table class="table table-borderless" id="health-addFood-table">
                 <tr>
-                    <td>@food.FoodId</td>
-                    <td>@food.Calories</td>
+                    <td>
+                        <h5>Date</h5>
+                        <input type="date" asp-for="Date" class="form-control" id="health-addFood-date" />
+                    </td>
+                    <td colspan="3"></td>
                 </tr>
-            }
-        </table>
+
+                @for (var i = 0; i < Model.MealsModel.Count; i++)
+                {
+                    <tr class="addFood-tr">
+                        <td class="align-top" style="width: 30%">
+                            <h5>@Model.MealsModel[i].MealType</h5>
+                        </td>
+                        <td id="health-addFood-table-td2" style="width: 40%">
+                            <div class="health-addFood-inputGroup" id="addSection-@Model.MealsModel[i].MealType">
+                                <div class="dropdown health-addFood-nameInput">
+                                    <div class="health-addFood-input">
+                                        <div class="form-group">
+                                            <label>Meal</label>
+                                            <div class="form-control health-addFood-displayInput" onclick="OpenOptions(this); return false;" style="margin-bottom: 1%;"></div>
+                                        </div>
+
+                                        <input type="text" asp-for="MealsModel[i].MealType" value="@Model.MealsModel[i].MealType" hidden readonly />
+                                        <input type="text" asp-for="MealsModel[i].FoodId" class="form-control foodId-field" hidden readonly />
+                                        <div class="health-addFood-selectList dropdown-menu" style="display:none;">
+                                            @foreach (var food in Model.AllFood)
+                                            {
+                                                <div class="dropdown-item" onclick="AddFood(this);" style="cursor:pointer;">
+                                                    @food.FoodName <span hidden>@food.FoodId</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-outline-info" onclick="AddInput(@i+1); return false;" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another food</button>
+                            <p>Calories: <span class="health-addFood-calories-span">0</span></p>
+                        </td>
+                        <td style="width: 10%">
+                            <div class="form-group health-addFood-quantity">
+                                <label>Quantity</label>
+                                <input type="number" asp-for="MealsModel[i].Quantity" value="1" min="0" class="form-control addFood-quantity-input" style="margin-bottom: 5%;" />
+                            </div>
+                        </td>
+                        <td style="width: 20%">
+                            <div style="margin-top: 32px;"></div>
+                            <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td></td>
+                    <td><h5>Net calories intake: <span id="health-addFood-totalCalories">0</span></h5></td>
+                    <td colspan="2">
+                        <div class="float-right">
+                            <a href="#AddSection" data-toggle="collapse" class="btn btn-secondary">Cancel</a>
+                            <input type="submit" value="Add record" class="btn btn-info" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+            <table id="foodCaloriesTable" hidden>
+                @foreach (var food in Model.AllFood)
+                {
+                    <tr>
+                        <td>@food.FoodId</td>
+                        <td>@food.Calories</td>
+                    </tr>
+                }
+            </table>
+        </form>
     </div>
 </div>
 <br />
@@ -137,7 +137,6 @@
     <table class="table table-bordered">
         <tr>
             <td>
-
             </td>
         </tr>
     </table>
@@ -148,28 +147,33 @@
 
     function OpenOptions(inp) {
         dropdownCooldown = true;
-        inp.parentElement.getElementsByClassName("health-addFood-selectList")[0].style.display = "block";
+        inp.parentElement.parentElement.getElementsByClassName("health-addFood-selectList")[0].style.display = "block";
         setTimeout(function () { dropdownCooldown = false; }, 126)
     }
 
     function AddInput(number) {
         var inputGroup = document.getElementsByClassName("health-addFood-inputGroup")[number - 1];
 
-        var foodNameInputDiv = document.querySelector(".health-addFood-nameInput").cloneNode(true);
+        var foodNameInputDiv = inputGroup.querySelector(".health-addFood-nameInput").cloneNode(true);
         foodNameInputDiv.querySelector(".health-addFood-displayInput").innerText = "";
+        foodNameInputDiv.querySelector("label").remove();
+
+        var allFields = foodNameInputDiv.querySelectorAll("input");
+
         var foodIdInput = foodNameInputDiv.querySelector(".foodId-field");
         foodIdInput.readonly = false;
         foodIdInput.value = "";
         foodIdInput.readonly = true;
         inputGroup.appendChild(foodNameInputDiv);
-        
+
         var td = document.getElementsByClassName("addFood-tr")[number - 1].getElementsByTagName("td");
         var quantityInput = document.querySelector(".health-addFood-quantity").cloneNode(true);
+        quantityInput.querySelector("label").remove();
         quantityInput.value = 1;
         td[2].appendChild(quantityInput);
         td[3].innerHTML +=
             `<br />
-            <button class="btn text-primary" onclick="RemoveInput(this)" style="margin-bottom: 2.5%;"><i class="far fa-times-circle"></i></button>`;
+            <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;margin-top: 11px;"><i class="far fa-times-circle"></i></button>`;
     }
 
     function RemoveInput(button) {
@@ -194,7 +198,7 @@
         // Update name field
         group.getElementsByClassName("health-addFood-displayInput")[0].innerText = div.innerText;
 
-        var idField = group.getElementsByTagName("input")[0]
+        var idField = group.getElementsByTagName("input")[1]
         idField.readonly = false;
         idField.value = div.getElementsByTagName("span")[0].innerText;
         idField.readonly = true;
@@ -203,23 +207,26 @@
 
     function ListenersInterrupt() {
         // Listening for change in aria-expanded
-        var foodCalories = {};
+        var foodCalories = {}; //Table of foodId: Calories
 
         function UpdateCalories() {
             var totalCalories = {
-                "addSection-Breakfast" : 0,
-                "addSection-Lunch" : 0,
-                "addSection-Dinner" : 0
+                "addSection-Breakfast": 0,
+                "addSection-Lunch": 0,
+                "addSection-Dinner": 0
             };
 
             var allInputs = document.getElementsByClassName("foodId-field");
             var allQuantity = document.getElementsByClassName("health-addFood-quantity");
-            for (var i in allInputs) {
-                var foodId = allInputs[i].value;
-                
-                if (foodId) {
+
+
+            for (var i = 0; i < allInputs.length; i++) {
+                var foodId = allInputs.item(i).value;
+
+                if (foodId > 0) {
                     var inputSectionId = allInputs.item(i).parentElement.parentElement.parentElement.id;
-                    totalCalories[inputSectionId] += foodCalories[allInputs[i].value] * allQuantity[i].value;
+                    totalCalories[inputSectionId] += foodCalories[allInputs.item(i).value] * allQuantity.item(i).querySelector("input").value;
+
                 }
 
             }
@@ -265,13 +272,37 @@
         }, 500);
     }
 
+    document.querySelector("#addFood-form").addEventListener("submit", function (e) {
+        var allInpGrp = document.getElementsByClassName("health-addFood-nameInput");
+        var quantities = document.getElementsByClassName("addFood-quantity-input")
+        var count = 0
+
+        for (var i in allInpGrp) {
+            var inputs = allInpGrp[i].querySelectorAll("input");
+            quantities.item(i).name = `MealsModel[${i}].Quantity`;
+            quantities.item(i).id = `MealsModel_${i}__Quantity`;
+
+            if (inputs.item(0).value.length > 0) {
+                inputs.item(0).name = `MealsModel[${i}].MealType`;
+                inputs.item(0).id = `MealsModel_${i}__MealType`;
+                inputs.item(1).name = `MealsModel[${i}].FoodId`;
+                inputs.item(1).id = `MealsModel_${i}__FoodId`;
+                count++;
+            }
+
+        }
+    })
+
     window.addEventListener('load', function () {
         document.addEventListener('click', function (event) {
-            if (!dropdownCooldown) {
-                const allTabs = document.getElementsByClassName("health-addFood-selectList");
-                console.log(allTabs);
-                for (var tab in allTabs) {
-                    allTabs.item(tab).style.display = 'none';
+            if (event.target.getAttribute("type") != "submit") {
+                event.preventDefault();
+                if (!dropdownCooldown) {
+                    const allTabs = document.getElementsByClassName("health-addFood-selectList");
+                    console.log(allTabs);
+                    for (var tab in allTabs) {
+                        allTabs.item(tab).style.display = 'none';
+                    }
                 }
             }
 

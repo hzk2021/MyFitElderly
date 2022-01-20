@@ -10,7 +10,9 @@ namespace EDP_Project.Models
     public class Meals
     {
         [Key]
-        public int ItemId { get; set; }
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
 
         [Required]
         public String MealType { get; set; }
@@ -19,6 +21,10 @@ namespace EDP_Project.Models
         public int FoodId { get; set; }
 
         [Required]
-        public int Date { get; set; }
+        public int Quantity { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public Food FoodDetails { get; set; }
     }
 }

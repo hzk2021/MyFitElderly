@@ -14,6 +14,7 @@ using System.Web;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
 using NLog;
+using EDP_Project.Services;
 
 namespace EDP_Project.Pages.Auth
 {
@@ -27,7 +28,7 @@ namespace EDP_Project.Pages.Auth
 
         private static Logger logger = LogManager.GetLogger("MyAppLoggerRules");
 
-
+        private readonly UserService _svc;
 
         [BindProperty]
 
@@ -39,7 +40,10 @@ namespace EDP_Project.Pages.Auth
         [BindProperty]
         public string error_msg { get; set; }
 
-
+        public LoginModel(UserService svc)
+        {
+            _svc = svc;
+        }
 
         public class MyObject
         {
@@ -57,7 +61,7 @@ namespace EDP_Project.Pages.Auth
 
         //SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
-
+        
 
         // Captcha Validation - to prevent attacks
 
@@ -288,6 +292,7 @@ namespace EDP_Project.Pages.Auth
 
                             HttpContext.Session.SetString("user", currentUser.Trim());
                             logger.Info($"{currentUser.Trim()} logged in attempt successful");
+                            _svc.retrieveuserid(HttpContext.Session.GetString("user"));
                             return RedirectToPage("Index");
 
                     }
@@ -301,7 +306,7 @@ namespace EDP_Project.Pages.Auth
 
 
                     //HttpContext.Session.SetString("user", "username");
-
+                    
 
 
 
