@@ -37,14 +37,17 @@ namespace EDP_Project.Pages.Staff.Blog
                 {
                     BlogPosts.Add(new Post
                     {
+                        Id = (int)dataReader["Id"],
                         Title = dataReader["Title"].ToString(),
                         Category = dataReader["Category"].ToString(),
+                        Header = dataReader["Header"].ToString(),
                         Content = dataReader["Content"].ToString(),
+                        Created = (DateTime)dataReader["Created"],
 
 
                     });
                 }
-                Console.WriteLine(BlogPosts[1].Title);
+
 
             }
             catch (WebException ex)

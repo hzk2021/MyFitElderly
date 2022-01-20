@@ -25,7 +25,7 @@ namespace EDP_Project.Pages.Staff.Accounts
             try
             {
                 string MyConnection2 = "datasource=localhost;port=3307;username=root;password=root";
-                string Query = "delete from user where Username='" + userID + "';";
+                string Query = "delete from user where Email='" + userID + "';";
                 MySqlCommand MyCommand2 = new MySqlCommand(Query, con);
                 MySqlDataReader MyReader2;
                 con.Open();

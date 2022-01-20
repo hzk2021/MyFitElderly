@@ -1,159 +1,91 @@
 ﻿@page
 @model EDP_Project.Pages.Staff.Blog.DashboardModel
 @{
+    ViewData["Title"] = "Blog Dashboard";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
 
-
-
-
-
-
-
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    @*<link rel="stylesheet" href="~/css/all.min.css">*@
-    <!-- Ionicons -->
-    <!-- Tempusdominus Bootstrap 4 -->
-    <!-- iCheck -->
-    <!-- JQVMap -->
-    <!-- Theme style -->
-
-
-
-    <link rel="stylesheet" href="~/css/adminlte.min.css">
-
-    @*<link href="~/plugins/jqvmap/jqvmap.css" media="screen" rel="stylesheet" type="text/css">*@
-
-
-
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
-    <script src="https://momentjs.com/downloads/moment.min.js"></script>
-
-
-    @*<script src="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.js"></script>
-        <link href="https://rawgit.com/wenzhixin/bootstrap-table/master/src/bootstrap-table.css" rel="stylesheet" />*@
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
-
-</head>
-<body>
-
-    @*<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>*@
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-
-    <table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
-           data-search="true"
-           data-show-columns="true"
-           data-show-refresh="true"
-           data-detail-view="true"
-           data-show-export="true"
-           data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
-        <thead>
-            <tr>
-                <th data-field="title" data-sortable="true">Title</th>
-                <th data-field="category" data-sortable="true">Category</th>
-                <th data-field="content" data-sortable="true">Content</th>
-
-
-                <th data-field="action" data-formatter="actionFormatter">Action</th>
-
-            </tr>
-        </thead>
-    </table>
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-
-
-    <!-- jQuery UI 1.11.4 -->
-    <script src="~/plugins/jquery-ui/jquery-ui.js"></script>
-
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-
-
-
-    <!-- Bootstrap 4 -->
-    <script src="~/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <!-- JQVMap -->
-    <!-- jQuery Knob Chart -->
-    <!-- daterangepicker -->
-    <!-- AdminLTE App -->
-    <!-- AdminLTE for demo purposes -->
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-
-
-    <script src="~/js/cardwidget.js"></script>
-
-
-
-    <script src="~/js/dashboard.js"></script>
-
-    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
-
-
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-
-    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-
-
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
-
-
-
-
-    <script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
-
-    @{
-        var bpost = @Model.BlogPosts;
-
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/locale/bootstrap-table-en-US.min.js" integrity="sha512-6yuh1Ismn8oLv1WBwNbTKKh+40FcHRFaAwS+t++e/u7gHsuM0xNHU00xkowBHtZ7Mmw4T1ur4fr2T6PGv4Jpsw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+    .select,
+    #locale {
+        width: 100%;
     }
 
-    <script>
+    .like {
+        margin-right: 10px;
+    }
+</style>
+
+
+<h1 class="text-center">Blog Dashboard</h1>
+<div id="toolbar">
+    <a asp-page="Create" id="add" role="button" class="btn btn-primary" >
+        <i class="fa fa-plus"></i> Add Blog
+    </a>
+</div>
+<table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
+       data-show-toggle="true"
+       data-show-fullscreen="true"
+       data-show-columns="true"
+       data-show-refresh="true"
+       data-show-export="true"
+       data-click-to-select="true" 
+       data-page-size="6" 
+       data-show-custom-view-button="true">
+    <thead>
+        <tr>
+            <th data-field="id" data-sortable="true">Id</th>
+            <th data-field="title" data-sortable="true">Title</th>
+            <th data-field="category" data-sortable="true">Category</th>
+            <th data-field="header" data-sortable="true">Header</th>
+            <th data-field="content" data-width="300" data-width-unit="px" data-sortable="true" >Content</th>
+            <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
+            <th data-field="action" data-formatter="actionFormatter">Action</th>
+
+        </tr>
+    </thead>
+</table>
+
+@{
+    var bpost = @Model.BlogPosts;
+
+}
+<script>
     var dataBlog = @Html.Raw(Json.Serialize(bpost));
     var $table = $('#table')
     $(function () {
         var data = dataBlog
         $table.bootstrapTable({ data: data })
     })
+
     function actionFormatter(index, row) {
         var html = []
         $.each(row, function (key, value) {
 
-            // if username is equal to current username or admin count != 1 and role == guest)
 
-            if (key == 'title') {
-
-
+            if (key == 'id') {
                 html.push('<div style="text-align:center">')
-                html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Update?id=' + value + '" title="edit"><i class="fa fa-edit"></i></a>')
-                html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Delete?id=' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
+               // html.push('<a class="edit" href="https://localhost:44320/Blog/BlogPostDetail/' + value + '" title="edit"><i class="fa fa-info-circle"></i></a>' + '&nbsp &nbsp')
+                html.push('<a class="edit" href="https://localhost:44320/Staff/Blog/Edit/' + value + '" title="edit"><i class="fa fa-edit"></i></a>' + '&nbsp &nbsp')
+                html.push('<a class="edit" href="https://localhost:44320/Staff/Blog/Delete/' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
 
             }
 
         })
         return html.join("")
+    }
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-</body>
-</html>
+</script>
+
+<script>
+    function dateFormat(value, row, index) {
+        return moment(value).format('DD/MM/YYYY HH:mm:ss');
+    }
+</script>
+

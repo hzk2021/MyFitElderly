@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EDP_Project.Pages.Staff.Blog
 {
-    public class CreateModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly BlogService _svc;
         [BindProperty]
@@ -18,21 +18,19 @@ namespace EDP_Project.Pages.Staff.Blog
         [BindProperty]
         public string ErrorMsg { get; set; }
 
-        public CreateModel(BlogService svc)
+        public EditModel(BlogService svc)
         {
             _svc = svc;
         }
-        public void OnGet()
+        public void OnGet(int id)
         {
+            BlogModel = _svc.GetPostId(id);
         }
-
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)
             {
-
-
-                string response = _svc.AddBlog(BlogModel);
+                string response = _svc.UpdatePost(BlogModel);
                 if (response == "True")
                 {
                     return RedirectToPage("Dashboard");
@@ -43,7 +41,6 @@ namespace EDP_Project.Pages.Staff.Blog
                 }
             }
             return Page();
-
         }
     }
- }
+}

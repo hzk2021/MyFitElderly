@@ -162,8 +162,9 @@ CREATE TABLE IF NOT EXISTS Log (
             `Description`       LONGTEXT      NULL,
             `CreatedOn`         DATETIME       NOT NULL,
             `UpdatedOn`         DATETIME       NOT NULL,
-            `ViewStatus`        BIT            NOT NULL,
+            `ViewStatus`        NCHAR(30)            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
+            `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
@@ -193,7 +194,8 @@ CREATE TABLE IF NOT EXISTS Log (
             MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
-            `Content`     NVARCHAR (50)    NULL,
+            `Header`     NVARCHAR (500)    NULL,
+            `Content`     NVARCHAR (4000)    NULL,
             `Category`     NVARCHAR (50)    NULL,
             `Created`         DATETIME       NOT NULL,
             PRIMARY KEY (`Id` ASC)

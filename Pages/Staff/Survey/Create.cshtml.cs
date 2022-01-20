@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using EDP_Project.Services.Survey;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,6 +22,9 @@ namespace EDP_Project.Pages.Staff.Survey
 
         [BindProperty]
         public List<Models.Survey.QuestionOption> qnsOptions { get; set; }
+
+        [BindProperty]
+        public IFormFile imgFile { get; set; }
 
         public CreateSurveyModel(SurveyService surveySrv)
         {
@@ -43,9 +48,19 @@ namespace EDP_Project.Pages.Staff.Survey
                     Description = newSurvey.Description,
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
-                    ViewStatus = false,
+                    ViewStatus = newSurvey.ViewStatus,
                     CreatedByStaffID = 7 // Temp | change later
                 };
+
+                if (imgFile != null)
+                {
+                    using (var t = new MemoryStream())
+                    {
+                        imgFile.CopyTo(t);
+                        svy.ImgBytes = t.ToArray();
+                    }
+                }
+
                 await _srv.AddSurvey(svy);
 
                 for (int i = 0; i < AllQuestionList.Count; i++)

@@ -1,14 +1,15 @@
-﻿@page
-@model EDP_Project.Pages.Staff.Blog.CreateModel
+﻿@page "{id}"
+@model EDP_Project.Pages.Staff.Blog.EditModel
 @{
-    ViewData["Title"] = "Create Blog" ;
+    ViewData["Title"] = "Update Blog";
 }
 <form method="post">
-    <h1 class="text-center">Add New Blog</h1>
+    <h1 class="text-center">Update Blog</h1>
     @if (!String.IsNullOrEmpty(Model.ErrorMsg))
     {
         <p class="alert alert-danger">@Model.ErrorMsg</p>
     }
+    <input type="number" asp-for="BlogModel.Id" hidden readonly required />
     <div class="form-group">
         <label for="title">Title</label>
         <input class="form-control" asp-for="BlogModel.Title" id="title" required />
