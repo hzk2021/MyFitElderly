@@ -68,7 +68,7 @@
                             <td>@survey.CreatedOn</td>
                             <td>@survey.UpdatedOn</td>
                             <td>@survey.ViewStatus</td>
-                            <td>@survey.CreatedByStaffID</td>
+                            <td>@Model._usrv.GetStaffUserName(@survey.CreatedByStaffID.ToString())</td> @*Need to change later*@
                             <td><a class="btn btn-warning" asp-page="Edit" asp-route-sid="@survey.SurveyUUID">Edit</a></td>
                             <td>
                                 <form asp-page="Delete" method="post" asp-route-sid="@survey.SurveyUUID">
