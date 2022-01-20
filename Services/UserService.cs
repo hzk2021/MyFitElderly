@@ -66,13 +66,13 @@ namespace EDP_Project.Services
 
         }
 
-        public string GetStaffUserName(string userID)
+        public string GetStaffUserName(string id_pk)
         {
             string username = string.Empty;
 
-            string sql = "select * FROM User WHERE Username=@USERID";
+            string sql = "select * FROM User WHERE Id=@ID";
             MySqlCommand command = new MySqlCommand(sql, con);
-            command.Parameters.AddWithValue("@USERID", userID);
+            command.Parameters.AddWithValue("@ID", id_pk);
             try
             {
                 con.Open();
