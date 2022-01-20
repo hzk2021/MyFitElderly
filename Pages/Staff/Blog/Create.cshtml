@@ -1,8 +1,31 @@
 ﻿@page
 @model EDP_Project.Pages.Staff.Blog.CreateModel
 @{
-    ViewData["Title"] = "Create Blog" ;
+    ViewData["Title"] = "Create Blog";
 }
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Return To Dashbaord?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sue you want to cancel? Changes made will not be saved!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a type="button" class="btn btn-danger" asp-page="Dashboard">Return to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
 <form method="post">
     <h1 class="text-center">Add New Blog</h1>
     @if (!String.IsNullOrEmpty(Model.ErrorMsg))
@@ -31,7 +54,7 @@
         <span asp-validation-for="BlogModel.Content" class="text-danger"></span>
     </div>
 
-    <a asp-page="Dashboard" class="btn btn-secondary">Cancel</a>
+    <button  class="btn btn-secondary" data-toggle="modal" data-target="#returnModal">Cancel</button>
     <input class="btn btn-success float-right" type="submit" value="Create" />
 </form>
 
