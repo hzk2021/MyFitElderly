@@ -66,6 +66,88 @@ namespace EDP_Project.Services
 
         }
 
+        public string GetStaffUserName(string userID)
+        {
+            string username = string.Empty;
+
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["Username"] != null)
+                        {
+                            if (reader["Username"] != DBNull.Value)
+                            {
+                                username = (string)reader["Username"];
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return username;
+
+        }
+
+        public bool isStaff(string userID)
+        {
+            var role = "";
+
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["Role"] != null)
+                        {
+                            if (reader["Role"] != DBNull.Value)
+                            {
+                                role = reader["Role"].ToString();
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            if (role == "Staff")
+            {
+                return true;
+            }
+
+
+            return false;
+        }
+
     }
 
 
