@@ -1,6 +1,7 @@
 ﻿@page
 @model EDP_Project.Pages.Staff.Blog.DashboardModel
 @{
+    ViewData["Title"] = "Blog Dashboard";
 }
 <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
 
@@ -22,19 +23,28 @@
 </style>
 
 
-
-
+<h1 class="text-center">Blog Dashboard</h1>
+<div id="toolbar">
+    <a asp-page="Create" id="add" role="button" class="btn btn-primary" >
+        <i class="fa fa-plus"></i> Add Blog
+    </a>
+</div>
 <table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
+       data-show-toggle="true"
+       data-show-fullscreen="true"
        data-show-columns="true"
        data-show-refresh="true"
        data-show-export="true"
-       data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
+       data-click-to-select="true" 
+       data-page-size="6" 
+       data-show-custom-view-button="true">
     <thead>
         <tr>
             <th data-field="id" data-sortable="true">Id</th>
             <th data-field="title" data-sortable="true">Title</th>
             <th data-field="category" data-sortable="true">Category</th>
-            <th data-field="content" data-sortable="true">Content</th>
+            <th data-field="header" data-sortable="true">Header</th>
+            <th data-field="content" data-width="300" data-width-unit="px" data-sortable="true" >Content</th>
             <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
             <th data-field="action" data-formatter="actionFormatter">Action</th>
 
@@ -61,7 +71,7 @@
 
             if (key == 'id') {
                 html.push('<div style="text-align:center">')
-                html.push('<a class="edit" href="https://localhost:44320/Staff/Blog/Edit/' + value + '" title="edit"><i class="fa fa-info-circle"></i></a>' + '&nbsp &nbsp')
+               // html.push('<a class="edit" href="https://localhost:44320/Blog/BlogPostDetail/' + value + '" title="edit"><i class="fa fa-info-circle"></i></a>' + '&nbsp &nbsp')
                 html.push('<a class="edit" href="https://localhost:44320/Staff/Blog/Edit/' + value + '" title="edit"><i class="fa fa-edit"></i></a>' + '&nbsp &nbsp')
                 html.push('<a class="edit" href="https://localhost:44320/Staff/Blog/Delete/' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
 

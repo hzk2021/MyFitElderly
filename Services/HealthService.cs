@@ -97,5 +97,109 @@ namespace EDP_Project.Services
             _context.Food.Remove(foodItem);
             _context.SaveChanges();
         }
+
+        public string AddMeals(List<Meals> meals)
+        {
+            try
+            {
+                _context.Meals.AddRange(meals);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception e)
+            {
+                return "An error occurred while registering your record. Try again later.";
+            }
+        }
+
+        public string UpdateMeals(List<Meals> meals)
+        {
+            try
+            {
+                _context.Meals.UpdateRange(meals);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception e)
+            {
+                return "An error occurred while registering your record. Try again later.";
+            }
+        }
+
+        public string RemoveMeals(int userId)
+        {
+            try
+            {
+                List<Meals> userTodayMeals = _context.Meals.Where(x => x.UserId == userId && x.Date == DateTime.Today).ToList();
+
+                _context.Meals.RemoveRange(userTodayMeals);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception e)
+            {
+                return "An error occurred while resetting today's record. Try again later.";
+            }
+        }
+
+        public List<Meals> GetTodayRecordAdded(int userId)
+        {
+            List<Meals> mealsList = _context.Meals.Where(m => m.UserId == userId && m.Date == DateTime.Today)
+                                                .Join(_context.Food,
+                                                m => m.FoodId,
+                                                f => f.FoodId,
+                                                (m, f) => new Meals { 
+                                                    Id = m.Id,
+                                                    UserId = m.UserId,
+                                                    FoodId = m.FoodId,
+                                                    MealType = m.MealType,
+                                                    Quantity = m.Quantity,
+                                                    Date = m.Date,
+                                                    FoodDetails = f
+                                                })
+                                                .ToList();
+            return mealsList;
+        }
+
+        public List<Meals> GetMealsRecord(int userId)
+        {
+            List<Meals> mealsList = _context.Meals.Where(m => m.UserId == userId)
+                                                .Join(_context.Food,
+                                                m => m.FoodId,
+                                                f => f.FoodId,
+                                                (m, f) => new Meals
+                                                {
+                                                    Id = m.Id,
+                                                    UserId = m.UserId,
+                                                    FoodId = m.FoodId,
+                                                    MealType = m.MealType,
+                                                    Quantity = m.Quantity,
+                                                    Date = m.Date,
+                                                    FoodDetails = f
+                                                })
+                                                .ToList();
+            return mealsList;
+        }
+    }
+
+    // Combine 2 Returned Lists of Objects
+    public class UnionList<first, second>
+    {
+        private first firstList;
+        private second secondList;
+        public UnionList(first firstList, second secondList)
+        {
+            this.firstList = firstList;
+            this.secondList = secondList;
+        }
+        public first Left
+        {
+            get { return this.firstList; }
+        }
+        public second Right
+        {
+            get { return this.secondList; }
+        }
+
     }
 }

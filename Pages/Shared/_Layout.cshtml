@@ -56,6 +56,8 @@
 
                         @{
 
+                            string userPhotoPath = "xxx.com";
+
 
                             if (@Context.Session.GetString("user") != null)
                             {
@@ -75,6 +77,11 @@
                                             if (reader["Role"] != DBNull.Value)
                                             {
                                                 userRole = reader["Role"].ToString();
+                                            }
+
+                                            if (reader["PhotoPath"] != DBNull.Value)
+                                            {
+                                                userPhotoPath = reader["PhotoPath"].ToString();
                                             }
                                         }
                                     }
@@ -105,25 +112,41 @@
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Staff/Blog/Dashboard">Blog Dashboard</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Booking/MedicalSpecialist">Booking</a>
                                     </li>
                                     
-                                    // Move to Staff Nav after
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle text-dark" id="sepcialistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Specialist</a>
-                                        <div class="dropdown-menu" aria-labelledby="sepcialistDropdown">
-                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/ViewSpecialist">Manage Medical Specialists</a>
-                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/CreateSpecialistDepartment">Create Medical Departments</a>
-                                        </div>
-                                    </li>
+                                    
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="">Fries</a>
                                     </li>
-                                    <li class="nav-item ml-auto">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
-                                            <i class="fa fa-sign-out fa-lg"></i>
-                                        </a>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="">Take A Survey</a>
                                     </li>
+                                    @*<li class="nav-item ml-auto">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
+                            <i class="fa fa-sign-out fa-lg"></i>
+                        </a>
+                    </li>*@
+
+
+                                    <li class="nav-item dropdown ml-auto ">
+
+                                        <img src="~/@userPhotoPath" style="height:40px; width:auto;" class="rounded-circle avatar" alt="Avatar">
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle user-action text-dark"> <b class="caret" style="font-weight:100; mar">@Context.Session.GetString("user")</b></a>
+
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#"><i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;Kopiko</a>
+                                            <a class="dropdown-item" href="/Logout"><i class="fa fa-sign-out fa-lg"></i>&nbsp;&nbsp;Logout</a>
+                                            @*<div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>*@
+                                        </div>
+                                    </li>
+
+
+
 
 
                                 }
@@ -143,13 +166,26 @@
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/">Hamburger</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" id="sepcialistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Specialist</a>
+                                        <div class="dropdown-menu" aria-labelledby="sepcialistDropdown">
+                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/ViewSpecialist">Manage Medical Specialists</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/CreateSpecialistDepartment">Create Medical Departments</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Staff/Survey/View">Survey</a>
                                     </li>
                                     <li class="nav-item ml-auto">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
-                                            <i class="fa fa-sign-out fa-lg"></i>
                                         </a>
                                     </li>
+
 
                                 }
                             }
@@ -169,8 +205,12 @@
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="Contact">Contact</a>
                                 </li>
+
 
 
                             }

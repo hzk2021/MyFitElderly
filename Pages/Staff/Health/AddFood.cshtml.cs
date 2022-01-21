@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 
+//n
+
 namespace EDP_Project.Pages
 {
     public class AddFoodModel : PageModel

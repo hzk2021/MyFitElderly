@@ -14,6 +14,7 @@ using System.Web;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
 using NLog;
+using EDP_Project.Services;
 
 namespace EDP_Project.Pages.Auth
 {
@@ -27,7 +28,7 @@ namespace EDP_Project.Pages.Auth
 
         private static Logger logger = LogManager.GetLogger("MyAppLoggerRules");
 
-
+        private readonly UserService _svc;
 
         [BindProperty]
 
@@ -39,7 +40,10 @@ namespace EDP_Project.Pages.Auth
         [BindProperty]
         public string error_msg { get; set; }
 
-
+        public LoginModel(UserService svc)
+        {
+            _svc = svc;
+        }
 
         public class MyObject
         {
@@ -114,7 +118,7 @@ namespace EDP_Project.Pages.Auth
         protected string getDBSalt(string userid)
         {
             string s = null;
-            string sql = "select PasswordSalt FROM User WHERE Email@USERID";
+            string sql = "select PasswordSalt FROM User WHERE Email = @USERID";
             MySqlCommand command = new MySqlCommand(sql, con);
             command.Parameters.AddWithValue("@USERID", userid);
             try
@@ -146,7 +150,7 @@ namespace EDP_Project.Pages.Auth
         protected string getDBHash(string userid)
         {
             string h = null;
-            string sql = "select PasswordHash FROM User WHERE Email@USERID";
+            string sql = "select PasswordHash FROM User WHERE Email = @USERID";
             MySqlCommand command = new MySqlCommand(sql, con);
             command.Parameters.AddWithValue("@USERID", userid);
             try
@@ -203,9 +207,11 @@ namespace EDP_Project.Pages.Auth
             {
 
 
-
+                bool emailVerified = false;
                 string dbHash = "";
                 string dbSalt = "";
+
+
 
                 // Open DB,
                 con.Open();
@@ -262,6 +268,17 @@ namespace EDP_Project.Pages.Auth
 
                                 }
 
+
+                                if (reader["EmailVerified"] != null)
+                                {
+                                    if (reader["EmailVerified"] != DBNull.Value)
+                                    {
+                                        emailVerified = (bool)reader["EmailVerified"];
+                                    }
+
+                                }
+
+
                             }
                         }
                     }
@@ -272,7 +289,6 @@ namespace EDP_Project.Pages.Auth
 
 
 
-                    // if password wrong, increase the thing.
 
 
                     SHA512Managed hashing = new SHA512Managed();
@@ -285,9 +301,16 @@ namespace EDP_Project.Pages.Auth
 
 
 
-
                             HttpContext.Session.SetString("user", currentUser.Trim());
                             logger.Info($"{currentUser.Trim()} logged in attempt successful");
+                            _svc.retrieveuserid(HttpContext.Session.GetString("user"));
+
+
+
+                          //  if (emailVerified != false) return RedirectToPage("Index");
+                          //  else return RedirectToPage("/Auth/EmailVerification");
+                            //return RedirectToPage("Index");
+
                             return RedirectToPage("Index");
 
                     }
@@ -326,7 +349,7 @@ namespace EDP_Project.Pages.Auth
                 // if user exists generate session
 
 
-                // Otherwise 
+                // Otherwise
 
 
                 // Return error

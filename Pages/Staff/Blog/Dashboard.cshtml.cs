@@ -40,6 +40,7 @@ namespace EDP_Project.Pages.Staff.Blog
                         Id = (int)dataReader["Id"],
                         Title = dataReader["Title"].ToString(),
                         Category = dataReader["Category"].ToString(),
+                        Header = dataReader["Header"].ToString(),
                         Content = dataReader["Content"].ToString(),
                         Created = (DateTime)dataReader["Created"],
 

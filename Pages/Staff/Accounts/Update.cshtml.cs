@@ -24,6 +24,7 @@ namespace EDP_Project.Pages.Staff.Accounts
 
         public string userID { get; set; }
 
+
         [BindProperty]
 
         public string originalPath { get; set; }
@@ -38,7 +39,7 @@ namespace EDP_Project.Pages.Staff.Accounts
 
 
 
-                string sqlz = "select PhotoPath FROM User WHERE Username = @USERID";
+                string sqlz = "select PhotoPath FROM User WHERE Email = @USERID";
                 MySqlCommand commandz = new MySqlCommand(sqlz, con);
                 commandz.Parameters.AddWithValue("@USERID", userId);
                 try
@@ -105,12 +106,14 @@ namespace EDP_Project.Pages.Staff.Accounts
 
 
 
-
                 string uploadsFolder = "wwwroot/Images";
                 string uniqueName = Guid.NewGuid().ToString() + "_" + myUser.Photo.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueName);
 
                 string photoPath = Path.Combine("Images", uniqueName);
+
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
 
                 myUser.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
 
@@ -120,12 +123,12 @@ namespace EDP_Project.Pages.Staff.Accounts
                     string MyConnection2 = "datasource=localhost;port=3307;username=root;password=root";
                     //string Query = "delete from user where Username='" + userID + "';";
 
-                    string Query = "update user set PhotoPath= @PHOTOPATH , Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where username= @CUSER";
+                    string Query = "update user set PhotoPath= @PHOTOPATH , Email= @USERID, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where Email= @CUSER";
 
                     MySqlCommand MyCommand2 = new MySqlCommand(Query, con);
 
                     MyCommand2.Parameters.AddWithValue("@PHOTOPATH", photoPath);
-                    MyCommand2.Parameters.AddWithValue("@USERNAME", myUser.Username);
+                    MyCommand2.Parameters.AddWithValue("@USERID", myUser.Email);
                     MyCommand2.Parameters.AddWithValue("@GENDER", myUser.Gender);
                     MyCommand2.Parameters.AddWithValue("@DOB", myUser.DateOfBirth);
 
@@ -151,9 +154,10 @@ namespace EDP_Project.Pages.Staff.Accounts
             {
                 try
                 {
-                    //string Query = "delete from user where Username='" + userID + "';";
 
-                    string Query = "update user set Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where username= @CUSER";
+                
+
+                    string Query = "update user set Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where Email= @CUSER";
 
                     MySqlCommand MyCommand2 = new MySqlCommand(Query, con);
 
@@ -192,7 +196,7 @@ namespace EDP_Project.Pages.Staff.Accounts
             con.Open();
 
 
-            MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE USERNAME = @USERID", con);
+            MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE Email = @USERID", con);
             cmdx.Parameters.AddWithValue("@USERID", userID);
             cmdx.ExecuteScalar();
             try
@@ -321,6 +325,8 @@ namespace EDP_Project.Pages.Staff.Accounts
         public IActionResult OnPost()
         {
             userID = HttpContext.Request.Query["id"];
+
+
 
             updateUserAccount(userID);
 

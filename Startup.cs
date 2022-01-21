@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS Log (
 
             MySqlCommand Create_caloriesIntake = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS caloriesIntake (
             `Date`              DATETIME        NOT NULL,
-            `UserId`                INT             NOT NULL,
+            `UserId`            INT             NOT NULL,
             `Day`               NVARCHAR (15)   NOT NULL,
             `CaloriesIntake`    INT             NULL,
             PRIMARY KEY (`Date` ASC),
@@ -124,13 +124,34 @@ CREATE TABLE IF NOT EXISTS Log (
             );", con);
 
             MySqlCommand Create_mealItems = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS meals (
-            `ItemId`       INT            AUTO_INCREMENT  NOT NULL,
+            `Id`           INT            AUTO_INCREMENT  NOT NULL,
+            `UserId`       INT            NOT NULL,
             `FoodId`       INT            NOT NULL,
             `MealType`     NVARCHAR (20)  NOT NULL,
-            `Date`         DATETIME       NULL,
-            PRIMARY KEY (`ItemId` ASC),
+            `Quantity`     INT            NOT NULL,
+            `Date`         DATETIME       NOT NULL,
+            PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`FoodId`) REFERENCES food(`FoodId`),
-            FOREIGN KEY (`Date`) REFERENCES caloriesIntake(`Date`)
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
+            );", con);
+
+            MySqlCommand Create_exerciseList = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS exercise (
+            `ExerciseId`            INT              AUTO_INCREMENT  NOT NULL,
+            `ExerciseName`          NVARCHAR (50)    NOT NULL,
+            `Measurement`           NVARCHAR (20)    NOT NULL,
+            `CaloriesBurnPerUnit`   INT              NOT NULL,
+            PRIMARY KEY (`ExerciseId` ASC)
+            );", con);
+
+            MySqlCommand Create_exerciseRoutines = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS exerciseRoutines (
+            `RoutineId`             INT              AUTO_INCREMENT  NOT NULL,
+            `UserId`                INT              NOT NULL,
+            `ExerciseId`            INT              NOT NULL,
+            `Intensity`             DOUBLE           NOT NULL,
+            `Day`                   NVARCHAR(15)     NOT NULL,
+            PRIMARY KEY (`RoutineId` ASC),
+            FOREIGN KEY (`ExerciseId`) REFERENCES exercise(`ExerciseId`),
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
             );", con);
 
             MySqlCommand create_surveyTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Survey (
@@ -143,9 +164,10 @@ CREATE TABLE IF NOT EXISTS Log (
             `UpdatedOn`         DATETIME       NOT NULL,
             `ViewStatus`        NCHAR(30)            NOT NULL,
             `CreatedByStaffID`  INT            NOT NULL,
+            `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
-            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
+            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Question (
@@ -155,7 +177,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToSurveyID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (QuestionUUID),
-            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
+            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionOptionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS QuestionOption (
@@ -165,13 +187,30 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToQuestionID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (OptionUUID),
-            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID)
+            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID) ON DELETE CASCADE
+            );", con);
+
+            MySqlCommand create_surveyResponseTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS SurveyResponse (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `SurveyResponseUUID`      CHAR(36)       NOT NULL,
+            `Question_Text`      NCHAR(255)       NOT NULL,
+            `Response_Text`              NCHAR(255)     NOT NULL,
+            `ReferenceToSurveyID`      CHAR(36)       NOT NULL,
+            `SubmittedByCustomerID`      INT       NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (SurveyResponseUUID),
+            FOREIGN KEY (`ReferenceToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE,
+            FOREIGN KEY (`SubmittedByCustomerID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
 
             MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
+            `Header`     NVARCHAR (500)    NULL,
+            `Content`     NVARCHAR (4000)    NULL,
+            `Category`     NVARCHAR (50)    NULL,
+            `Created`         DATETIME       NOT NULL,
             `Content`   NVARCHAR (50)    NULL,
             `Category`  NVARCHAR (50)    NULL,
             `Created`   DATETIME         NOT NULL,
@@ -207,9 +246,14 @@ CREATE TABLE IF NOT EXISTS Log (
                 create_surveyTable.ExecuteNonQuery();
                 create_questionTable.ExecuteNonQuery();
                 create_questionOptionTable.ExecuteNonQuery();
-                Create_caloriesIntake.ExecuteNonQuery();
+
                 Create_foodList.ExecuteNonQuery();
+                Create_exerciseList.ExecuteNonQuery();
                 Create_mealItems.ExecuteNonQuery();
+                Create_exerciseRoutines.ExecuteNonQuery();
+                Create_caloriesIntake.ExecuteNonQuery();
+
+                create_surveyResponseTable.ExecuteNonQuery();
                 Create_specialistDepartment.ExecuteNonQuery();
                 Create_specialist.ExecuteNonQuery();
 

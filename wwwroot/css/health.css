@@ -19,3 +19,8 @@ input.bottom-line-input {
     border-width: 0 0 2px;
     border-color: black;
 }
+
+.health-todayRecord-li li {
+    display: inline;
+    float: left;
+}

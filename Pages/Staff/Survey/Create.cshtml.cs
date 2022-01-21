@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EDP_Project.Services;
 using EDP_Project.Services.Survey;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -21,9 +24,15 @@ namespace EDP_Project.Pages.Staff.Survey
         [BindProperty]
         public List<Models.Survey.QuestionOption> qnsOptions { get; set; }
 
-        public CreateSurveyModel(SurveyService surveySrv)
+        [BindProperty]
+        public IFormFile imgFile { get; set; }
+
+        public UserService _usrv;
+
+        public CreateSurveyModel(SurveyService surveySrv, UserService userSrv)
         {
             _srv = surveySrv;
+            _usrv = userSrv;
         }
 
         public string surveyUUID = Guid.NewGuid().ToString();
@@ -44,8 +53,18 @@ namespace EDP_Project.Pages.Staff.Survey
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
                     ViewStatus = newSurvey.ViewStatus,
-                    CreatedByStaffID = 7 // Temp | change later
+                    CreatedByStaffID = 7 // _usrv.retrieveuserid(HttpContext.Session.GetString("user")) // Temp | change later
                 };
+
+                if (imgFile != null)
+                {
+                    using (var t = new MemoryStream())
+                    {
+                        imgFile.CopyTo(t);
+                        svy.ImgBytes = t.ToArray();
+                    }
+                }
+
                 await _srv.AddSurvey(svy);
 
                 for (int i = 0; i < AllQuestionList.Count; i++)
