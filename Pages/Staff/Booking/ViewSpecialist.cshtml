@@ -1,0 +1,69 @@
+﻿@page
+@model EDP_Project.Pages.Staff.Booking.ViewSpecialistModel
+@{
+    ViewData["Title"] = "View Specialist";
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+
+<style>
+    .select,
+    #locale {
+        width: 100%;
+    }
+
+    .like {
+        margin-right: 10px;
+    }
+</style>
+
+<a asp-page="/Staff/Booking/CreateSpecialist" class="btn btn-info btn-lg"><i class="fas fa-plus"></i>Create New Specialist</a>
+
+<table id="table"
+       data-search="true"
+       data-pagination="true"
+       data-page-size="6"
+       data-show-custom-view="true"
+       data-show-custom-view-button="true">
+    <thead>
+        <tr>
+            <th data-field="id" data-sortable="true">Id</th>
+            <th data-field="name" data-sortable="true">Name</th>
+            <th data-field="department" data-sortable="true">Department</th>
+            <th data-field="profession" data-sortable="true">Profession</th>
+            <th data-field="hospital" data-sortable="true">Hospital</th>
+            <th data-field="expertise" data-sortable="true">Expertise</th>
+            <th data-field="action" data-formatter="actionFormatter">Action</th>
+        </tr>
+    </thead>
+
+</table>
+
+<script>
+    var dataSpecialist = @Html.Raw(Json.Serialize(Model.AllSpecialist));
+    var $table = $('#table')
+    $(function () {
+        var data = dataSpecialist
+        $table.bootstrapTable({ data: data })
+    })
+
+    function actionFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+
+
+            if (key == 'id') {
+                html.push('<div style="text-align:center">')
+                html.push('<a class="edit" href="https://localhost:44320/Staff/Booking/UpdateSpecialist/' + value + '" title="update"><i class="fa fa-edit"></i></a>' + '&nbsp &nbsp')
+                html.push('<a class="edit" href="https://localhost:44320/Staff/Booking/DeleteSpecialist/' + value + '" title="delete"><i class="fa fa-trash"></i></a>')
+
+            }
+
+        })
+        return html.join("")
+    }
+
+</script>
+

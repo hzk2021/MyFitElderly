@@ -1,5 +1,6 @@
 ﻿using EDP_Project.Models;
 using EDP_Project.Models.Blog;
+using EDP_Project.Models.Booking;
 using EDP_Project.Models.Survey;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -41,5 +42,10 @@ namespace Pract2.Models
 
         public DbSet<QuestionOption> QuestionOption { get; set; }
         public DbSet<Post> Post { get; set; }
+
+        public DbSet<SpecialistDepartment> SpecialistDepartment { get; set; }
+        public DbSet<Specialist> Specialist { get; set; }
+
+
     }
 }

@@ -172,17 +172,36 @@ CREATE TABLE IF NOT EXISTS Log (
             MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
             `Id`       INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
-            `Content`     NVARCHAR (50)    NULL,
-            `Category`     NVARCHAR (50)    NULL,
-            `Created`         DATETIME       NOT NULL,
+            `Content`   NVARCHAR (50)    NULL,
+            `Category`  NVARCHAR (50)    NULL,
+            `Created`   DATETIME         NOT NULL,
             PRIMARY KEY (`Id` ASC)
 
+            );", con);
+
+            MySqlCommand Create_specialistDepartment = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialistDepartment (
+            `Id`            INT             AUTO_INCREMENT  NOT NULL,
+            `Department`    NVARCHAR (50)   NOT NULL,
+            `Description`   NVARCHAR (50)   NOT NULL,
+            `Price`         DECIMAL (4,2)   NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (Department)
+            );", con);
+
+            MySqlCommand Create_specialist = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialist (
+            `Id`            INT             AUTO_INCREMENT  NOT NULL,
+            `Name`          NVARCHAR (50)   NOT NULL,
+            `Department`    NVARCHAR (50)   NOT NULL,
+            `Profession`    NVARCHAR (50)   NOT NULL,
+            `Hospital`      NVARCHAR (50)   NOT NULL,
+            `Expertise`     NVARCHAR (50)   NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`Department`) REFERENCES specialistDepartment(`Department`)
             );", con);
 
             try
             {
                 Create_Blog.ExecuteNonQuery();
-
                 Create_table.ExecuteNonQuery();
                 create_log_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
@@ -191,10 +210,13 @@ CREATE TABLE IF NOT EXISTS Log (
                 Create_caloriesIntake.ExecuteNonQuery();
                 Create_foodList.ExecuteNonQuery();
                 Create_mealItems.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
+                Create_specialistDepartment.ExecuteNonQuery();
+                Create_specialist.ExecuteNonQuery();
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
 
@@ -221,6 +243,9 @@ CREATE TABLE IF NOT EXISTS Log (
 
             services.AddTransient<SurveyService>();
             services.AddTransient<BlogService>();
+
+            services.AddTransient<BookingService>();
+
 
             services.AddRazorPages();
 

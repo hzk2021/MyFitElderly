@@ -1,0 +1,33 @@
+﻿@page
+@model EDP_Project.Pages.Staff.Booking.CreateSpecialistDepartmentModel
+@{
+    ViewData["Title"] = "Create Specialist Department";
+}
+
+<form method="post">
+    <h1 style="padding:2%;">Create Medical Specialist Department</h1>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label">Field of Specialty</label>
+        <input asp-for="SpecialistDepartmentModel.Department" required />
+        <span asp-validation-for="SpecialistDepartmentModel.Department" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label">Specialty Description</label>
+        <input asp-for="SpecialistDepartmentModel.Description" required />
+        <span asp-validation-for="SpecialistDepartmentModel.Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label">Consultation Price</label>
+        <input asp-for="SpecialistDepartmentModel.Price" required />
+        <span asp-validation-for="SpecialistDepartmentModel.Price" class="text-danger"></span>
+    </div>
+
+    <br style="margin-bottom:5%;" />
+
+    <a asp-page="ViewSpecialist" class="btn btn-secondary">Discard</a>
+    <input class="btn btn-success float-right" type="submit" value="Add to list" />
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
