@@ -201,6 +201,13 @@ CREATE TABLE IF NOT EXISTS Log (
             PRIMARY KEY (`Id` ASC)
 
             );", con);
+            //MySqlCommand comments = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS comments (
+            //`Id`       INT              AUTO_INCREMENT  NOT NULL,
+            //`Comment`     NVARCHAR (4000)    NOT NULL,
+            //`Created`         DATETIME       NOT NULL,
+            //PRIMARY KEY (`Id` ASC)
+
+            //);", con);
 
             try
             {
