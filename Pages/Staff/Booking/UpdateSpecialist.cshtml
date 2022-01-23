@@ -1,0 +1,54 @@
+﻿@page "{id}"
+@model EDP_Project.Pages.Staff.Booking.UpdateSpecialistModel
+@{
+    ViewData["Title"] = "Edit Specialist";
+}
+
+<form method="post">
+    <div class="card">
+        <h1 style="padding:2%;">Update specialist record</h1>
+        <input type="number" asp-for="SpecialistModel.Id" hidden readonly required />
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Your name</label>
+            <input asp-for="SpecialistModel.Name" required />
+            <span asp-validation-for="SpecialistModel.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Your department/field</label>
+            <select asp-for="SpecialistModel.Department" required>
+                <option value="General Surgery" selected>General Surgery</option>
+                <option value="Cardiology" selected>Cardiology</option>
+                <option value="Neurology" selected>Neurology</option>
+                <option value="Gastroentrology" selected>Gastroentrology</option>
+                <option value="Oncology" selected>Oncology</option>
+                <option value="Colorectal Surgery" selected>Colorectal Surgery</option>
+                <option value="Paediatrics" selected>Paediatrics</option>
+                <option value="Othropaedics" selected>Othropaedics</option>
+            </select>
+            <span asp-validation-for="SpecialistModel.Department" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Your job title</label>
+            <input asp-for="SpecialistModel.Profession" required />
+            <span asp-validation-for="SpecialistModel.Profession" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">Current hospital you are working at</label>
+            <input asp-for="SpecialistModel.Hospital" required />
+            <span asp-validation-for="SpecialistModel.Hospital" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 col-form-label">List of Expertise</label>
+            <input asp-for="SpecialistModel.Expertise" required />
+            <span asp-validation-for="SpecialistModel.Expertise" class="text-danger"></span>
+        </div>
+    </div>
+    <br style="margin-bottom:5%;" />
+
+    <a asp-page="ViewSpecialist" class="btn btn-secondary">Cancel</a>
+    <input class="btn btn-success float-right" type="submit" value="UPDATE" />
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

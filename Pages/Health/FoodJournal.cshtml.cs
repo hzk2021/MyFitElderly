@@ -25,10 +25,18 @@ namespace EDP_Project.Pages.Health
         public List<Meals> TodayRecord { get; set; }
 
         [BindProperty]
+        public List<Meals> AllRecord { get; set; }
+
+        [BindProperty]
+        public bool RecordExists { get; set; }
+
+        [BindProperty]
         public List<Meals> MealsModel { get; set; }
 
         [BindProperty]
         public string ErrorMsg { get; set; }
+
+        public bool UpdateOperation { get; set; }
 
         public FoodJournalModel(HealthService svc, UserService userSvc)
         {
@@ -39,19 +47,21 @@ namespace EDP_Project.Pages.Health
             MealsModel.Add(new Meals() { FoodId = 0, MealType = "Lunch" });
             MealsModel.Add(new Meals() { FoodId = 0, MealType = "Dinner" });
         }
+
         public void OnGet()
         {
             AllFood = _svc.GetAllFoodRecords();
             var userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
+            AllRecord = _svc.GetMealsRecord(userId);
             TodayRecord = _svc.GetTodayRecordAdded(userId);
-            Console.WriteLine(TodayRecord.Count);
-            foreach (var meal in TodayRecord)
-            {
-                Console.WriteLine(meal.FoodId);
-                Console.WriteLine(meal.MealType);
-                Console.WriteLine(meal.UserId);
-                Console.WriteLine(meal.FoodDetails.FoodName);
-            }
+            RecordExists = TodayRecord.Count > 0;
+            if (RecordExists)
+                Date = TodayRecord[0].Date;
+            else
+                Date = DateTime.Now;
+
+            UpdateOperation = RecordExists;
+           
         }
 
         public IActionResult OnPost()
@@ -65,7 +75,13 @@ namespace EDP_Project.Pages.Health
                     MealsModel[i].Date = Date;
                     MealsModel[i].UserId = userId;
                 }
-                string response = _svc.AddMeals(MealsModel);
+
+                string response;
+                if (UpdateOperation)
+                    response = _svc.AddMeals(MealsModel);
+                else
+                    response = _svc.UpdateMeals(MealsModel);
+
                 if (response != "true")
                     ErrorMsg = response;
             }

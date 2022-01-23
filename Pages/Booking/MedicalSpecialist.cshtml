@@ -1,0 +1,80 @@
+﻿@page
+@model EDP_Project.Pages.Booking.MedicalSpecialistModel
+@{
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+
+<table id="table"
+       data-search="true"
+       data-pagination="true"
+       data-page-size="6"
+       data-show-custom-view="true"
+       data-custom-view="customViewFormatter"
+       data-show-custom-view-button="true">
+    <thead>
+        <tr>
+            <th data-field="id" data-sortable="true">Id</th>
+            <th data-field="name" data-sortable="true">Name</th>
+            <th data-field="department" data-sortable="true">Department</th>
+            <th data-field="profession" data-sortable="true">Profession</th>
+            <th data-field="hospital" data-sortable="true">Hospital</th>
+            <th data-field="expertise" data-sortable="true">Expertise</th>
+        </tr>
+    </thead>
+</table>
+
+<template id="profileTemplate">
+    <div class="col-4 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-8 col-md-6">
+                        <h3 class="mb-0 text-truncated">%NAME%</h3>
+                        <p>
+                            %PROFESSION% 
+                            <br />
+                            %HOSPITAL%
+                        <div class="col-md-12 bg-light text-right"><button class="btn btn-block btn-outline-info" title="Profile"><span>View Profile</span></button></div>
+                        </p>
+
+                        Expertise:
+                        <p class="text-muted">%EXPERTISE%</p>
+
+                    </div>
+
+                </div>
+                <div class="m-2">
+                    <button class="btn btn-block btn-outline-success" title="Follow"><span>Book Appointment</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    var dataSpecialist = @Html.Raw(Json.Serialize(Model.AllSpecialist));
+    var $table = $('#table')
+    $(function () {
+        var data = dataSpecialist
+        $table.bootstrapTable({ data: data })
+    })
+
+    function customViewFormatter(data) {
+        var template = $('#profileTemplate').html()
+        var view = ''
+        $.each(data, function (i, row) {
+            view += template.replace('%ID%', row.id)
+                .replace('%NAME%', row.name)
+                .replace('%PROFESSION%', row.profession)
+                .replace('%HOSPITAL%', row.hospital)
+                .replace('%EXPERTISE%', row.expertise)
+
+        })
+
+        return `<div class="row mx-0">${view}</div>`
+    }
+
+</script>

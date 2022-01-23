@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `ImgBytes`         MEDIUMBLOB   NULL,
             UNIQUE (SurveyUUID),
             PRIMARY KEY (`Id` ASC),
-            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id)
+            FOREIGN KEY (`CreatedByStaffID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS Question (
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToSurveyID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (QuestionUUID),
-            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID)
+            FOREIGN KEY (`BelongsToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE
             );", con);
 
             MySqlCommand create_questionOptionTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS QuestionOption (
@@ -187,7 +187,20 @@ CREATE TABLE IF NOT EXISTS Log (
             `BelongsToQuestionID` CHAR(36)      NOT NULL,
             PRIMARY KEY (`Id` ASC),
             UNIQUE (OptionUUID),
-            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID)
+            FOREIGN KEY (`BelongsToQuestionID`) REFERENCES question(QuestionUUID) ON DELETE CASCADE
+            );", con);
+
+            MySqlCommand create_surveyResponseTable = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS SurveyResponse (
+            `Id`                INT            AUTO_INCREMENT  NOT NULL,
+            `SurveyResponseUUID`      CHAR(36)       NOT NULL,
+            `Question_Text`      NCHAR(255)       NOT NULL,
+            `Response_Text`              NCHAR(255)     NOT NULL,
+            `ReferenceToSurveyID`      CHAR(36)       NOT NULL,
+            `SubmittedByCustomerID`      INT       NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (SurveyResponseUUID),
+            FOREIGN KEY (`ReferenceToSurveyID`) REFERENCES survey(SurveyUUID) ON DELETE CASCADE,
+            FOREIGN KEY (`SubmittedByCustomerID`) REFERENCES user(Id) ON DELETE CASCADE
             );", con);
 
 
@@ -198,6 +211,9 @@ CREATE TABLE IF NOT EXISTS Log (
             `Content`     NVARCHAR (4000)    NULL,
             `Category`     NVARCHAR (50)    NULL,
             `Created`         DATETIME       NOT NULL,
+            `Content`   NVARCHAR (50)    NULL,
+            `Category`  NVARCHAR (50)    NULL,
+            `Created`   DATETIME         NOT NULL,
             PRIMARY KEY (`Id` ASC)
 
             );", con);
@@ -209,10 +225,29 @@ CREATE TABLE IF NOT EXISTS Log (
 
             //);", con);
 
+            MySqlCommand Create_specialistDepartment = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialistDepartment (
+            `Id`            INT             AUTO_INCREMENT  NOT NULL,
+            `Department`    NVARCHAR (50)   NOT NULL,
+            `Description`   NVARCHAR (50)   NOT NULL,
+            `Price`         DECIMAL (4,2)   NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            UNIQUE (Department)
+            );", con);
+
+            MySqlCommand Create_specialist = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialist (
+            `Id`            INT             AUTO_INCREMENT  NOT NULL,
+            `Name`          NVARCHAR (50)   NOT NULL,
+            `Department`    NVARCHAR (50)   NOT NULL,
+            `Profession`    NVARCHAR (50)   NOT NULL,
+            `Hospital`      NVARCHAR (50)   NOT NULL,
+            `Expertise`     NVARCHAR (50)   NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`Department`) REFERENCES specialistDepartment(`Department`)
+            );", con);
+
             try
             {
                 Create_Blog.ExecuteNonQuery();
-
                 Create_table.ExecuteNonQuery();
                 create_log_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
@@ -224,6 +259,11 @@ CREATE TABLE IF NOT EXISTS Log (
                 Create_mealItems.ExecuteNonQuery();
                 Create_exerciseRoutines.ExecuteNonQuery();
                 Create_caloriesIntake.ExecuteNonQuery();
+
+                create_surveyResponseTable.ExecuteNonQuery();
+                Create_specialistDepartment.ExecuteNonQuery();
+                Create_specialist.ExecuteNonQuery();
+
             }
             catch (Exception e)
             {
@@ -254,6 +294,9 @@ CREATE TABLE IF NOT EXISTS Log (
 
             services.AddTransient<SurveyService>();
             services.AddTransient<BlogService>();
+
+            services.AddTransient<BookingService>();
+
 
             services.AddRazorPages();
 
