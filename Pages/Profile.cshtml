@@ -81,7 +81,7 @@
             }
 </style>
 
-<form method="POST"  enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="container" style="padding-top: 60px; animation-duration: 1.3s;
@@ -184,7 +184,7 @@
                                     <label for="email">Email</label>
                                     <input type="email" asp-for="myUser.Email" class="form-control" value="@Model.myUser.Email" id="emailInput" disabled required>
 
-                                    <span asp-validation-for="myUser.Email" class="text-danger"></span>
+                                    <span class="text-danger">@Model.error_msg</span>
 
 
                                 </div>
@@ -373,16 +373,94 @@
         </div>
 </form>
 
+
+
+<!-- Modal for registered email -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: red;">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: white;">Warning!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: red;">This email has already been registered. Please use another one.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="successmodal" tabindex="-1" role="dialog" aria-labelledby="successful_loginLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d53343;">
+                <h5 class="modal-title" id="successful_loginLabel" style="color: white">Alert!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #d53343;">
+                    This email has already been registered!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $table2 = $('#table2')
+    $(function () {
+        var data = datakmfkslogs
+        $table2.bootstrapTable({ data: data })
+    })
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
 @{
 
     var niggerman2 = @Model.userAct;
 
+
+    var sentResponse = Request.Query["emailexists"].ToString();
+
+
+
+    if (sentResponse == "true")
+    {
+        <script>
+            $('#successmodal').modal('toggle');
+        </script>
+
+
+    }
 }
 
 
 <script>
 
-         var datakmfkslogs = @Html.Raw(Json.Serialize(niggerman2))
+
+
+
+   var datakmfkslogs = @Html.Raw(Json.Serialize(niggerman2))
 
 
     var tab1 = document.getElementById("home-tab");
@@ -414,35 +492,11 @@
     }
 
 
-    var $table2 = $('#table2')
-    $(function () {
-        var data = datakmfkslogs
-        $table2.bootstrapTable({ data: data })
-    })
+
+
 
 
 </script>
-
-<!-- Modal for registered email -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: red;">
-                <h5 class="modal-title" id="exampleModalLabel" style="color: white;">Warning!</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="color: red;">This email has already been registered. Please use another one.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- Modal for registered username -->
@@ -505,41 +559,41 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-group mb-2" style="color: black;">
+                    <div class="form-group mb-2" style="color: black;">
 
-                    <p>Enter your new<strong> password </strong>below.</p>
+                        <p>Enter your new<strong> password </strong>below.</p>
+                    </div>
+
+
+                    @{
+                        var myPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
+                    }
+
+                    <div class="form-group mx-sm-3 mb-2">
+                        <div class="form-group">
+                            <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="4" id="password"
+                                   placeholder="Password" required>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <input type="password" name="password2" class="form-control" minlength="4" placeholder="Confirm Password"
+                                   id="password_confirm" oninput="check(this)" required>
+                        </div>
+                    </div>
                 </div>
 
 
-                @{
-                    var myPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
-                }
+                <div class="modal-footer">
+                    @*<a class="btn btn-success mb-2" asp-page="/Change-Password" asp-route-username="@Model.myUser.Username" role="button">
+                            Submit
+                        </a>*@
+                    <input type="submit" class="btn btn-success mb-2" value="Submit" asp-page-handler="Button2" />
 
-                <div class="form-group mx-sm-3 mb-2">
-                    <div class="form-group">
-                        <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="4" id="password"
-                               placeholder="Password" required>
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <input type="password" name="password2" class="form-control" minlength="4" placeholder="Confirm Password"
-                               id="password_confirm" oninput="check(this)" required>
-                    </div>
+
+                    @*<button type="submit" class="btn btn-success mb-2">Submit</button>*@
                 </div>
-            </div>
-
-
-            <div class="modal-footer">
-                @*<a class="btn btn-success mb-2" asp-page="/Change-Password" asp-route-username="@Model.myUser.Username" role="button">
-                        Submit
-                    </a>*@
-                <input type="submit" class="btn btn-success mb-2" value="Submit" asp-page-handler="Button2" />
-
-
-                @*<button type="submit" class="btn btn-success mb-2">Submit</button>*@
             </div>
         </div>
-    </div>
     </div>
 
 </form>
@@ -729,9 +783,3 @@
 </script>
 
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

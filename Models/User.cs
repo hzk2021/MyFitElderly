@@ -46,6 +46,9 @@ namespace EDP_Project.Models
 
         public DateTime ResetPwTokenExpiry { get; set; }
 
+        public int FailedAttempts { get; set; }
+        public DateTime LastLogin { get; set; }
+
 
 
 

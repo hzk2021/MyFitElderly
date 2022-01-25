@@ -1,5 +1,9 @@
-﻿@page
+﻿
+@page
 @model EDP_Project.Pages.Staff.Accounts.ListModel
+@using Microsoft.AspNetCore.Http;
+@using MySql.Data.MySqlClient;
+
 @{
 }
 <!DOCTYPE html>
@@ -592,7 +596,45 @@
         var decS = Model.decStaff;
 
 
+        string serverEmail = "";
 
+
+        if (@HttpContext.Session.GetString("user") != null)
+        {
+            string userRole = "Guest";
+            MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+            string sql = "SELECT * FROM User WHERE Username=@USER";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USER", @HttpContext.Session.GetString("user"));
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                        if (reader["Email"] != DBNull.Value)
+                        {
+                            serverEmail = reader["Email"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            finally
+            {
+                con.Close();
+            }
+
+
+
+
+        }
     }
 
 
@@ -602,6 +644,7 @@
 
      var datakmfks = @Html.Raw(Json.Serialize(niggerman))
      var datakmfkslogs = @Html.Raw(Json.Serialize(niggerman2))
+        var currentEmail = "@serverEmail"
 
 
 
@@ -625,17 +668,32 @@
 
                 if (key == 'email') {
 
+                    if (currentEmail.trim() == value) {
 
-                    html.push('<div style="text-align:center">')
+                        html.push('<div style="text-align:center">')
+
+                        html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Update?self=true&id=' + value + '" title="edit"><i class="fa fa-edit"></i></a>')
+                    }
+
+
+                    else {
+
+
+                        html.push('<div style="text-align:center">')
 
 
 
 
 
-                    html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Update?id=' + value + '" title="edit"><i class="fa fa-edit"></i></a>')
-                    html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Delete?id=' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
+                        html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Update?id=' + value + '" title="edit"><i class="fa fa-edit"></i></a>')
+                        html.push('<a class="edit" href="https://localhost:44320/Staff/Accounts/Delete?id=' + value + '" title="edit"><i class="fa fa-trash"></i></a>')
 
-                    html.push('</div>')
+                        html.push('</div>')
+
+                    }
+
+
+
 
                 }
 

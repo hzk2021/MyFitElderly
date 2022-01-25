@@ -32,39 +32,46 @@ namespace EDP_Project
             ////  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
 
-            //string lel_fml = @"DROP TABLE IF EXISTS user";
-            //string dropLogTable = @"DROP TABLE IF EXISTS log";
-            //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
-            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
-            //string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
+            string lel_fml = @"DROP TABLE IF EXISTS user";
+            string dropLogTable = @"DROP TABLE IF EXISTS log";
+            string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
+            string dropQuestionTable = @"DROP TABLE IF EXISTS question";
+            string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
+            string dropSurveyResponseTable = @"DROP TABLE IF EXISTS surveyresponse";
+            string dropExerciseRoutineTable = @"DROP TABLE IF EXISTS exerciseroutines";
 
-            //string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
-            //string dropMeals = @"DROP TABLE IF EXISTS meals";
-
-
-            //using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
-            //{
-
-            //    MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-            //    MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
-            //    MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-            //    MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-            //    MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
-
-            //    MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-            //    MySqlCommand dm = new MySqlCommand(dropMeals, conn);
-
-            //    conn.Open();
-            //    dlt.ExecuteNonQuery();
-            //    dm.ExecuteNonQuery();
-            //    dci.ExecuteNonQuery();
-            //    dqot.ExecuteNonQuery();
-            //    dqt.ExecuteNonQuery();
-            //    dst.ExecuteNonQuery();
-            //    cmd.ExecuteNonQuery();
+            string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
+            string dropMeals = @"DROP TABLE IF EXISTS meals";
 
 
-            //}
+            using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
+            {
+
+                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+                MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
+                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+
+                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+
+                MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
+                MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
+
+                conn.Open();
+                dlt.ExecuteNonQuery();
+                dm.ExecuteNonQuery();
+                dci.ExecuteNonQuery();
+                dqot.ExecuteNonQuery();
+                dqt.ExecuteNonQuery();
+                dert.ExecuteNonQuery();
+                dsrt.ExecuteNonQuery();
+                dst.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+
+
+            }
 
 
             MySqlCommand create_log_table = new MySqlCommand(@"
@@ -95,6 +102,10 @@ CREATE TABLE IF NOT EXISTS Log (
   `Password` longtext,
   `ResetPwToken` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `ResetPwTokenExpiry` datetime DEFAULT NULL,
+
+  `FailedAttempts` INT DEFAULT 0,
+  `LastFailed` datetime DEFAULT NULL,
+
   `Gender` char(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `DateOfBirth` datetime DEFAULT NULL,
   `Contact` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
@@ -217,6 +228,7 @@ CREATE TABLE IF NOT EXISTS Log (
             PRIMARY KEY (`Id` ASC)
 
             );", con);
+
             //MySqlCommand comments = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS comments (
             //`Id`       INT              AUTO_INCREMENT  NOT NULL,
             //`Comment`     NVARCHAR (4000)    NOT NULL,
@@ -224,6 +236,7 @@ CREATE TABLE IF NOT EXISTS Log (
             //PRIMARY KEY (`Id` ASC)
 
             //);", con);
+
 
             MySqlCommand Create_specialistDepartment = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialistDepartment (
             `Id`            INT             AUTO_INCREMENT  NOT NULL,
