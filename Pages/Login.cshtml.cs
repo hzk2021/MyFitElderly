@@ -61,6 +61,113 @@ namespace EDP_Project.Pages.Auth
 
         //SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EDP_DB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
 
+        protected void resetLockout(string userEmail)
+        {
+            try
+            {
+                string sql = "UPDATE User SET FailedAttempts = 0,  LastFailed = @NULL_VAL WHERE Email =@USERID; ";
+                using (var cmd = new MySqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@USERID", userEmail);
+                    cmd.Parameters.AddWithValue("@NULL_VAL", DBNull.Value);
+                    var update = cmd.ExecuteNonQuery();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+
+        }
+
+        protected bool verifyLocked(string userid)
+        {
+            int loginAttempts = 0;
+            DateTime lastFailed = new DateTime();
+
+            string sql = "select * FROM USER WHERE Email =@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userid);
+            try
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["FailedAttempts"] != null)
+                        {
+                            if (reader["FailedAttempts"] != DBNull.Value)
+                            {
+                                loginAttempts = (int)reader["FailedAttempts"];
+                                //lastFailed = (DateTime)reader["LastFailed"];
+                            }
+
+                        }
+
+                        if (reader["LastFailed"] != null)
+                        {
+                            if (reader["LastFailed"] != DBNull.Value)
+                            {
+                                lastFailed = (DateTime)reader["LastFailed"];
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally {}
+
+            if ((loginAttempts < 3) || (DateTime.Now.Subtract(lastFailed).TotalSeconds > 30))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+
+            }
+
+
+
+
+
+
+
+        }
+
+        protected void increaseFailedAttempt(string userEmail)
+        {
+
+            int loginAttempts = 0;
+
+
+            try
+            {
+                string sql = "UPDATE USER SET FailedAttempts = FailedAttempts + 1,  LastFailed = @LASTFAILED WHERE Email =@USERID; ";
+                using (var cmd = new MySqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@USERID", userEmail);
+                    cmd.Parameters.AddWithValue("@LASTFAILED", DateTime.Now);
+                    var update = cmd.ExecuteNonQuery();
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+
+
+        }
 
 
         // Captcha Validation - to prevent attacks
@@ -234,6 +341,7 @@ namespace EDP_Project.Pages.Auth
                     cmdx.ExecuteScalar();
                     string dbPass = "";
                     string currentUser = "";
+                    string userEmail = "";
 
                     try
                     {
@@ -278,6 +386,15 @@ namespace EDP_Project.Pages.Auth
 
                                 }
 
+                                if (reader["Email"] != null)
+                                {
+                                    if (reader["Email"] != DBNull.Value)
+                                    {
+                                        userEmail = reader["Email"].ToString();
+                                    }
+
+                                }
+
 
                             }
                         }
@@ -300,24 +417,37 @@ namespace EDP_Project.Pages.Auth
                     {
 
 
+                        if (!verifyLocked(userEmail))
+                        {
 
+                            resetLockout(userEmail);
                             HttpContext.Session.SetString("user", currentUser.Trim());
-                            logger.Info($"{currentUser.Trim()} logged in attempt successful");
+                            logger.Info($"{userEmail.Trim()} logged in attempt successful");
                             _svc.retrieveuserid(HttpContext.Session.GetString("user"));
 
 
 
-                          //  if (emailVerified != false) return RedirectToPage("Index");
-                          //  else return RedirectToPage("/Auth/EmailVerification");
+                            //  if (emailVerified != false) return RedirectToPage("Index");
+                            //  else return RedirectToPage("/Auth/EmailVerification");
                             //return RedirectToPage("Index");
 
                             return RedirectToPage("Index");
+
+                        }
+
+                        else
+                        {
+                            error_msg = "Account has been locked!";
+
+                        }
 
                     }
 
                         else
                         {
-                            logger.Warn($"{currentUser.Trim()} logged in attempt failed");
+
+                        increaseFailedAttempt(userEmail.Trim());
+                        logger.Warn($"{userEmail.Trim()} logged in attempt failed");
                             error_msg = "Invalid email or password!";
                                 return Page();
                         }

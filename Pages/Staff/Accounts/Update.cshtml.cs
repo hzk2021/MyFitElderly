@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using EDP_Project.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,32 @@ namespace EDP_Project.Pages.Staff.Accounts
 
         public void updateUserAccount(string userId)
         {
+
+            var oldEmail = (HttpContext.Request.Query["id"].ToString());
+            var newEmail = myUser.Email;
+
+
+
+            if (oldEmail != newEmail)
+            {
+                try
+                {
+                    con.Open();
+                    string query2 = $"UPDATE log SET message = REPLACE(message, '{oldEmail}', '{myUser.Email}'); UPDATE user set EmailVerified = 0 where Email = '{oldEmail}'";
+                    MySqlCommand cmd2 = new MySqlCommand(query2, con);
+                    //cmd2.Parameters.AddWithValue("@ELAINE", myUser.Username);
+                    MySqlDataReader dataReader2 = cmd2.ExecuteReader();
+                }
+                catch (WebException ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
 
             if (myUser.Photo != null)
             {
@@ -79,6 +106,10 @@ namespace EDP_Project.Pages.Staff.Accounts
                 {
                     con.Close();
                 }
+
+
+
+
 
 
 
@@ -327,8 +358,15 @@ namespace EDP_Project.Pages.Staff.Accounts
             userID = HttpContext.Request.Query["id"];
 
 
-
             updateUserAccount(userID);
+
+            if (HttpContext.Request.Query["self"].ToString() == "true")
+            {
+                return RedirectToPage("/Logout");
+
+            }
+
+
 
             return RedirectToPage("/Staff/Accounts/List");
         }
