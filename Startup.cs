@@ -32,43 +32,43 @@ namespace EDP_Project
             ////  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
 
-            string lel_fml = @"DROP TABLE IF EXISTS user";
-            string dropLogTable = @"DROP TABLE IF EXISTS log";
-            string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
-            string dropQuestionTable = @"DROP TABLE IF EXISTS question";
-            string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
-            string dropSurveyResponseTable = @"DROP TABLE IF EXISTS surveyresponse";
-            string dropExerciseRoutineTable = @"DROP TABLE IF EXISTS exerciseroutines";
+            //string lel_fml = @"DROP TABLE IF EXISTS user";
+            //string dropLogTable = @"DROP TABLE IF EXISTS log";
+            //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
+            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
+            //string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
+            //string dropSurveyResponseTable = @"DROP TABLE IF EXISTS surveyresponse";
+            //string dropExerciseRoutineTable = @"DROP TABLE IF EXISTS exerciseroutines";
 
-            string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
-            string dropMeals = @"DROP TABLE IF EXISTS meals";
+            //string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
+            //string dropMeals = @"DROP TABLE IF EXISTS meals";
 
 
             using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
             {
 
-                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-                MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
-                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+                //MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+                //MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
+                //MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+                //MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+                //MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
 
-                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+                //MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+                //MySqlCommand dm = new MySqlCommand(dropMeals, conn);
 
-                MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
-                MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
+                //MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
+                //MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
 
                 conn.Open();
-                dlt.ExecuteNonQuery();
-                dm.ExecuteNonQuery();
-                dci.ExecuteNonQuery();
-                dqot.ExecuteNonQuery();
-                dqt.ExecuteNonQuery();
-                dert.ExecuteNonQuery();
-                dsrt.ExecuteNonQuery();
-                dst.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+                //dlt.ExecuteNonQuery();
+                //dm.ExecuteNonQuery();
+                //dci.ExecuteNonQuery();
+                //dqot.ExecuteNonQuery();
+                //dqt.ExecuteNonQuery();
+                //dert.ExecuteNonQuery();
+                //dsrt.ExecuteNonQuery();
+                //dst.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
 
 
             }
@@ -216,26 +216,26 @@ CREATE TABLE IF NOT EXISTS Log (
 
 
             MySqlCommand Create_Blog = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS post (
-            `Id`       INT              AUTO_INCREMENT  NOT NULL,
+            `Id`        INT              AUTO_INCREMENT  NOT NULL,
             `Title`     NVARCHAR (50)    NOT NULL,
-            `Header`     NVARCHAR (500)    NULL,
-            `Content`     NVARCHAR (4000)    NULL,
-            `Category`     NVARCHAR (50)    NULL,
-            `Created`         DATETIME       NOT NULL,
-            `Content`   NVARCHAR (50)    NULL,
+            `Header`    NVARCHAR (500)   NULL,
+            `Content`   NVARCHAR (4000)  NULL,
             `Category`  NVARCHAR (50)    NULL,
             `Created`   DATETIME         NOT NULL,
             PRIMARY KEY (`Id` ASC)
 
             );", con);
+            MySqlCommand Create_comments = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS comments (
+            `Id`          INT              AUTO_INCREMENT  NOT NULL,
+            `UserId`      INT              NOT NULL,
+            `BlogId`      INT              NOT NULL,
+            `Comment`     NVARCHAR (4000)  NOT NULL,
+            `Created`     DATETIME         NOT NULL,
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`UserId`) REFERENCES user(`Id`),
+            FOREIGN KEY (`BlogId`) REFERENCES post(`Id`));", con);
 
-            //MySqlCommand comments = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS comments (
-            //`Id`       INT              AUTO_INCREMENT  NOT NULL,
-            //`Comment`     NVARCHAR (4000)    NOT NULL,
-            //`Created`         DATETIME       NOT NULL,
-            //PRIMARY KEY (`Id` ASC)
 
-            //);", con);
 
 
             MySqlCommand Create_specialistDepartment = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialistDepartment (
@@ -258,9 +258,13 @@ CREATE TABLE IF NOT EXISTS Log (
             FOREIGN KEY (`Department`) REFERENCES specialistDepartment(`Department`)
             );", con);
 
+
+
+
             try
             {
-                Create_Blog.ExecuteNonQuery();
+
+
                 Create_table.ExecuteNonQuery();
                 create_log_table.ExecuteNonQuery();
                 create_surveyTable.ExecuteNonQuery();
@@ -274,6 +278,8 @@ CREATE TABLE IF NOT EXISTS Log (
                 Create_caloriesIntake.ExecuteNonQuery();
 
                 create_surveyResponseTable.ExecuteNonQuery();
+                Create_Blog.ExecuteNonQuery();
+                Create_comments.ExecuteNonQuery();
                 Create_specialistDepartment.ExecuteNonQuery();
                 Create_specialist.ExecuteNonQuery();
 

@@ -42,7 +42,7 @@ namespace Pract2.Models
 
         public DbSet<QuestionOption> QuestionOption { get; set; }
         public DbSet<Post> Post { get; set; }
-
+        public DbSet<Comments> Comments { get; set; }
         public DbSet<SurveyResponse> SurveyResponse { get; set; }
 
         public DbSet<SpecialistDepartment> SpecialistDepartment { get; set; }
