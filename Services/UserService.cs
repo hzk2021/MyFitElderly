@@ -66,6 +66,131 @@ namespace EDP_Project.Services
 
         }
 
+
+        public string retrieveUserEmail(string userID)
+        {
+            string email = "";
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["Email"] != null)
+                        {
+                            if (reader["Email"] != DBNull.Value)
+                            {
+                                email = reader["Email"].ToString();
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+            return email;
+
+        }
+
+
+
+        public bool emailVerified(string userID)
+        {
+            bool verified = new bool();
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["EmailVerified"] != null)
+                        {
+                            if (reader["EmailVerified"] != DBNull.Value)
+                            {
+                                verified = (bool)reader["EmailVerified"];
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+            return verified;
+        }
+
+
+
+        public bool exceededPwAge(string userId)
+        {
+            DateTime lastPwSet = new DateTime();
+            con.Open();
+            try
+            {
+                MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE USERNAME = @USERNAME", con);
+                cmdx.Parameters.AddWithValue("@USERNAME", userId);
+                cmdx.ExecuteScalar();
+
+                using (MySqlDataReader reader = cmdx.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["LastPwSet"] != null)
+                        {
+                            if (reader["LastPwSet"] != DBNull.Value)
+                            {
+                                lastPwSet = (DateTime)reader["LastPwSet"];
+                            }
+
+                            else
+                            {
+                                return true;
+                            }
+
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            // Minimum password age; if it has exceeded 3 days, then allow reset of password
+            if (DateTime.Now.Subtract(lastPwSet).TotalDays > 30)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
+
+
+
         public string GetStaffUserName(string id_pk)
         {
             string username = "Invalid staffID";

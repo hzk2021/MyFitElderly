@@ -183,11 +183,14 @@ namespace EDP_Project.Pages.Auth
                 {
                     // Void the last token & update pw last set timestamp
 
-                    string sql = "UPDATE User SET ResetPwToken = @PWTOKEN WHERE ResetPwToken=@RESETPWTOKEN; ";
+                    string sql = "UPDATE User SET FailedAttempts = 0, LastPwSet = @LASTPWSET, ResetPwToken = @PWTOKEN WHERE ResetPwToken=@RESETPWTOKEN; ";
                     using (var cmdz = new MySqlCommand(sql, con))
                     {
                         cmdz.Parameters.AddWithValue("@RESETPWTOKEN", HttpUtility.UrlDecode(userToken).Replace(" ", "+"));
+                        cmdz.Parameters.AddWithValue("@LASTPWSET", DateTime.Now);
                         cmdz.Parameters.AddWithValue("@PWTOKEN", DBNull.Value);
+                        cmdz.Parameters.AddWithValue("@LASTFAILED", DBNull.Value);
+
                         var update = cmdz.ExecuteNonQuery();
                     }
 

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using EDP_Project.Models;
+using EDP_Project.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -16,6 +18,18 @@ namespace EDP_Project.Pages.Staff.Accounts
     {
 
         MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+
+
+
+
+
+
+        private readonly UserService _userSvc;
+
+        public ListModel(UserService userSvc)
+        {
+            _userSvc = userSvc;
+        }
 
 
 
@@ -144,8 +158,29 @@ namespace EDP_Project.Pages.Staff.Accounts
 
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+
+
+
+
+            if (HttpContext.Session.GetString("user") != null)
+            {
+
+                var currentUser = HttpContext.Session.GetString("user").ToString();
+                //HttpContext.Session.Clear();
+
+                if (!_userSvc.isStaff(currentUser))
+                {
+                    return RedirectToPage("/Error/Error404");
+                }
+            }
+            else
+            {
+                return Redirect("/Login");
+            }
+
+
 
 
             userAccounts = new List<User>();
@@ -412,22 +447,9 @@ namespace EDP_Project.Pages.Staff.Accounts
                 numActive = userAccounts.Where(x => x.Status == "Active").Count();
                 numInactive = userAccounts.Where(x => x.Status == "Inactive").Count();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
+            return Page();
+
         }
     }
 }

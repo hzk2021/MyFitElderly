@@ -57,6 +57,7 @@
                         @{
 
                             string userPhotoPath = "xxx.com";
+                            DateTime lastPwSet = new DateTime();
 
 
                             if (@Context.Session.GetString("user") != null)
@@ -83,6 +84,10 @@
                                             {
                                                 userPhotoPath = reader["PhotoPath"].ToString();
                                             }
+                                            if (reader["LastPwSet"] != DBNull.Value)
+                                            {
+                                                lastPwSet = (DateTime)reader["LastPwSet"];
+                                            }
                                         }
                                     }
                                 }
@@ -99,7 +104,7 @@
 
                                 // Guest navbar (logged in)
 
-                                if (userRole != "Admin")
+                                if (userRole != "Staff")
                                 {
 
                                     <li class="nav-item">
@@ -117,31 +122,23 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Booking/MedicalSpecialist">Booking</a>
                                     </li>
-                                    
-                                    
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="">Fries</a>
-                                    </li>
+
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="">Take A Survey</a>
                                     </li>
-                                    @*<li class="nav-item ml-auto">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
-                            <i class="fa fa-sign-out fa-lg"></i>
-                        </a>
-                    </li>*@
+
+
 
 
                                     <li class="nav-item dropdown ml-auto ">
 
                                         <img src="~/@userPhotoPath" style="height:40px; width:auto;" class="rounded-circle avatar" alt="Avatar">
-                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle user-action text-dark"> <b class="caret" style="font-weight:100; mar">@Context.Session.GetString("user")</b></a>
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle user-action text-dark"> <b class="caret" style="font-weight:100; mar">@Context.Session.GetString("user") (@userRole)</b></a>
 
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="#"><i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;Kopiko</a>
+                                            <a class="dropdown-item" href="/Profile"><i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;Profile</a>
                                             <a class="dropdown-item" href="/Logout"><i class="fa fa-sign-out fa-lg"></i>&nbsp;&nbsp;Logout</a>
-                                            @*<div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>*@
+
                                         </div>
                                     </li>
 
@@ -168,9 +165,6 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="/">Hamburger</a>
-                                    </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle text-dark" id="sepcialistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Specialist</a>
                                         <div class="dropdown-menu" aria-labelledby="sepcialistDropdown">
@@ -181,9 +175,16 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Staff/Survey/View">Survey</a>
                                     </li>
-                                    <li class="nav-item ml-auto">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="/Logout">
-                                        </a>
+                                    <li class="nav-item dropdown ml-auto ">
+
+                                        <img src="~/@userPhotoPath" style="height:40px; width:auto;" class="rounded-circle avatar" alt="Avatar">
+                                        <a href="#" data-toggle="dropdown" class="dropdown-toggle user-action text-dark"> <b class="caret" style="font-weight:100; mar">@Context.Session.GetString("user") (@userRole)</b></a>
+
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="/Profile"><i class="fas fa-user fa-lg"></i>&nbsp;&nbsp;Profile</a>
+                                            <a class="dropdown-item" href="/Logout"><i class="fa fa-sign-out fa-lg"></i>&nbsp;&nbsp;Logout</a>
+
+                                        </div>
                                     </li>
 
 
@@ -217,13 +218,7 @@
 
 
 
-
-
-
-
-
                         }
-
 
 
 
