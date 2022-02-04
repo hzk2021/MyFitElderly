@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS Log (
 
             // generate root account
 
-            MySqlCommand gen_root_acc = new MySqlCommand("REPLACE INTO `user` (`Id`, `PhotoPath`,`Username`,`Email`,`EmailVerified`,`Token`,`TokenExpiry`,`DateCreated`,`PasswordSalt`,`Password`,`ResetPwToken`,`ResetPwTokenExpiry`,`FailedAttempts`,`LastFailed`,`LastPwSet`,`Gender`,`DateOfBirth`,`Contact`,`Status`,`Role`,`Address`) VALUES ('999','Images\\74b1e825-1fbe-4508-a7a7-b5ec86f8f366_icon.jpg','admin','admin@gmail.com',1,NULL,NULL,'2020-01-28','mbb8LPmet7Y=','cDt39OvddIC9uQf++ZeSsQDATAwtI4TlIswAWsgViCEBw/lAWgS16LDBvs47dCpbQOoq9Fu6mKKstCiYeYGedQ==',NULL,NULL,0,NULL,'2022-01-30 23:09:00','Male','2022-01-01 00:00:00','11111111','Active','Staff','ANG MO KIO AVENUE 8');", con);
+            MySqlCommand gen_root_acc = new MySqlCommand("REPLACE INTO `user` (`Id`, `PhotoPath`,`Username`,`Email`,`EmailVerified`,`Token`,`TokenExpiry`,`DateCreated`,`PasswordSalt`,`Password`,`ResetPwToken`,`ResetPwTokenExpiry`,`FailedAttempts`,`LastFailed`,`LastPwSet`,`Gender`,`DateOfBirth`,`Contact`,`Status`,`Role`,`Address`) VALUES ('999','Images/74b1e825-1fbe-4508-a7a7-b5ec86f8f366_icon.jpg','admin','admin@gmail.com',1,NULL,NULL,'2020-01-28','mbb8LPmet7Y=','cDt39OvddIC9uQf++ZeSsQDATAwtI4TlIswAWsgViCEBw/lAWgS16LDBvs47dCpbQOoq9Fu6mKKstCiYeYGedQ==',NULL,NULL,0,NULL,'2022-01-30 23:09:00','Male','2022-01-01 00:00:00','11111111','Active','Staff','ANG MO KIO AVENUE 8');", con);
 
 
             try
@@ -344,10 +344,12 @@ CREATE TABLE IF NOT EXISTS Log (
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("Error/Error");                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //app.UseStatusCodePages();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
