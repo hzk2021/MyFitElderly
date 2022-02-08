@@ -1,0 +1,247 @@
+﻿
+
+
+
+@page
+@model EDP_Project.Pages.Auth.TwoFactorAuthModel
+@using MySql.Data.MySqlClient;
+@using System.Security.Cryptography;
+@using Google.Authenticator;
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>MyFitElderly | Login - 2FA </title>
+
+    <style>
+        body {
+            background: #eee;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0,0,0,.125);
+            border-radius: 1rem;
+        }
+
+        .img-thumbnail {
+            padding: .25rem;
+            background-color: #ecf2f5;
+            border: 1px solid #dee2e6;
+            border-radius: .25rem;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .avatar-lg {
+            height: 150px;
+            width: 150px;
+        }
+
+        .checking_label {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+
+    @{
+
+        MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+
+
+
+
+        string retrieveSecretStuff(string userid)
+        {
+            // Retrieve password salt, append it to userID & hash it.
+            // Then return
+
+            // yeah science, mr white!
+
+            string h = null;
+            string sql = "select PasswordSalt FROM User WHERE Username =@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userid);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        if (reader["PasswordSalt"] != null)
+                        {
+                            if (reader["PasswordSalt"] != DBNull.Value)
+                            {
+                                h = reader["PasswordSalt"].ToString();
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally { con.Close(); }
+
+
+
+
+            SHA512Managed hashing = new SHA512Managed();
+            string idWithSalt = userid + h;
+            byte[] hashIDWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(idWithSalt));
+            string secretIngredient = Convert.ToBase64String(hashIDWithSalt);
+            return secretIngredient;
+
+        }
+
+
+
+
+        var cUsername = "testing";
+
+
+
+
+        Model.secretIngredient = retrieveSecretStuff(cUsername);
+
+
+        TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+        var setupInfo = tfa.GenerateSetupCode("EDP_Project", cUsername, Model.secretIngredient, 300, 300);
+        var setupInfo2 = tfa.GetCurrentPIN(Model.secretIngredient);
+        string qrCodeImageUrl = setupInfo.QrCodeSetupImageUrl;
+        string manualEntrySetupCode = setupInfo.ManualEntryKey;
+        bool isCorrectPIN = tfa.ValidateTwoFactorPIN(Model.secretIngredient, setupInfo2);
+
+
+
+
+    }
+
+
+
+
+
+
+    <div class="container" style="margin-top:80px">
+        <br>
+        <div class="row">
+            <div class="col-lg-5 col-md-7 mx-auto my-auto">
+                <div class="card">
+                    <div class="card-body px-lg-5 py-lg-5 text-center">
+
+                        <asp:Image ID="imgQRcode" runat="server" />
+
+                        <img id="myImg" src="@qrCodeImageUrl" style="width:300px;height:300px;" alt="Alternate Text" />
+
+
+
+
+
+
+                        <h2 class="text-info">2FA Security</h2>
+                        <p class="mb-4">Enter 6-digits code from your authenticator app.</p>
+
+
+                        <form method="POST">
+                            <input type="hidden" asp-for="secretIngredient" value="@Model.secretIngredient" />
+
+                            <div class="row mb-4">
+                                <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
+                                    <input id="input1" asp-for="value1" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+
+
+
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
+                                    <input id="input2" asp-for="value2" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
+                                    <input id="input3" asp-for="value3" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
+                                    <input id="input4" asp-for="value4" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
+                                    <input id="input5" asp-for="value5" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
+                                    <input id="input6" asp-for="value6" runat="server" type="text" class="form-control text-lg text-center" placeholder="_" aria-label="2fa">
+                                </div>
+                            </div>
+
+
+                            <p style="color:red;">@Model.error_msg</p>
+                            <br />
+
+                            @*<asp:LinkButton ID="LinkButton1" runat="server" OnClick="LinkButton1_Click">Back to login</asp:LinkButton>*@
+
+
+                            <a href="/Logout">Back to Login</a>
+
+
+
+
+
+                            <br />
+
+                            @*<asp:Button ID="Button1" type="button" class="btn bg-info btn-lg my-4" runat="server" Text="Continue" OnClick="Button1_Click" />*@
+
+
+
+                            <button type="submit" value="Submit" class="btn bg-info btn-lg my-4">Continue</button>
+
+
+
+
+                            <!--<button type="button" id="Button1">Primary</button>-->
+                            @*<button ID="Button1" type="button" class="btn bg-info btn-lg my-4">Continue</button>*@
+                            <!--<asp:Button ID="Button1" type="button" class="btn bg-info btn-lg my-4" runat="server" Text="Continue" OnClick="Button1_Click" />-->
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="Scripts/fingerprint2.js"></script>
+    <script type="text/javascript">
+        var fp = new Fingerprint2();
+        fp.get(function (result, components) {
+            document.querySelector("#lblFingerprint").textContent = result;
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

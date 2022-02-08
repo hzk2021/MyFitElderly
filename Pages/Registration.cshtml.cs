@@ -77,13 +77,14 @@ namespace EDP_Project.Pages.Auth
 
 
 
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL,  @PhotoPath, @Username, @Email, @EmailVerified, @Token, @TokenExpiry, @DateCreated, @PasswordSalt, @Password, @ResetPwToken, @ResetPwTokenExpiry,  @FailedAttempts, @LastFailed, @LastPwSet, @Gender, @DateOfBirth, @Contact, @Status, @Role, @Address)", con);
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL,  @PhotoPath, @Username, @Email, @EmailVerified, @TwoFactorVerified, @Token, @TokenExpiry, @DateCreated, @PasswordSalt, @Password, @ResetPwToken, @ResetPwTokenExpiry,  @FailedAttempts, @LastFailed, @LastPwSet, @Gender, @DateOfBirth, @Contact, @Status, @Role, @Address)", con);
             con.Open();
 
             cmd.Parameters.AddWithValue("@PhotoPath", photoPath);
             cmd.Parameters.AddWithValue("@Username", myUser.Username);
             cmd.Parameters.AddWithValue("@Email", myUser.Email);
             cmd.Parameters.AddWithValue("@EmailVerified", 0);
+            cmd.Parameters.AddWithValue("@TwoFactorVerified", 0);
             cmd.Parameters.AddWithValue("@Token", DBNull.Value);
             cmd.Parameters.AddWithValue("@TokenExpiry", DBNull.Value);
 
@@ -319,45 +320,45 @@ namespace EDP_Project.Pages.Auth
 
         public IActionResult OnPost()
         {
-            //var usernamePattern = "^[a-zA-Z][a-zA-Z ]{5,30}$";// the whitelist
+            var usernamePattern = "^[a-zA-Z][a-zA-Z ]{5,30}$";// the whitelist
 
 
-            //Match nameMatch = Regex.Match(myUser.Username, usernamePattern);
-
-
-
-
-            //var addressPat = "^[a-zA-Z0-9][a-zA-Z0-9 ]{5,40}$";// the whitelist
-
-            //Match addMatch = Regex.Match(myUser.Address, addressPat);
-
-
-            //var pwPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
+            Match nameMatch = Regex.Match(myUser.Username, usernamePattern);
 
 
 
-            //Match pwMatch = Regex.Match(myUser.Password, pwPattern);
+
+            var addressPat = "^[a-zA-Z0-9][a-zA-Z0-9 ]{5,40}$";// the whitelist
+
+            Match addMatch = Regex.Match(myUser.Address, addressPat);
 
 
-            //if (myUser.Photo == null)
-            //{
-            //    ModelState.AddModelError("File", "Please upload a profile picture");
-            //}
+            var pwPattern = @"^(?=[^A-Z\n]*[A-Z])(?=[^a-z\n]*[a-z])(?=[^0-9\n]*[0-9])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,}$";
 
 
 
-            //if (!nameMatch.Success)
-            //{
-            //    ModelState.AddModelError("Username", "Username cannot contain special characters");
-
-            //}
+            Match pwMatch = Regex.Match(myUser.Password, pwPattern);
 
 
-            //if (!dateVerify(myUser.DateOfBirth))
-            //{
-            //    ModelState.AddModelError("DateOfBirth", "Please enter a valid date of birth.");
+            if (myUser.Photo == null)
+            {
+                ModelState.AddModelError("File", "Please upload a profile picture");
+            }
 
-            //}
+
+
+            if (!nameMatch.Success)
+            {
+                ModelState.AddModelError("Username", "Username cannot contain special characters");
+
+            }
+
+
+            if (!dateVerify(myUser.DateOfBirth))
+            {
+                ModelState.AddModelError("DateOfBirth", "Please enter a valid date of birth.");
+
+            }
 
 
             if (!emailVerify(myUser.Email))
@@ -381,18 +382,18 @@ namespace EDP_Project.Pages.Auth
             }
 
 
-            //if (!pwMatch.Success)
-            //{
-            //    ModelState.AddModelError("Password", "Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters.");
+            if (!pwMatch.Success)
+            {
+                ModelState.AddModelError("Password", "Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters.");
 
-            //}
+            }
 
 
-            //if (!addMatch.Success)
-            //{
-            //    ModelState.AddModelError("Address", "Please enter a valid address.");
+            if (!addMatch.Success)
+            {
+                ModelState.AddModelError("Address", "Please enter a valid address.");
 
-            //}
+            }
 
 
 

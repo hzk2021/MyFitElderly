@@ -245,6 +245,35 @@ namespace EDP_Project.Pages
         }
 
 
+        public void unverifyUser(string userid)
+        {
+
+            con.Open();
+
+
+            try
+            {
+                string sql = "UPDATE User SET TwoFactorVerified = @VERIFIED WHERE Username=@USERID; ";
+                using (var cmd = new MySqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@USERID", userid);
+                    cmd.Parameters.AddWithValue("@VERIFIED", 0);
+                    var update = cmd.ExecuteNonQuery();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+        }
+
 
         protected string getUserEmail(string userid)
         {
@@ -338,6 +367,17 @@ namespace EDP_Project.Pages
             {
                 con.Close();
             }
+
+
+
+
+
+
+
+
+            unverifyUser(HttpContext.Session.GetString("user").ToString());
+
+
 
             logger.Info($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} logged out");
             HttpContext.Session.Remove("user");
