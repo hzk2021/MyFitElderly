@@ -221,9 +221,6 @@ namespace EDP_Project.Pages.Staff.Accounts
 
             // Decrypt String ID
 
-
-
-
             con.Open();
 
 

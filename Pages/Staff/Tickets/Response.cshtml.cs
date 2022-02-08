@@ -134,7 +134,7 @@ namespace EDP_Project.Pages.Staff.Tickets
             string from = "contact.breadington.official@gmail.com"; //From address    
             MailMessage message = new MailMessage(from, to);
             message.Subject = mailSubject;
-            message.Body = mailBody;
+            message.Body = "Hi " + myTicket.CustomerName + ", Thanks for contacting MyFitElderly!<br>" + mailBody;
             message.BodyEncoding = Encoding.UTF8;
             message.IsBodyHtml = true;
             SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    

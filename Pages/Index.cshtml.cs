@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EDP_Project.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -16,12 +17,16 @@ namespace EDP_Project.Pages
 
         MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
 
+        private readonly UserService _userSvc;
+
 
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ILogger<IndexModel> logger, UserService userSvc)
         {
             _logger = logger;
+            _userSvc = userSvc;
+
         }
 
         [BindProperty]
@@ -31,6 +36,7 @@ namespace EDP_Project.Pages
         [BindProperty]
 
         public string cVerified { get; set; }
+
 
 
 
@@ -117,51 +123,36 @@ namespace EDP_Project.Pages
         }
 
 
+
+
+
         public IActionResult OnGet()
         {
 
             int userid = retrieveuserid(HttpContext.Session.GetString("user"));
 
 
-
-
             if (HttpContext.Session.GetString("user") != null)
             {
-
-
-
-
-
-
-
-
-
-
-
-                if (isStaff(HttpContext.Session.GetString("user")))
-                {
-                    // whatevs u want
-                }
-
-
 
                 cUsername = HttpContext.Session.GetString("user");
                 //HttpContext.Session.Clear();
 
+                if (!_userSvc.emailVerified(HttpContext.Session.GetString("user")))
+                {
+                    return RedirectToPage("/Auth/EmailVerification");
+                }
 
 
+                if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user")))
+                {
+                    return RedirectToPage("/Auth/ResetPassword");
+                }
 
             }
             else
             {
-
-
-
-                return RedirectToPage("Login");
-
-
-
-
+                return Redirect("/Login");
             }
 
             return Page();

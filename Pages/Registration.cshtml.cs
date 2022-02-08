@@ -77,7 +77,7 @@ namespace EDP_Project.Pages.Auth
 
 
 
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL,  @PhotoPath, @Username, @Email, @EmailVerified, @Token, @TokenExpiry, @DateCreated, @PasswordSalt, @Password, @ResetPwToken, @ResetPwTokenExpiry,  @FailedAttempts, @LastFailed, @Gender, @DateOfBirth, @Contact, @Status, @Role, @Address)", con);
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO User VALUES(NULL,  @PhotoPath, @Username, @Email, @EmailVerified, @Token, @TokenExpiry, @DateCreated, @PasswordSalt, @Password, @ResetPwToken, @ResetPwTokenExpiry,  @FailedAttempts, @LastFailed, @LastPwSet, @Gender, @DateOfBirth, @Contact, @Status, @Role, @Address)", con);
             con.Open();
 
             cmd.Parameters.AddWithValue("@PhotoPath", photoPath);
@@ -95,6 +95,7 @@ namespace EDP_Project.Pages.Auth
 
             cmd.Parameters.AddWithValue("@FailedAttempts", 0);
             cmd.Parameters.AddWithValue("@LastFailed", DBNull.Value);
+            cmd.Parameters.AddWithValue("@LastPwSet", DBNull.Value);
 
             cmd.Parameters.AddWithValue("@Gender", myUser.Gender);
             cmd.Parameters.AddWithValue("@DateOfBirth", myUser.DateOfBirth);
@@ -277,7 +278,43 @@ namespace EDP_Project.Pages.Auth
 
 
 
+        public bool usernameExists(string username)
+        {
 
+
+            try
+            {
+                con.Open();
+
+                MySqlCommand cmd = new MySqlCommand("select * FROM User WHERE Username = @USERNAME", con);
+                cmd.Parameters.AddWithValue("@USERNAME", myUser.Username);
+                int userExistss = Convert.ToInt32(cmd.ExecuteScalar());
+
+
+                if (userExistss > 0)
+                {
+                    return true;
+                }
+
+
+            }
+            catch (FormatException)
+            {
+                return true;
+            }
+
+            finally
+
+            {
+                con.Close();
+            }
+
+
+
+            return false;
+
+
+        }
 
 
         public IActionResult OnPost()
@@ -333,6 +370,13 @@ namespace EDP_Project.Pages.Auth
             if (emailExists(myUser.Email))
             {
                 ModelState.AddModelError("Email", "This email has already been registered.");
+
+            }
+
+
+            if (usernameExists(myUser.Username))
+            {
+                ModelState.AddModelError("Username", "Username has already been taken.");
 
             }
 
