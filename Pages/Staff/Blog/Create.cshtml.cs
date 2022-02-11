@@ -33,6 +33,7 @@ namespace EDP_Project.Pages.Staff.Blog
 
 
                 string response = _svc.AddBlog(BlogModel);
+
                 if (response == "True")
                 {
                     return RedirectToPage("Dashboard");

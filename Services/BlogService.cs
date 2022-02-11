@@ -51,5 +51,20 @@ namespace EDP_Project.Services
             _context.Post.Remove(postItem);
             _context.SaveChanges();
         }
+
+
+        public string AddComments(Comments comments)
+        {
+            try
+            {
+                _context.Comments.Add(comments);
+                _context.SaveChanges();
+                return "True";
+            }
+            catch (Exception )
+            {
+                return "An error occurred while registering your record. Try again later.";
+            }
+        }
     }
 }

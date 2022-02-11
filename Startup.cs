@@ -232,9 +232,8 @@ CREATE TABLE IF NOT EXISTS Log (
             `BlogId`      INT              NOT NULL,
             `Comment`     NVARCHAR (4000)  NOT NULL,
             `Created`     DATETIME         NOT NULL,
-            PRIMARY KEY (`Id` ASC),
-            FOREIGN KEY (`UserId`) REFERENCES user(`Id`),
-            FOREIGN KEY (`BlogId`) REFERENCES post(`Id`));", con);
+            PRIMARY KEY (`Id` ASC)
+            );", con);
 
 
 
