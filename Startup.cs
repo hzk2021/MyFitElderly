@@ -32,43 +32,48 @@ namespace EDP_Project
             ////  ------------------ On startup, if table already exist drop it , otherwise create new table ------------------
 
 
-            //string lel_fml = @"DROP TABLE IF EXISTS user";
-            //string dropLogTable = @"DROP TABLE IF EXISTS log";
-            //string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
-            //string dropQuestionTable = @"DROP TABLE IF EXISTS question";
-            //string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
-            //string dropSurveyResponseTable = @"DROP TABLE IF EXISTS surveyresponse";
-            //string dropExerciseRoutineTable = @"DROP TABLE IF EXISTS exerciseroutines";
+            string lel_fml = @"DROP TABLE IF EXISTS user";
+            string dropLogTable = @"DROP TABLE IF EXISTS log";
+            string dropSurveyTable = @"DROP TABLE IF EXISTS survey";
+            string dropQuestionTable = @"DROP TABLE IF EXISTS question";
+            string dropQuestionOptionTable = @"DROP TABLE IF EXISTS questionoption";
+            string dropSurveyResponseTable = @"DROP TABLE IF EXISTS surveyresponse";
+            string dropExerciseRoutineTable = @"DROP TABLE IF EXISTS exerciseroutines";
 
-            //string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
-            //string dropMeals = @"DROP TABLE IF EXISTS meals";
+            string dropCaloriesIntake = @"DROP TABLE IF EXISTS caloriesintake";
+            string dropMeals = @"DROP TABLE IF EXISTS meals";
+
+            string dropComments = @"DROP TABLE IF EXISTS comments";
 
 
             using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
             {
 
-                //MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
-                //MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
-                //MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
-                //MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
-                //MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
+                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+                MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
+                MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
+                MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
+                MySqlCommand dqot = new MySqlCommand(dropQuestionOptionTable, conn);
 
-                //MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
-                //MySqlCommand dm = new MySqlCommand(dropMeals, conn);
+                MySqlCommand dci = new MySqlCommand(dropCaloriesIntake, conn);
+                MySqlCommand dm = new MySqlCommand(dropMeals, conn);
 
-                //MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
-                //MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
+                MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
+                MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
+
+                MySqlCommand dctt = new MySqlCommand(dropComments, conn);
 
                 conn.Open();
-                //dlt.ExecuteNonQuery();
-                //dm.ExecuteNonQuery();
-                //dci.ExecuteNonQuery();
-                //dqot.ExecuteNonQuery();
-                //dqt.ExecuteNonQuery();
-                //dert.ExecuteNonQuery();
-                //dsrt.ExecuteNonQuery();
-                //dst.ExecuteNonQuery();
-                //cmd.ExecuteNonQuery();
+                dlt.ExecuteNonQuery();
+                dm.ExecuteNonQuery();
+                dci.ExecuteNonQuery();
+                dqot.ExecuteNonQuery();
+                dqt.ExecuteNonQuery();
+                dert.ExecuteNonQuery();
+                dsrt.ExecuteNonQuery();
+                dst.ExecuteNonQuery();
+                dctt.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
 
             }
@@ -95,6 +100,7 @@ CREATE TABLE IF NOT EXISTS Log (
   `Username` char(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `Email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `EmailVerified` tinyint(1) DEFAULT NULL,
+  `TwoFactorVerified` tinyint(1) DEFAULT NULL,
   `Token` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `TokenExpiry` datetime DEFAULT NULL,
   `DateCreated` date DEFAULT NULL,
@@ -261,7 +267,7 @@ CREATE TABLE IF NOT EXISTS Log (
 
             // generate root account
 
-            MySqlCommand gen_root_acc = new MySqlCommand("REPLACE INTO `user` (`Id`, `PhotoPath`,`Username`,`Email`,`EmailVerified`,`Token`,`TokenExpiry`,`DateCreated`,`PasswordSalt`,`Password`,`ResetPwToken`,`ResetPwTokenExpiry`,`FailedAttempts`,`LastFailed`,`LastPwSet`,`Gender`,`DateOfBirth`,`Contact`,`Status`,`Role`,`Address`) VALUES ('999','Images/74b1e825-1fbe-4508-a7a7-b5ec86f8f366_icon.jpg','admin','admin@gmail.com',1,NULL,NULL,'2020-01-28','mbb8LPmet7Y=','cDt39OvddIC9uQf++ZeSsQDATAwtI4TlIswAWsgViCEBw/lAWgS16LDBvs47dCpbQOoq9Fu6mKKstCiYeYGedQ==',NULL,NULL,0,NULL,'2022-01-30 23:09:00','Male','2022-01-01 00:00:00','11111111','Active','Staff','ANG MO KIO AVENUE 8');", con);
+            MySqlCommand gen_root_acc = new MySqlCommand("REPLACE INTO `user` (`Id`, `PhotoPath`,`Username`,`Email`,`EmailVerified`,`TwoFactorVerified`,`Token`,`TokenExpiry`,`DateCreated`,`PasswordSalt`,`Password`,`ResetPwToken`,`ResetPwTokenExpiry`,`FailedAttempts`,`LastFailed`,`LastPwSet`,`Gender`,`DateOfBirth`,`Contact`,`Status`,`Role`,`Address`) VALUES ('999','Images/74b1e825-1fbe-4508-a7a7-b5ec86f8f366_icon.jpg','admin','admin@gmail.com',1,0,NULL,NULL,'2020-01-28','mbb8LPmet7Y=','cDt39OvddIC9uQf++ZeSsQDATAwtI4TlIswAWsgViCEBw/lAWgS16LDBvs47dCpbQOoq9Fu6mKKstCiYeYGedQ==',NULL,NULL,0,NULL,'2022-01-30 23:09:00','Male','2022-01-01 00:00:00','11111111','Active','Staff','ANG MO KIO AVENUE 8');", con);
 
 
             try

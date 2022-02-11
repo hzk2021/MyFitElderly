@@ -135,20 +135,28 @@ namespace EDP_Project.Pages
             if (HttpContext.Session.GetString("user") != null)
             {
 
-                cUsername = HttpContext.Session.GetString("user");
-                //HttpContext.Session.Clear();
+                //cUsername = HttpContext.Session.GetString("user");
 
-                if (!_userSvc.emailVerified(HttpContext.Session.GetString("user")))
+                if (!_userSvc.twofactorVerified(HttpContext.Session.GetString("user")))
                 {
-                    return RedirectToPage("/Auth/EmailVerification");
+
+                    return RedirectToPage("/Auth/TwoFactorAuth");
+
                 }
 
-
-                if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user")))
+                else
                 {
-                    return RedirectToPage("/Auth/ResetPassword");
-                }
+                    if (!_userSvc.emailVerified(HttpContext.Session.GetString("user")))
+                    {
+                        return RedirectToPage("/Auth/EmailVerification");
+                    }
 
+
+                    if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user")))
+                    {
+                        return RedirectToPage("/Auth/ResetPassword");
+                    }
+                }
             }
             else
             {

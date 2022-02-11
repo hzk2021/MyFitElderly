@@ -423,15 +423,12 @@ namespace EDP_Project.Pages.Auth
                             resetLockout(userEmail);
                             HttpContext.Session.SetString("user", currentUser.Trim());
                             logger.Info($"{userEmail.Trim()} logged in attempt successful");
-                            _svc.retrieveuserid(HttpContext.Session.GetString("user"));
-
-
-
+                            //_svc.retrieveuserid(HttpContext.Session.GetString("user"));
                             //  if (emailVerified != false) return RedirectToPage("Index");
                             //  else return RedirectToPage("/Auth/EmailVerification");
                             //return RedirectToPage("Index");
 
-                            return RedirectToPage("Index");
+                            return RedirectToPage("/Auth/TwoFactorAuth");
 
                         }
 

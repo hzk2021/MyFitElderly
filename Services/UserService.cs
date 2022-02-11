@@ -141,6 +141,42 @@ namespace EDP_Project.Services
         }
 
 
+        public bool twofactorVerified(string userID)
+        {
+            bool verified = new bool();
+            string sql = "select * FROM User WHERE Username=@USERID";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERID", userID);
+            try
+            {
+                con.Open();
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["TwoFactorVerified"] != null)
+                        {
+                            if (reader["TwoFactorVerified"] != DBNull.Value)
+                            {
+                                verified = (bool)reader["TwoFactorVerified"];
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+            return verified;
+        }
+
+
 
         public bool exceededPwAge(string userId)
         {
