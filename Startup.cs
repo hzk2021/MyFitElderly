@@ -49,7 +49,7 @@ namespace EDP_Project
             using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
             {
 
-                MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
+               // MySqlCommand cmd = new MySqlCommand(lel_fml, conn);
                 MySqlCommand dlt = new MySqlCommand(dropLogTable, conn);
                 MySqlCommand dst = new MySqlCommand(dropSurveyTable, conn);
                 MySqlCommand dqt = new MySqlCommand(dropQuestionTable, conn);
@@ -61,7 +61,7 @@ namespace EDP_Project
                 MySqlCommand dsrt = new MySqlCommand(dropSurveyResponseTable, conn);
                 MySqlCommand dert = new MySqlCommand(dropExerciseRoutineTable, conn);
 
-                MySqlCommand dctt = new MySqlCommand(dropComments, conn);
+               // MySqlCommand dctt = new MySqlCommand(dropComments, conn);
 
                 conn.Open();
                 dlt.ExecuteNonQuery();
@@ -72,8 +72,8 @@ namespace EDP_Project
                 dert.ExecuteNonQuery();
                 dsrt.ExecuteNonQuery();
                 dst.ExecuteNonQuery();
-                dctt.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+                //dctt.ExecuteNonQuery();
+               // cmd.ExecuteNonQuery();
 
 
             }

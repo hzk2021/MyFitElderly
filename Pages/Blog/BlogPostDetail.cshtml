@@ -1,7 +1,11 @@
-﻿@page "{id}"
+﻿
+@page "{id}"
+@using Microsoft.AspNetCore.Http;
+@using MySql.Data.MySqlClient;
 @model EDP_Project.Pages.Blog.BlogPostDetailModel
 @{
     ViewData["Title"] = @Model.BlogModel.Title;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +25,7 @@
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
 </head>
 <body>
+
 
     <!-- Page content-->
     <div class="container mt-5">
@@ -47,52 +52,267 @@
                     <p class="fs-5 mb-4">@Model.BlogModel.Content</p>
                 </section>
             </article>
-            <!-- Comments section-->
-            <section class="mb-5">
-                <div class="card bg-light">
-                    <div class="card-body">
-                        <!-- Comment form-->
-                        <form method="post" class="mb-4">
-                            <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
-                            <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
-                            <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                            <span asp-validation-for="comment.Comment" class="text-danger"></span>
-                            <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
-                        </form>
+
+            @{
+
+                string username = "";
+                if (@HttpContext.Session.GetString("user") != null)
+                {
+                    string userRole = "Guest";
+                    MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+                    string sql = "SELECT * FROM User WHERE Username=@USER";
+                    MySqlCommand command = new MySqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@USER", @HttpContext.Session.GetString("user"));
+                    try
+                    {
+                        con.Open();
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                                if (reader["Role"] != DBNull.Value)
+                                {
+                                    userRole = reader["Role"].ToString();
+                                }
+                                if (reader["Username"] != DBNull.Value)
+                                {
+                                    username = reader["Username"].ToString();
+                                }
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.ToString());
+                    }
+
+                    finally
+                    {
+                        con.Close();
+                    }
 
 
-                        <br /><br />
+                    // Guest navbar (logged in)
 
-                        <!-- Single comment-->
-                        <div >
-                            <table id="table"
-                                   data-search="true"
-                                   data-pagination="true"
-                                   data-page-size="6"
-                                   data-show-custom-view="true"
-                                   data-show-fullscreen="true"
-                                   data-custom-view="customViewFormatter">
-                                <thead>
-                                    <tr>
-                                        <th data-field="username" data-sortable="true">Username</th>
-                                        <th data-field="comment" data-sortable="true">Comment</th>
-                                        <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
-                                        <th data-field="action" data-formatter="actionFormatter">Action</th>
+                    if (userRole == "Staff")
+                    {
+                        <!-- Comments for admins -->
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    <form method="post" class="mb-4">
+                                        <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                        <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                        <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                        <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
+                                    </form>
 
-                                    </tr>
-                                </thead>
-                            </table>
-                            <template id="profileTemplate">
-                                <div class="ms-3">
-                                    <div class="fw-bold">%USRID%</div>
-                                    <p>%COMMENT%</p>
-                                    <p class="text-muted">%CREATED%</p>
+
+                                    <br /><br />
+
+                                    <!-- Single comment-->
+                                    <div>
+                                        <table id="table"
+                                               data-search="true"
+                                               data-pagination="true"
+                                               data-page-size="6"
+                                               data-show-custom-view="true"
+                                               data-show-fullscreen="true"
+                                               data-custom-view="customViewFormatter">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-sortable="true">Id</th>
+                                                    <th data-field="username" data-sortable="true">Username</th>
+                                                    <th data-field="comment" data-sortable="true">Comment</th>
+                                                    <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
+                                                    <th data-field="action" data-formatter="actionFormatter">Action</th>
+
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <template id="profileTemplate">
+                                            <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to Delete this comment?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a type="button" class="btn btn-danger" href="/Blog/DelComment/%ID%">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-3">
+                                                <div class="fw-bold">%USRN% &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">%CREATED%</p></div>
+                                                <div><p>%COMMENT%</p> <button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+
+                                            </div>
+
+                                        </template>
+                                    </div>
                                 </div>
-                             </template>
+                            </div>
+                        </section>
+                    }
+                    else
+                    {
+                        <!-- Comments for registered users -->
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    <form method="post" class="mb-4">
+                                        <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                        <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                        <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                        <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
+                                    </form>
+
+
+                                    <br /><br />
+
+                                    <!-- Single comment-->
+                                          <div>
+
+                                              @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                                  {
+                                              <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                              <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                              Are you sure you want to Delete this comment?
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                              <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                                      if (username == Model.commentslist[i].Username)
+                                                      {
+
+
+                                                        <div class="m-3">
+                                                            <div class="row">
+
+                                                                <div class="col-8 fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                                <divcol-4><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></divcol-4>
+                                                            </div>
+                                                                <div><p>@Model.commentslist[i].Comment</p> </div>
+
+                                                        </div>                                             
+                                                      }
+                                                      else
+                                                      {
+                                                          <div class="m-3">
+                                                              <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                              <div><p>@Model.commentslist[i].Comment</p> </div>
+
+                                                          </div>
+                                                      }
+                                                  }
+
+                                              }
+
+                                          </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                }
+                else
+                {
+
+                    <!-- Comments for not registered peeps-->
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form method="post" class="mb-4">
+                                    <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                    <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                    <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                    <button type="submit" class="float-right btn btn-primary mt-sm-2" disabled>Comment</button>
+                                </form>
+
+
+                                <br /><br />
+
+                                <!-- Single comment-->
+                                <div>
+                                    <table id="table"
+                                           data-search="true"
+                                           data-pagination="true"
+                                           data-page-size="6"
+                                           data-show-custom-view="true"
+                                           data-show-fullscreen="true"
+                                           data-custom-view="customViewFormatter">
+                                        <thead>
+                                            <tr>
+                                                <th data-field="id" data-sortable="true">Id</th>
+                                                <th data-field="username" data-sortable="true">Username</th>
+                                                <th data-field="comment" data-sortable="true">Comment</th>
+                                                <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
+                                                <th data-field="action" data-formatter="actionFormatter">Action</th>
+
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <template id="profileTemplate">
+                                        <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to Delete this comment?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <a type="button" class="btn btn-danger" href="/Blog/DelComment/%ID%">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="m-3">
+                                            <div class="fw-bold">%USRN% &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">%CREATED%</p></div>
+                                            <div><p>%COMMENT%</p> </div>
+
+                                        </div>
+
+                                    </template>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </section>
+                }
+            }
 
         </div>
     </div>
@@ -110,6 +330,7 @@
 <script>
 
     var dataBlog = @Html.Raw(Json.Serialize(cmms));
+    console.log(dataBlog);
     var values = [];
 
     var $table = $('#table')
@@ -122,8 +343,8 @@
         var template = $('#profileTemplate').html()
         var view = ''
         $.each(data, function (i, row) {
-            view += template
-                .replace('%USRID%',row.username)
+            view += template.replace('%ID%', row.id)
+                .replace('%USRN%',row.username)
                 .replace('%COMMENT%', row.comment)
                 .replace('%CREATED%', moment(row.created).format('DD/MM/YYYY HH:mm:ss'))
 

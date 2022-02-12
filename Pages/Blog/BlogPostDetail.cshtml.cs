@@ -45,17 +45,19 @@ namespace EDP_Project.Pages.Blog
             _userSvc = userSvc;
 
         }
+        const string SessionCmtID = "_ID";
         public void OnGet(int id)
         {
             var userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             BlogModel =  _svc.GetPostId(id);
             usrId = userId.ToString();
             pageNum = id;
+            HttpContext.Session.SetInt32(SessionCmtID, id);
 
             commentslist = new List<ModComment>();
             con.Open();
             //string query = "SELECT Comments.comment, Comments.created, User.username From Comments FULL OUTER JOIN User ON Comments.id=User.id WHERE BlogId=" + id; 
-            string query = "SELECT comments.Comment, comments.Created, user.Username From comments JOIN user ON comments.userId = user.id WHERE BlogId=" + id;
+            string query = "SELECT comments.Id, comments.Comment, comments.Created, user.Username From comments JOIN user ON comments.userId = user.id WHERE BlogId=" + id;
             MySqlCommand cmd = new MySqlCommand(query, con);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             try
@@ -64,10 +66,11 @@ namespace EDP_Project.Pages.Blog
                 {
                     commentslist.Add(new ModComment
                     {
+                        Id = (int)dataReader["Id"],
                         Username = dataReader["Username"].ToString(),
                         Comment = dataReader["Comment"].ToString(),
                         Created = (DateTime)dataReader["Created"],
-                    }); ; ;
+                    }); ; ; ;
                 }
             }
             catch (WebException ex)

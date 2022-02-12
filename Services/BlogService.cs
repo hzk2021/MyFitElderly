@@ -53,18 +53,11 @@ namespace EDP_Project.Services
         }
 
 
-        public string AddComments(Comments comments)
+        public void RemoveComment(int commentId)
         {
-            try
-            {
-                _context.Comments.Add(comments);
-                _context.SaveChanges();
-                return "True";
-            }
-            catch (Exception )
-            {
-                return "An error occurred while registering your record. Try again later.";
-            }
+            Comments commentItem = _context.Comments.Where(x => x.Id == commentId).ToList()[0];
+            _context.Comments.Remove(commentItem);
+            _context.SaveChanges();
         }
     }
 }
