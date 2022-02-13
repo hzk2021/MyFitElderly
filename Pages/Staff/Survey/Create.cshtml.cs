@@ -38,12 +38,12 @@ namespace EDP_Project.Pages.Staff.Survey
         public string surveyUUID = Guid.NewGuid().ToString();
         public void OnGet()
         {
-            _usrv.AIOCheck();
+            _usrv.AIOCheckStaff();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            _usrv.AIOCheck();
+            _usrv.AIOCheckStaff();
 
             if (ModelState.IsValid)
             {

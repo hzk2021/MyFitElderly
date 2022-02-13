@@ -28,7 +28,7 @@ namespace EDP_Project.Pages.Staff.Survey
 
         public async Task<IActionResult> OnPost(string sid)
         {
-            _usrv.AIOCheck();
+            _usrv.AIOCheckStaff();
 
             if (sid != null && sid != string.Empty)
             {

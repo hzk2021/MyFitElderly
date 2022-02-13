@@ -319,7 +319,7 @@ namespace EDP_Project.Services
             return false;
         }
 
-        public void AIOCheck()
+        public void AIOCheckStaff()
         {
             var HttpContext = _contextAccessor.HttpContext;
 
@@ -347,6 +347,36 @@ namespace EDP_Project.Services
                     }
                 }
             } else
+            {
+                HttpContext.Response.Redirect("/Login");
+            }
+
+        }
+
+        public void AIOCheckGuest()
+        {
+            var HttpContext = _contextAccessor.HttpContext;
+
+            if (HttpContext.Session.GetString("user") != null)
+            {
+                if (!twofactorVerified(HttpContext.Session.GetString("user")))
+                {
+                    HttpContext.Response.Redirect("/Auth/TwoFactorAuth");
+                }
+                else
+                {
+                    if (!emailVerified(HttpContext.Session.GetString("user")))
+                    {
+                        HttpContext.Response.Redirect("/Auth/EmailVerification");
+                    }
+
+                    if (exceededPwAge(HttpContext.Session.GetString("user")))
+                    {
+                        HttpContext.Response.Redirect("/Auth/ResetPassword");
+                    }
+                }
+            }
+            else
             {
                 HttpContext.Response.Redirect("/Login");
             }

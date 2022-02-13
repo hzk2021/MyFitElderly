@@ -23,25 +23,28 @@
 
                                     <div asp-validation-summary="All" class="text-danger"></div>
 
-                                    @if (Model.survey.ImgBytes != null)
+                                    @if (Model.survey != null)
                                     {
-                                        <div class="imgDiv">
-                                            @{
-                                                var base64 = Convert.ToBase64String(Model.survey.ImgBytes);
-                                                var userImage = String.Format("data:image/gif;base64,{0}", base64);
-                                                <img src="@userImage" alt="Survey Image" class="surveyImage" />
-                                            }
+                                        @if (Model.survey.ImgBytes != null)
+                                        {
+                                            <div class="imgDiv">
+                                                @{
+                                                    var base64 = Convert.ToBase64String(Model.survey.ImgBytes);
+                                                    var userImage = String.Format("data:image/gif;base64,{0}", base64);
+                                                    <img src="@userImage" alt="Survey Image" class="surveyImage" />
+                                                }
+                                            </div>
+                                        }
+
+                                        <div class="col-12 my-3">
+                                            <label class="form-label">Title</label>
+                                            <label class="form-control" type="text" />@Model.survey.Title
+                                        </div>
+                                        <div class="col-12 my-3">
+                                            <label class="form-label">Description</label>
+                                            <label class="form-control" type="text" />@Model.survey.Description
                                         </div>
                                     }
-
-                                    <div class="col-12 my-3">
-                                        <label class="form-label">Title</label>
-                                        <label class="form-control" type="text" />@Model.survey.Title
-                                    </div>
-                                    <div class="col-12 my-3">
-                                        <label class="form-label">Description</label>
-                                        <label class="form-control" type="text" />@Model.survey.Description
-                                    </div>
                                 </div>
 
                             </div>

@@ -32,7 +32,7 @@ namespace EDP_Project.Pages.Staff.Survey
 
         public async void OnGet(string sid)
         {
-            _usrv.AIOCheck();
+            _usrv.AIOCheckStaff();
 
             svy = await _srv.GetASurvey(sid);
 
@@ -48,7 +48,7 @@ namespace EDP_Project.Pages.Staff.Survey
 
         public async Task<IActionResult> OnPost()
         {
-            _usrv.AIOCheck();
+            _usrv.AIOCheckStaff();
 
             if (ModelState.IsValid)
             {
