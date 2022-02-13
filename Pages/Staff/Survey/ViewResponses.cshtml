@@ -1,0 +1,68 @@
+﻿@page "{sid}"
+@model EDP_Project.Pages.Staff.Survey.ViewResponsesModel
+@{
+}
+
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="container">
+
+    <h1 class="text-center">Response Count: @Model.svyResponses.Count</h1>
+
+    <ul id="draw-charts">
+
+    </ul>
+
+
+</div>
+
+<script>
+    google.charts.load('current', {
+        callback: function () {
+
+
+            for (var i = 0; i < @Model.svyResponseGroup.Count; i++) {
+
+                var answers = @Json.Serialize(Model.svyResponseGroup);
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Answers');
+                data.addColumn('number', 'Count');
+
+                var stringifyObj = JSON.stringify(answers)
+                var parseObj = JSON.parse(stringifyObj)[Object.keys(answers)[i]];
+
+                let uniqueArray = [...new Set(parseObj)]
+                console.log(uniqueArray);
+
+                for (var k = 0; k < uniqueArray.length; k++) {
+                    var temp = [];
+                    temp.push(uniqueArray[k]);
+
+                    var count = 0;
+
+                    for (var l = 0; l < parseObj.length; l++) {
+                        if (parseObj[l] == uniqueArray[k]) {
+                            count += 1;
+                        }
+                    }
+
+                    temp.push(count)
+
+                    data.addRow(temp);
+                }
+
+                var options = {
+                    title: Object.keys(answers)[i],
+                    width: 400,
+                    height: 300,
+                    pieSliceText: 'value' // Remove this to show percentage instead
+                };
+                var container = document.getElementById('draw-charts').appendChild(document.createElement('div'));
+                var chart = new google.visualization.PieChart(container);
+                chart.draw(data, options);
+            }
+        },
+        packages: ['corechart']
+    });
+
+</script>

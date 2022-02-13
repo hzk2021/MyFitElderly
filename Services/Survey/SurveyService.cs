@@ -26,7 +26,7 @@ namespace EDP_Project.Services.Survey
 
         public async Task<List<Models.Survey.Survey>> GetAllSurveys()
         {
-            return await _dbcontext.Survey.ToListAsync(); // Test
+            return await _dbcontext.Survey.ToListAsync();
         }
 
         public async Task<Models.Survey.Survey> GetASurvey(string surveyUUID)
@@ -162,6 +162,15 @@ namespace EDP_Project.Services.Survey
         {
             await _dbcontext.SurveyResponse.AddAsync(srv_response);
             await _dbcontext.SaveChangesAsync();
+        }
+
+        public async Task<List<Models.Survey.SurveyResponse>> GetResponsesFromSurveyID(string sid)
+        {
+            return await _dbcontext.SurveyResponse.Where(sr => sr.ReferenceToSurveyID == sid).ToListAsync();
+        }
+        public async Task<List<Models.Survey.SurveyResponse>> GetAllSurveyResponses()
+        {
+            return await _dbcontext.SurveyResponse.ToListAsync();
         }
 
     }

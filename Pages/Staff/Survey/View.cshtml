@@ -52,6 +52,7 @@
                 <th>CreatedByStaff</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
+                <th>Option 3</th>
             </tr>
         </thead>
 
@@ -75,7 +76,7 @@
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
-
+                            <td><a class="btn btn-success" asp-page="ViewResponses" asp-route-sid="@survey.SurveyUUID">Responses</a></td>
                         </tr>
                     }
                 }
