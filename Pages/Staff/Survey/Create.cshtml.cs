@@ -38,10 +38,13 @@ namespace EDP_Project.Pages.Staff.Survey
         public string surveyUUID = Guid.NewGuid().ToString();
         public void OnGet()
         {
+            _usrv.AIOCheck();
         }
 
         public async Task<IActionResult> OnPost()
         {
+            _usrv.AIOCheck();
+
             if (ModelState.IsValid)
             {
                 Models.Survey.Survey svy = new Models.Survey.Survey()
@@ -53,7 +56,7 @@ namespace EDP_Project.Pages.Staff.Survey
                     CreatedOn = DateTime.Now,
                     UpdatedOn = DateTime.Now,
                     ViewStatus = newSurvey.ViewStatus,
-                    CreatedByStaffID = 7 // _usrv.retrieveuserid(HttpContext.Session.GetString("user")) // Temp | change later
+                    CreatedByStaffID = _usrv.retrieveuserid(HttpContext.Session.GetString("user")) // Temp | change later
                 };
 
                 if (imgFile != null)

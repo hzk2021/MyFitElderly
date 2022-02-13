@@ -23,6 +23,7 @@ namespace EDP_Project.Pages.Staff.Survey
 
         public async void OnGet()
         {
+            _usrv.AIOCheck();
             Surveys = await _srv.GetAllSurveys();
         }
     }

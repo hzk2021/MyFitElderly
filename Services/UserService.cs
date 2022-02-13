@@ -6,18 +6,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Pract2.Models;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EDP_Project.Services
 {
     public class UserService
     {
         private readonly UserDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
 
-        public UserService(UserDbContext context)
+        public UserService(UserDbContext context, IHttpContextAccessor contextAccessor)
         {
             _context = context;
+            _contextAccessor = contextAccessor;
         }
 
 
@@ -56,6 +60,7 @@ namespace EDP_Project.Services
             }
             catch (Exception ex)
             {
+                con.Close();
                 throw new Exception(ex.ToString());
             }
             finally
@@ -214,6 +219,11 @@ namespace EDP_Project.Services
             {
                 throw new Exception(ex.ToString());
             }
+            finally
+            {
+                con.Close();
+            }
+
             // Minimum password age; if it has exceeded 3 days, then allow reset of password
             if (DateTime.Now.Subtract(lastPwSet).TotalDays > 30)
             {
@@ -309,11 +319,46 @@ namespace EDP_Project.Services
             return false;
         }
 
+        public void AIOCheck()
+        {
+            var HttpContext = _contextAccessor.HttpContext;
+
+            if (HttpContext.Session.GetString("user") != null)
+            {
+                if (!isStaff(HttpContext.Session.GetString("user")))
+                {
+                    HttpContext.Response.Redirect("/");
+                }
+
+
+                if (!twofactorVerified(HttpContext.Session.GetString("user")))
+                {
+                    HttpContext.Response.Redirect("/Auth/TwoFactorAuth");
+                } else
+                {
+                    if (!emailVerified(HttpContext.Session.GetString("user")))
+                    {
+                        HttpContext.Response.Redirect("/Auth/EmailVerification");
+                    }
+
+                    if (exceededPwAge(HttpContext.Session.GetString("user")))
+                    {
+                        HttpContext.Response.Redirect("/Auth/ResetPassword");
+                    }
+                }
+            } else
+            {
+                HttpContext.Response.Redirect("/Login");
+            }
+
+        }
+
+
     }
 
 
 
-    
+
 
 
 
