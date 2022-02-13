@@ -1,0 +1,13 @@
+﻿@page "{id}"
+@model EDP_Project.Pages.Blog.likeModel
+@{
+}
+@{
+    var cmms = @Model.likecntlist;
+
+}
+<script>
+
+    var dataBlog = @Html.Raw(Json.Serialize(cmms));
+    console.log(dataBlog);
+    </script>

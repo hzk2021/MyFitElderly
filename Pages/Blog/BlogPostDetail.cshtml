@@ -23,6 +23,20 @@
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+    @{ 
+        const string SessionCmtID = "_ID";
+       
+    }
+<script>
+
+
+        function likeCount()
+        {
+            document.myform.submit();
+        }
+
+</script>
+
 </head>
 <body>
 
@@ -115,53 +129,48 @@
                                     <br /><br />
 
                                     <!-- Single comment-->
-                                    <div>
-                                        <table id="table"
-                                               data-search="true"
-                                               data-pagination="true"
-                                               data-page-size="6"
-                                               data-show-custom-view="true"
-                                               data-show-fullscreen="true"
-                                               data-custom-view="customViewFormatter">
-                                            <thead>
-                                                <tr>
-                                                    <th data-field="id" data-sortable="true">Id</th>
-                                                    <th data-field="username" data-sortable="true">Username</th>
-                                                    <th data-field="comment" data-sortable="true">Comment</th>
-                                                    <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
-                                                    <th data-field="action" data-formatter="actionFormatter">Action</th>
+                                          <div>
 
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                        <template id="profileTemplate">
-                                            <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure you want to Delete this comment?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <a type="button" class="btn btn-danger" href="/Blog/DelComment/%ID%">Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="m-3">
-                                                <div class="fw-bold">%USRN% &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">%CREATED%</p></div>
-                                                <div><p>%COMMENT%</p> <button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+                                              @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                                  {
+                                                      <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog" role="document">
+                                                              <div class="modal-content">
+                                                                  <div class="modal-header">
+                                                                      <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                          <span aria-hidden="true">&times;</span>
+                                                                      </button>
+                                                                  </div>
+                                                                  <div class="modal-body">
+                                                                      Are you sure you want to Delete this comment?
+                                                                  </div>
+                                                                  <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                      <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
 
-                                            </div>
+                                                          <div class="m-3">
+                                                              <div class="row">
 
-                                        </template>
-                                    </div>
+                                                                  <div class="col-8 fw-bold">@Model.commentslist[i].Username <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                                  <div class="col-4"><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+                                                              </div>
+                                                              <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                              <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                                              <div><p>@Model.commentslist[i].Comment</p> </div>
+
+
+                                                          </div>
+                                                      
+                                                  }
+
+                                              }
+
+                                          </div>
                                 </div>
                             </div>
                         </section>
@@ -176,7 +185,7 @@
                                     <form method="post" class="mb-4">
                                         <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
                                         <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
-                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join discussion and leave a comment!"></textarea>
                                         <span asp-validation-for="comment.Comment" class="text-danger"></span>
                                         <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
                                     </form>
@@ -185,56 +194,61 @@
                                     <br /><br />
 
                                     <!-- Single comment-->
-                                          <div>
+                                    <div>
 
-                                              @{ for (var i = 0; i < Model.commentslist.Count; i++)
-                                                  {
-                                              <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog" role="document">
-                                                      <div class="modal-content">
-                                                          <div class="modal-header">
-                                                              <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
-                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                  <span aria-hidden="true">&times;</span>
-                                                              </button>
-                                                          </div>
-                                                          <div class="modal-body">
-                                                              Are you sure you want to Delete this comment?
-                                                          </div>
-                                                          <div class="modal-footer">
-                                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                              <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                                      if (username == Model.commentslist[i].Username)
-                                                      {
-
-
-                                                        <div class="m-3">
-                                                            <div class="row">
-
-                                                                <div class="col-8 fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
-                                                                <divcol-4><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></divcol-4>
+                                        @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                            {
+                                                <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
                                                             </div>
-                                                                <div><p>@Model.commentslist[i].Comment</p> </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to Delete this comment?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                if (username == Model.commentslist[i].Username)
+                                                {
 
-                                                        </div>                                             
-                                                      }
-                                                      else
-                                                      {
-                                                          <div class="m-3">
-                                                              <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
-                                                              <div><p>@Model.commentslist[i].Comment</p> </div>
 
-                                                          </div>
-                                                      }
-                                                  }
+                                                    <div class="m-3">
+                                                        <div class="row">
 
-                                              }
+                                                            <div class="col-8 fw-bold">@Model.commentslist[i].Username <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                            <div class="col-4"><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+                                                        </div>
+                                                            <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                            <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                                        <div><p>@Model.commentslist[i].Comment</p> </div>
 
-                                          </div>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                    <div class="m-3">
+                                        <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                        <div><p>@Model.commentslist[i].Comment</p> </div>
+                                        <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                        <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+
+                                    </div>
+                                                }
+                                            }
+
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -252,9 +266,9 @@
                                 <form method="post" class="mb-4">
                                     <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
                                     <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
-                                    <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Please register or login to join the discussion and leave a comment!"></textarea>
                                     <span asp-validation-for="comment.Comment" class="text-danger"></span>
-                                    <button type="submit" class="float-right btn btn-primary mt-sm-2" disabled>Comment</button>
+                                    <button type="submit" class="float-right btn btn-primary mt-sm-2 disabled">Comment</button>
                                 </form>
 
 
@@ -262,51 +276,39 @@
 
                                 <!-- Single comment-->
                                 <div>
-                                    <table id="table"
-                                           data-search="true"
-                                           data-pagination="true"
-                                           data-page-size="6"
-                                           data-show-custom-view="true"
-                                           data-show-fullscreen="true"
-                                           data-custom-view="customViewFormatter">
-                                        <thead>
-                                            <tr>
-                                                <th data-field="id" data-sortable="true">Id</th>
-                                                <th data-field="username" data-sortable="true">Username</th>
-                                                <th data-field="comment" data-sortable="true">Comment</th>
-                                                <th data-field="created" data-formatter="dateFormat" data-sortable="true">Created Date</th>
-                                                <th data-field="action" data-formatter="actionFormatter">Action</th>
 
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                    <template id="profileTemplate">
-                                        <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to Delete this comment?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <a type="button" class="btn btn-danger" href="/Blog/DelComment/%ID%">Delete</a>
+                                    @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                        {
+                                            <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to Delete this comment?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="m-3">
-                                            <div class="fw-bold">%USRN% &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">%CREATED%</p></div>
-                                            <div><p>%COMMENT%</p> </div>
+                                            <div class="m-3">
+                                                <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                <div><p>@Model.commentslist[i].Comment</p> </div>
+                                                <a type="button" class="btn btn-success btn-sm disabled" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                <a type="button" class="btn btn-danger ml-3 btn-sm disabled" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                            </div>
+                                            
+                                        }
 
-                                        </div>
+                                    }
 
-                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -346,6 +348,8 @@
             view += template.replace('%ID%', row.id)
                 .replace('%USRN%',row.username)
                 .replace('%COMMENT%', row.comment)
+                .replace('%LIKECOUNT%', row.like)
+                .replace('%DISLIKECOUNT%',row.dislike)
                 .replace('%CREATED%', moment(row.created).format('DD/MM/YYYY HH:mm:ss'))
 
         })

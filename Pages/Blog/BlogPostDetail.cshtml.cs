@@ -57,7 +57,7 @@ namespace EDP_Project.Pages.Blog
             commentslist = new List<ModComment>();
             con.Open();
             //string query = "SELECT Comments.comment, Comments.created, User.username From Comments FULL OUTER JOIN User ON Comments.id=User.id WHERE BlogId=" + id; 
-            string query = "SELECT comments.Id, comments.Comment, comments.Created, user.Username From comments JOIN user ON comments.userId = user.id WHERE BlogId=" + id;
+            string query = "SELECT comments.Id, comments.Comment, comments.Created,comments.likey,comments.dislike, user.Username From comments JOIN user ON comments.userId = user.id WHERE BlogId=" + id;
             MySqlCommand cmd = new MySqlCommand(query, con);
             MySqlDataReader dataReader = cmd.ExecuteReader();
             try
@@ -70,6 +70,8 @@ namespace EDP_Project.Pages.Blog
                         Username = dataReader["Username"].ToString(),
                         Comment = dataReader["Comment"].ToString(),
                         Created = (DateTime)dataReader["Created"],
+                        like = (int)(Convert.IsDBNull(dataReader["likey"]) ? null : (int?)dataReader["likey"]),
+                        dislike = (int)(Convert.IsDBNull(dataReader["dislike"]) ? null : (int?)dataReader["dislike"])
                     }); ; ; ;
                 }
             }
@@ -93,11 +95,13 @@ namespace EDP_Project.Pages.Blog
                 //comment.UserId = userId;
                 //comment.BlogId = 1;
                 //comment.Created = DateTime.Now;
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO comments VALUES(null, @UserId,@BlogId,@Comment,@Created)", con);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO comments VALUES(null, @UserId,@BlogId,@Comment,@like,@dislike,@Created)", con);
                 con.Open();
                 cmd.Parameters.AddWithValue("@UserId", userId);
                 cmd.Parameters.AddWithValue("@BlogId", comment.BlogId);
                 cmd.Parameters.AddWithValue("@Comment", comment.Comment);
+                cmd.Parameters.AddWithValue("@like", 0);
+                cmd.Parameters.AddWithValue("@dislike", 0);
                 cmd.Parameters.AddWithValue("@Created", DateTime.Now);
                 cmd.ExecuteNonQuery();
                 //string response = _svc.AddComments(comment);

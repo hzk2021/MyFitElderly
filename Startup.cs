@@ -237,6 +237,8 @@ CREATE TABLE IF NOT EXISTS Log (
             `UserId`      INT              NOT NULL,
             `BlogId`      INT              NOT NULL,
             `Comment`     NVARCHAR (4000)  NOT NULL,
+            `likey`      INT              NOT NULL DEFAULT 0,
+            `dislike`      INT              NOT NULL DEFAULT 0,
             `Created`     DATETIME         NOT NULL,
             PRIMARY KEY (`Id` ASC)
             );", con);

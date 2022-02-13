@@ -12,6 +12,8 @@ namespace EDP_Project.Models.Blog
         public int UserId { get; set; }
         public int BlogId { get; set; }
         public string Comment { get; set; }
+        public int like { get; set; }
+        public int dislike { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
 
 
