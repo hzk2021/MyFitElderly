@@ -78,7 +78,7 @@ namespace EDP_Project.Pages.Staff.Survey
             var existingSurvey = await _srv.GetASurvey(SurveyUUID);
             var svy_responses = await _srv.GetResponsesFromSurveyID(existingSurvey.SurveyUUID);
 
-            string txt = "Question" + ",Response";
+            string txt = "Question" + ",Response\n";
             foreach (var response in svy_responses)
             {
                 txt = txt + ($"{response.Question_Text},{response.Response_Text}\n");
