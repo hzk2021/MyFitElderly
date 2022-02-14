@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDP_Project.Services;
 using EDP_Project.Services.Survey;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,13 +20,18 @@ namespace EDP_Project.Pages.Survey
         [BindProperty]
         public List<Models.Survey.SurveyResponse> survey_response { get; set; }
 
-        public CreateResponseModel(SurveyService surveySrv)
+        private UserService _usrv;
+
+        public CreateResponseModel(SurveyService surveySrv, UserService userSrv)
         {
             _srv = surveySrv;
+            _usrv = userSrv;
         }
 
         public async void OnGet(string sid)
         {
+            _usrv.AIOCheckGuest();
+
             survey = await _srv.GetASurvey(sid);
 
             if (survey == null)
@@ -38,6 +45,7 @@ namespace EDP_Project.Pages.Survey
         }
         public async Task<IActionResult> OnPost()
         {
+            _usrv.AIOCheckGuest();
             if (ModelState.IsValid)
             {
                 for (int i = 0; i < survey_response.Count; i++)
@@ -48,7 +56,7 @@ namespace EDP_Project.Pages.Survey
                     svy_response.Question_Text = svy_response.Question_Text;
                     svy_response.Response_Text = svy_response.Response_Text;
                     svy_response.ReferenceToSurveyID = svy_response.ReferenceToSurveyID;
-                    svy_response.SubmittedByCustomerID = 7; // TEMP ID (MUST CHANGE LATER)
+                    svy_response.SubmittedByCustomerID = _usrv.retrieveuserid(HttpContext.Session.GetString("user"));
 
                     await _srv.AddSurveyResponse(svy_response);
                 }

@@ -25,7 +25,6 @@ namespace EDP_Project.Pages.Health
         {
             int userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
 
-            Console.WriteLine(userId.ToString()+ " , " +search + " , " + sort + " , " + order + " , " + limit + " , " + offset);
             object records = _svc.GetMealsRecord(userId, search, sort, order, limit, offset);
             return new JsonResult(records);
         }

@@ -13,19 +13,23 @@ namespace EDP_Project.Pages.Staff.Health
     public class EditFoodModel : PageModel
     {
         private readonly HealthService _svc;
+        private readonly UserService _userSvc;
+
         [BindProperty]
         public Food FoodModel { get; set; }
 
         [BindProperty]
         public string ErrorMsg { get; set; }
 
-        public EditFoodModel(HealthService svc)
+        public EditFoodModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
+            _userSvc = userSvc;
         }
 
         public void OnGet(int id)
         {
+            _userSvc.AIOCheckStaff();
             FoodModel = _svc.GetFoodById(id);
         }
 

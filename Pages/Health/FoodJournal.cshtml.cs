@@ -50,6 +50,8 @@ namespace EDP_Project.Pages.Health
 
         public void OnGet()
         {
+            _userSvc.AIOCheckGuest();
+
             AllFood = _svc.GetAllFoodRecords();
             UserId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             

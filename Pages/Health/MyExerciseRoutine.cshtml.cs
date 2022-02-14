@@ -51,6 +51,8 @@ namespace EDP_Project.Pages.Health
 
         public void OnGet()
         {
+            _userSvc.AIOCheckGuest();
+
             UserId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             AllExercises = _svc.GetAllExerciseRecords();
             Routines = _svc.GetRoutine(UserId);
@@ -137,8 +139,6 @@ namespace EDP_Project.Pages.Health
         public IActionResult OnPost()
         {
             int userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
-            Console.WriteLine(Routines.Count);
-            Console.WriteLine(GroupedExerciseCount[0]+", "+GroupedExerciseCount[1]);
 
             // Assign the days for each routine row
             int scannedRows = 0;
@@ -165,8 +165,10 @@ namespace EDP_Project.Pages.Health
             }
 
             _svc.UpdateRoutines(Routines, userId);
-            return Page();
-            //_svc.
+
+            _svc.CalculateCalories(userId);
+
+            return RedirectToPage("");
         }
     }
 }

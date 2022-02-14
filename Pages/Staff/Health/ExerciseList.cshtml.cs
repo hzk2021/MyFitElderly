@@ -11,8 +11,14 @@ namespace EDP_Project.Pages
 {
     public class ExerciseListModel : PageModel
     {
+        private readonly UserService _userSvc;
+        public ExerciseListModel(UserService userSvc)
+        {
+            _userSvc = userSvc;
+        }
         public void OnGet()
         {
+            _userSvc.AIOCheckStaff();
         }
     }
 }

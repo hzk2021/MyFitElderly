@@ -12,7 +12,7 @@
 <div id="GraphSection" class="row" style="margin-bottom:2.5%;">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-body" style="height:70%;">
+            <div class="card-body" style="height:80%;">
                 <canvas class="h-25" id="line"></canvas>
             </div>
         </div>
@@ -22,11 +22,9 @@
 
 <div id="RecordsTable">
     <h3>Calories intake</h3>
+    <p class="@Model.EvaluatedMsg[1]">@Html.Raw(Model.EvaluatedMsg[0])</p>
     <div class="col-4">
         <div id="toolbar">
-            <select id="selectFilter" class="form-control" name="filterAlgorithm" onchange="getFilter(this)">
-                <option value="All" selected>All</option>
-            </select>
         </div>
     </div>
     <table id="caloriesIntake_table" class="table" style="border: 0;"
@@ -50,6 +48,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.3.1/chartjs-plugin-annotation.min.js" integrity="sha512-y7WpspnUHkKaewKb/dwPyBDJhigLAA9eH2rdvXGwZonWs/5NpSxKI6ZG2TWQVo+JY+tfNdgPgjcTGDhG/GMriA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     var chart = document.getElementById("line").getContext("2d");
 
@@ -57,7 +56,6 @@
         id: "bgChartColor",
         beforeDraw(chart, args, options) {
             const { ctx, chartArea: { top, right, bottom, left, width, height }, scales: { x, y } } = chart;
-            var colorsSchemes = { red: "rgba(200, 0, 0, 0.15)", yellow: "rgba(255, 200, 0, 0.15)", green: "rgba(0, 200, 0, 0.15)" };
             ctx.save();
 
             //ctx.fillStyle = colorsSchemes.red;
@@ -92,6 +90,8 @@
         console.log(labels);
         console.log(values);
 
+        var colorsSchemes = { red: "rgba(200, 0, 0, 0.15)", yellow: "rgba(255, 200, 0, 0.15)", green: "rgba(0, 200, 0, 0.15)" };
+
         var chartInfo = new Chart(chart, {
             type: "line",
             data: {
@@ -104,12 +104,51 @@
             },
             options: {
                 scales: {
-                    y: {beginAtZero: true}
+                    y: { beginAtZero: true }
                 },
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                plugins: {
+                    annotation: {
+                        annotations: [{
+                            type: 'box',
+                            drawTime: 'beforeDatasetsDraw',
+                            yMax: 4000,
+                            yMin: 1600,
+                            backgroundColor: colorsSchemes.red
+                        },
+                        {
+                            type: 'box',
+                            drawTime: 'beforeDatasetsDraw',
+                            yMax: 1600,
+                            yMin: 1200,
+                            backgroundColor: colorsSchemes.yellow
+                        },
+                        {
+                            type: 'box',
+                            drawTime: 'beforeDatasetsDraw',
+                            yMax: 1200,
+                            yMin: -200,
+                            backgroundColor: colorsSchemes.green
+                        },
+                        {
+                            type: 'box',
+                            drawTime: 'beforeDatasetsDraw',
+                            yMax: -200,
+                            yMin: -600,
+                            backgroundColor: colorsSchemes.yellow
+                        },
+                        {
+                            type: 'box',
+                            drawTime: 'beforeDatasetsDraw',
+                            yMax: -600,
+                            yMin: -4000,
+                            backgroundColor: colorsSchemes.red
+                        }]
+                    },
+                }
             },
-            plugins: [bgChartColor]
+            
         });
     }
 

@@ -87,7 +87,14 @@ namespace EDP_Project.Services
 
             if (!string.IsNullOrEmpty(sort) && string.IsNullOrEmpty(order))
             {
-                uncompletedfoodList = uncompletedfoodList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                if (order == "asc")
+                {
+                    uncompletedfoodList = uncompletedfoodList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
+                else
+                {
+                    uncompletedfoodList = uncompletedfoodList.OrderByDescending(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
             }
 
             if (!string.IsNullOrEmpty(search))
@@ -198,7 +205,14 @@ namespace EDP_Project.Services
 
                 if (!string.IsNullOrEmpty(sort) && string.IsNullOrEmpty(order))
                 {
-                    uncompletedMealsList = uncompletedMealsList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                    if (order == "asc")
+                    {
+                        uncompletedMealsList = uncompletedMealsList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                    }
+                    else
+                    {
+                        uncompletedMealsList = uncompletedMealsList.OrderByDescending(x => x.GetType().GetProperty(sort).GetValue(x));
+                    }
                     Console.WriteLine(uncompletedMealsList);
                 }
 
@@ -389,7 +403,14 @@ namespace EDP_Project.Services
 
             if (!string.IsNullOrEmpty(sort) && string.IsNullOrEmpty(order))
             {
-                uncompletedexerciseList = uncompletedexerciseList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                if (order == "asc")
+                {
+                    uncompletedexerciseList = uncompletedexerciseList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
+                else
+                {
+                    uncompletedexerciseList = uncompletedexerciseList.OrderByDescending(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
             }
 
             if (!string.IsNullOrEmpty(search))
@@ -446,7 +467,7 @@ namespace EDP_Project.Services
                 _context.SaveChanges();
                 return "true";
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return "An error occurred while registering your record. Try again later.";
             }
@@ -454,30 +475,46 @@ namespace EDP_Project.Services
 
         //--------------- Calories Intake methods ---------------
 
+        public CaloriesIntakes FindExistingCalculation(int userId)
+        {
+            return _context.CaloriesIntakes.FirstOrDefault(x => x.UserId == userId && x.Date == DateTime.Today);
+        }
+
         public string CalculateCalories(int userId)
         {
             // Calculate calories intake
-            List<Meals> todayMeals = GetTodayMealAdded(userId);
-            double totalCaloriesIntake = todayMeals.Aggregate(0d, (total, y) => total + (y.Quantity * y.FoodDetails.Calories));
-
             string day = DateTime.Today.DayOfWeek.ToString();
-            List<ExerciseRoutines> todayExerciseRoutines = _context.ExerciseRoutines.Where(x => x.UserId == userId).Where(x => x.Days.Contains(day)).ToList();
-            double totalCaloriesBurned = 1800 + todayExerciseRoutines.Aggregate(0d, (total, y) => total + (y.Intensity * y.ExerciseDetails.CaloriesBurnPerUnit));
+            List<ExerciseRoutines> todayExerciseRoutines = _context.ExerciseRoutines.Where(x => x.UserId == userId && x.Days.Contains(day)).Join(_context.Exercise,
+                                                m => m.ExerciseId, f => f.ExerciseId, (m, f) => new ExerciseRoutines
+                                                { ExerciseId = m.ExerciseId, RoutineId = m.RoutineId, UserId = m.UserId, Intensity = m.Intensity,
+                                                    Days = m.Days, ExerciseDetails = f }).ToList();
+
+            double totalCaloriesBurned = todayExerciseRoutines.Aggregate(0d, (total, y) => total + 1800 + Math.Round(y.Intensity * y.ExerciseDetails.CaloriesBurnPerUnit, 1));
+
+            List<Meals> todayMeals = GetTodayMealAdded(userId);
+            double totalCaloriesIntake = todayMeals.Aggregate(0d, (total, y) => total + Math.Round(y.Quantity * y.FoodDetails.Calories, 1));
 
             // Save to db
-            CaloriesIntakes newRecord = new CaloriesIntakes 
-            { Date = DateTime.Today, 
-            UserId = userId, 
-            Day = DateTime.Today.DayOfWeek.ToString(), 
-            CaloriesIntake = totalCaloriesIntake, 
-            CaloriesBurned = totalCaloriesBurned };
+            CaloriesIntakes todayRecord = FindExistingCalculation(userId);
+
+            CaloriesIntakes newRecord = new CaloriesIntakes()
+            {
+                Date = DateTime.Today, 
+                UserId = userId, 
+                Day = DateTime.Today.DayOfWeek.ToString(), 
+                CaloriesIntake = totalCaloriesIntake, 
+                CaloriesBurned = totalCaloriesBurned 
+            };
 
             try
             {
-                if (_context.CaloriesIntakes.Any(x => x.UserId == userId && x.Date == DateTime.Today))
-                    _context.CaloriesIntakes.Update(newRecord);
-                else
-                    _context.CaloriesIntakes.Add(newRecord);
+                if (todayRecord != null)
+                {
+                    _context.CaloriesIntakes.Remove(todayRecord);
+                }
+
+                _context.CaloriesIntakes.Add(newRecord);
+
                 _context.SaveChanges();
 
                 return "true";
@@ -502,20 +539,32 @@ namespace EDP_Project.Services
         }
         public List<CaloriesIntakes> GetChartCaloriesIntake(int userId)
         {
-            DateTime maxDay = DateTime.Today.AddDays(-1 * (7 + (DateTime.Today.DayOfWeek - DayOfWeek.Monday)) % 7).Date;
+            int todayDay = (int)(Weekdays)Enum.Parse(typeof(Weekdays), DateTime.Today.DayOfWeek.ToString());
+            DateTime maxDay = DateTime.Today.AddDays(-todayDay);
+            List<CaloriesIntakes> resultList = _context.CaloriesIntakes.Where(x => x.UserId == userId && x.Date >= maxDay).OrderByDescending(x => x.Date).Take(7).ToList().OrderBy(x => x.Date).ToList();
 
-            List<CaloriesIntakes> resultList = _context.CaloriesIntakes.Where(x => x.UserId == userId && x.Date > maxDay).Skip(0).Take(7).ToList();
-            int frontIndex = (int)(DayOfWeek) Enum.Parse(typeof(Weekdays), resultList[0].Day);
-            int backIndex = (int)(DayOfWeek)Enum.Parse(typeof(Weekdays), resultList[resultList.Count-1].Day);
-
-            //If not 7 records fill rest with empty records
-            for (var i = frontIndex-1; i >= 0; i -= 1)
+            if (resultList.Count == 0)
             {
-                resultList.Insert(0, new CaloriesIntakes() { Day = ((Weekdays) i).ToString() });
+                for (var i = 0; i < 7; i++)
+                {
+                    resultList.Add(new CaloriesIntakes() { Day = ((Weekdays)i).ToString() });
+                }
             }
-            for (var i = 0; i < (resultList.Count-1) - backIndex; i++)
+            else
             {
-                resultList.Add(new CaloriesIntakes() { Day = ((Weekdays) resultList.Count + i).ToString() });
+                int frontIndex = (int)(DayOfWeek)Enum.Parse(typeof(Weekdays), resultList[0].Day);
+                int backIndex = (int)(DayOfWeek)Enum.Parse(typeof(Weekdays), resultList[resultList.Count - 1].Day);
+
+                //If not 7 records fill rest with empty records
+                int rawListCount = resultList.Count;
+                for (var i = frontIndex - 1; i >= 0; i -= 1)
+                {
+                    resultList.Insert(0, new CaloriesIntakes() { Day = ((Weekdays)i).ToString() });
+                }
+                for (var i = 0; i < 6 - backIndex; i++)
+                {
+                    resultList.Add(new CaloriesIntakes() { Day = ((Weekdays)rawListCount + i).ToString() });
+                }
             }
 
             return resultList;
@@ -526,13 +575,20 @@ namespace EDP_Project.Services
             List<CaloriesIntakes> caloriesIntakeList = new List<CaloriesIntakes>();
             var uncompletedList = _context.CaloriesIntakes.Where(m => m.UserId == userId);
 
-            if (!String.IsNullOrEmpty(sort) && String.IsNullOrEmpty(order))
+            if (!string.IsNullOrEmpty(sort) && string.IsNullOrEmpty(order))
             {
-                uncompletedList = uncompletedList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                if (order == "asc")
+                {
+                    uncompletedList = uncompletedList.OrderBy(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
+                else
+                {
+                    uncompletedList = uncompletedList.OrderByDescending(x => x.GetType().GetProperty(sort).GetValue(x));
+                }
                 Console.WriteLine(uncompletedList);
             }
 
-            if (!String.IsNullOrEmpty(search))
+            if (!string.IsNullOrEmpty(search))
             {
                 uncompletedList = uncompletedList.Where(x => x.Date.ToString().Contains(search)
                                 || x.CaloriesBurned.ToString().Contains(search)
@@ -541,35 +597,41 @@ namespace EDP_Project.Services
             }
 
             // Offset & limit 7 by DATE
-            DateTime maxDay = DateTime.Today.AddDays(-1 * (7 + (DateTime.Today.DayOfWeek - DayOfWeek.Monday)) % 7).Date;
-            int actualLimit = uncompletedList.Where(x => x.Date > maxDay).ToList().Count;
+            int todayDay = (int)(Weekdays)Enum.Parse(typeof(Weekdays), DateTime.Today.DayOfWeek.ToString());
+            DateTime maxDay = DateTime.Today.AddDays(-todayDay);
+            int actualLimit = uncompletedList.Where(x => x.Date >= maxDay).ToList().Count;
 
             caloriesIntakeList = uncompletedList.Skip(offset * actualLimit).Take(actualLimit).ToList();
 
+            // Gen the class to pass to json
             List<CaloriesIntakeRecord> recordList = new List<CaloriesIntakeRecord>();
+            double overallIntake = 0;
             foreach (var row in caloriesIntakeList)
             {
                 CaloriesIntakeRecord record = new CaloriesIntakeRecord();
                 record.Date = row.Date.ToShortDateString() + "<br />" + row.Date.DayOfWeek.ToString();
                 record.CaloriesIntake = row.CaloriesIntake.ToString();
                 record.CaloriesBurned = row.CaloriesBurned.ToString();
-                double overallIntake = row.CaloriesIntake - row.CaloriesBurned;
-                if (overallIntake > 0)
+                double netGainLoss = row.CaloriesIntake - row.CaloriesBurned;
+                overallIntake += netGainLoss;
+                if (netGainLoss > 0)
                 {
                     record.NetGainLoss = "+";
                 }
 
-                record.NetGainLoss += overallIntake;
+                record.NetGainLoss += netGainLoss.ToString();
                 recordList.Add(record);
             }
-            double averageIntake = recordList.Aggregate(0d, (total, x) => total + double.Parse(x.NetGainLoss.Substring(1)) ) / recordList.Count;
+
+            double averageIntake = Math.Round(overallIntake / recordList.Count, 1);
+
             if (averageIntake > 0)
             {
-                recordList.Add(new CaloriesIntakeRecord() { CaloriesBurned = "Week's average:", NetGainLoss = "+" + averageIntake });
+                recordList.Add(new CaloriesIntakeRecord() { CaloriesBurned = "<h6>Week's average:</h6>", NetGainLoss = "+" + averageIntake });
             }
-            else if (averageIntake == 0)
+            else
             {
-                recordList.Add(new CaloriesIntakeRecord() { CaloriesBurned = "Week's average:", NetGainLoss = averageIntake.ToString() });
+                recordList.Add(new CaloriesIntakeRecord() { CaloriesBurned = "<h6>Week's average:</h6>", NetGainLoss = averageIntake.ToString() });
             }
 
             var jsonData = new { total = recordList.Count, rows = recordList };
@@ -595,13 +657,13 @@ namespace EDP_Project.Services
                 }
             }
 
+            // Week average intake evaluation
             string averageValueStr = record[record.Count - 1].NetGainLoss;
             if (averageValueStr.Substring(0, 1) == "+")
             {
                 averageValueStr.Substring(1);
             }
-
-            double averageValue = double.Parse(averageValueStr);
+            double averageValue = Math.Round(double.Parse(averageValueStr), 1);
             if (-200 < averageValue && averageValue < 1200)
             {
                 result = new string []{ "<i class=\"fa-solid fa-circle-check\"></i> Your calories intake is within acceptable range", "text-success", ""};
@@ -618,7 +680,7 @@ namespace EDP_Project.Services
             }
             else if (-600 < averageValue && averageValue < -200 || 1200 < averageValue && averageValue < 1600)
             {
-                result = new string[] { "<i class=\"fa-solid fa-triangle-exclamation\"></i> Your calories intake is slightly out of the acceptable range.", "text-warning" };
+                result = new string[] { "<i class=\"fa-solid fa-triangle-exclamation\"></i> Your calories intake is slightly out of the acceptable range.", "text-warning", "" };
                 if (option == 1)
                 {
                     result[2] += "alert-warning";
@@ -626,22 +688,22 @@ namespace EDP_Project.Services
                 }
                 else
                 {
-                    result[0] += " May bring up concerns over the long run if no action is taken";
+                    result[0] += " This may bring up concerns over the long run if no action is taken";
                     return result;
                 }
             }
             else
             {
-                result = new string[] { "<i class=\"fa-solid fa-triangle-exclamation\"></i> Your calories intake is not acceptable.", "text-danger" };
+                result = new string[] { "<i class=\"fa-solid fa-triangle-exclamation\"></i> Your calories intake is not acceptable.", "text-danger", "" };
                 if (option == 1)
                 {
-                    result[0] += "Immediate actions required";
+                    result[0] += " Immediate actions required";
                     result[2] += "alert-danger";
                     return result;
                 }
                 else
                 {
-                    result[0] += "Please readjust your food consumption and exercise routines or it might raise health concerns";
+                    result[0] += " Please readjust your food consumption and exercise routines or it might raise health concerns";
                     return result;
                 }
             }

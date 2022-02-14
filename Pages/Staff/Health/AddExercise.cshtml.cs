@@ -30,7 +30,7 @@ namespace EDP_Project.Pages
 
         public void OnGet()
         {
-            
+            _userSvc.AIOCheckStaff();
         }
 
 

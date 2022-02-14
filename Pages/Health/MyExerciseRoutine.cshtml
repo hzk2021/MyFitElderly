@@ -18,22 +18,26 @@
     else
     {
         <button class="btn btn-info btn-lg" onclick="ShowForm(this)"><i class="far fa-edit"></i> Edit my routine</button>
+        <br />
+
         @for (var i = 0; i < Model.Days.Count; i++)
         {
             var day = Model.Days[i];
             <div class="card container">
-                <h3>@day.Replace(",", ", ")</h3>
-                <table>
+                <h4>@day.Replace(",", ", ")</h4>
+                <br />
+                <table style="font-size:18px;">
                     @foreach (var routine in Model.Routines.Where(x => x.Days == day))
                     {
                         <tr>
-                            <td>@routine.ExerciseDetails.ExerciseName </td>
+                            <td width="30%">@routine.ExerciseDetails.ExerciseName </td>
                             <td>@routine.Intensity @routine.ExerciseDetails.Measurement</td>
                         </tr>
                     }
                 </table>
                 <h5>Calories: @Model.Calories[i]</h5>
             </div>
+            <br>
         }
     }
 </div>
@@ -97,9 +101,7 @@
                         <tr>
                             <td colspan="4">
                                 <div class="float-right row">
-                                    <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
-                                    <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
-                                    <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
+                                    <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this); return false;"><i class="fa fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -173,7 +175,7 @@
                                                         </div>
 
                                                         <input type="text" asp-for="Routines[i].ExerciseId" value="@Model.Routines[i].ExerciseId" class="form-control exerciseId-field" hidden readonly />
-                                                        <input type="text" asp-for="Routines[i].RoutineId" value="@Model.Routines[i].RoutineId" hidden readonly />
+                                                        @*<input type="text" asp-for="Routines[i].RoutineId" value="@Model.Routines[i].RoutineId" hidden readonly />*@
                                                     </div>
                                                 }
 
@@ -230,9 +232,7 @@
                                     <tr>
                                         <td colspan="4">
                                             <div class="float-right row">
-                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
-                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
-                                                <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
+                                                <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this); return false;"><i class="fa fa-trash"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -259,7 +259,7 @@
                                                         </div>
 
                                                         <input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseId" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseId" class="form-control exerciseId-field" hidden readonly />
-                                                        <input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" hidden readonly />
+                                                        @*<input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" hidden readonly />*@
                                                     </div>
                                                 }
 
@@ -316,8 +316,8 @@
                                     <tr>
                                         <td colspan="4">
                                             <div class="float-right row">
-                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
-                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
+                                                @*<button class="btn btn-lg text-primary" onclick="CopyGroup(this); return false;"><i class="fa-regular fa-copy"></i></button>
+                                                <button class="btn btn-lg text-primary" onclick="PasteGroup(this); return false;"><i class="fa-regular fa-clipboard"></i></button>*@
                                                 <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
                                             </div>
                                         </td>
@@ -375,7 +375,7 @@
                     @foreach (var exercise in Model.AllExercises.Where(x => x.Measurement == categories[i]))
                     {
                         <div class="dropdown-item" onclick="AddExercise(this);" style="cursor: pointer; margin: 8px 0;">
-                            @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span>
+                            @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span> - <span>@exercise.CaloriesBurnPerUnit cal/@exercise.Measurement</span>
                         </div>
                     }
                 </div>
@@ -386,7 +386,7 @@
                     @foreach (var exercise in Model.AllExercises.Where(x => x.Measurement == categories[i]))
                     {
                     <div class="dropdown-item" onclick="AddExercise(this);" style="cursor:pointer;">
-                        @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span>
+                        @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span> - <span>@exercise.CaloriesBurnPerUnit cal/@exercise.Measurement</span>
                     </div>
                     }
                 </div>
@@ -397,13 +397,15 @@
     </div>
 
 </div>
-<button onclick="SetAspValues();"></button>
 
 <script>
     var dropdownCooldown = false;
 
     var exerciseCalories = {}; //Table of exerciseId: Calories
     var emptyClonedGroup = document.getElementById("AddRoutines").querySelector(".health-addRoutine-daysGroup").cloneNode(true);
+
+    var currentClipboard;
+
     var checkboxes = emptyClonedGroup.getElementsByClassName("health-addRoutine-daysCheckbox");
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes.item(i).checked = false;
@@ -515,8 +517,27 @@
 
     function RemoveGroup(btn) {
         btn.closest(".health-addRoutine-daysGroup").remove();
+        var hiddenCheckboxInputs = [].slice.call(document.querySelector("form").children).filter(x => x.tagName.toLowerCase() === "input");
+        for (var i = 0; i < 7; i++) {
+            hiddenCheckboxInputs[hiddenCheckboxInputs.length - i - 1].remove();
+        }
         SetAspValues();
     }
+
+    //function CopyGroup(btn) {
+    //    currentClipboard = btn.closest(".health-addRoutine-daysGroup").cloneNode(true);
+    //    var checkboxes = currentClipboard.getElementsByClassName("health-addRoutine-daysCheckbox");
+    //    for (var i = 0; i < checkboxes.length; i++) {
+    //        checkboxes.item(i).checked = false;
+    //    }
+    //}
+
+    //function PasteGroup(btn) {
+    //    btn.closest("#health-addRoutine-groupsContainer").appendChild(currentClipboard);
+
+    //    SetAspValues();
+    //    UpdateCheckboxes();
+    //}
 
     function RemoveInput(button) {
         var tr = button.parentElement.parentElement;
@@ -580,7 +601,7 @@
         // Checkbox change
         var allGroups = document.getElementsByClassName("health-addRoutine-daysGroup");
         var groupNo = allGroups.length;
-        var hiddenCheckboxInputs = [].slice.call(document.querySelector("form").children).shift().filter(x => x.tagName.toLowerCase() === "input");
+        var hiddenCheckboxInputs = [].slice.call(document.querySelector("form").children).filter(x => x.tagName.toLowerCase() === "input");
 
         for (j = 0; j < groupNo.length; j++) {
             var groupCheckboxes = allGroups.item(j).querySelector(`input[type="checkbox"]`);
@@ -588,7 +609,7 @@
                 var input = groupCheckboxes.item(i);
                 input.name = `GroupedDays[${j}][${i}]`;
 
-                hiddenCheckboxInputs.item(j * 7 + i).name = `GroupedDays[${j}][${i}]`;
+                hiddenCheckboxInputs.item(j * 7 + i+1).name = `GroupedDays[${j}][${i}]`;
             }
         }
 
@@ -740,7 +761,6 @@
             var allTr = exerciseCaloriesTable.querySelectorAll("tr");
             console.log(allTr);
             if (allTr.length > 0) {
-                console.log("Here");
                 for (var i in allTr) {
                     var allTd = allTr.item(i).querySelectorAll("td");
                     exerciseCalories[allTd[0].innerText] = parseInt(allTd[1].innerText);
@@ -750,7 +770,7 @@
             exerciseCaloriesTable.parentElement.removeChild(exerciseCaloriesTable);
             var recordExists = document.getElementById("recordExists");
             if (recordExists) {
-                if (recordExists.innerText.toLowerCase == "true") {
+                if (recordExists.innerText.toLowerCase() == "true") {
                     document.getElementById("AddRoutines").remove();
                 }
                 recordExists.remove();
@@ -790,7 +810,7 @@
             const navBar = document.querySelector("header");
 
             if (event.target.getAttribute("type") != "submit" && ![].slice.call(allTabs).find(x => x === event.target || isDescendant(event.target, x))
-                && event.target.getAttribute("type") != "checkbox" && ![].slice.call(navBar).find(x => x == event.target || isDescendant(event.target, x)) ) {
+                && event.target.getAttribute("type") != "checkbox" && !isDescendant(event.target, navBar) ) {
                 event.preventDefault();
                 if (!dropdownCooldown) {
                     for (var i in allTabs) {

@@ -1,7 +1,11 @@
-﻿@page "{id}"
+﻿
+@page "{id}"
+@using Microsoft.AspNetCore.Http;
+@using MySql.Data.MySqlClient;
 @model EDP_Project.Pages.Blog.BlogPostDetailModel
 @{
     ViewData["Title"] = @Model.BlogModel.Title;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -15,129 +19,348 @@
     <link rel="icon" type="image/x-icon" href="~/images/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="~/css/bPoststyles.css" rel="stylesheet" />
+    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+    @{ 
+        const string SessionCmtID = "_ID";
+       
+    }
+<script>
+
+
+        function likeCount()
+        {
+            document.myform.submit();
+        }
+
+</script>
+
 </head>
 <body>
 
+
     <!-- Page content-->
     <div class="container mt-5">
-        <p class="text-muted"><a asp-page="/Blog/UserViewBlog"><i class="fas fa-arrow-left"></i></a> &nbsp;&nbsp;    <em>Blog/@Model.BlogModel.Title</em></p>
+        <p class="text-muted"><a asp-page="/Blog/UserViewBlog"><i class="fas fa-arrow-left"></i></a> &nbsp;&nbsp;    <em>Blog / @Model.BlogModel.Title</em></p>
         <div class="row">
-            
+
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">@Model.BlogModel.Title</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">Posted on @Model.BlogModel.Created</div>
+                    <!-- Post categories-->
+                    <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.BlogModel.Category</p>
+
+                </header>
+                <!-- Preview image figure-->
+                <!-- <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
                 <!-- Post content-->
-                <article>
-                    <!-- Post header-->
-                    <header class="mb-4">
-                        <!-- Post title-->
-                        <h1 class="fw-bolder mb-1">@Model.BlogModel.Title</h1>
-                        <!-- Post meta content-->
-                        <div class="text-muted fst-italic mb-2">Posted on @Model.BlogModel.Created</div>
-                        <!-- Post categories-->
-                        <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.BlogModel.Category</p>
-                        
-                    </header>
-                    <!-- Preview image figure-->
-                    <!-- <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
-                    <!-- Post content-->
-                    <section class="mb-5">
-                        <p class="fs-5 mb-4">@Model.BlogModel.Header</p>
-                        <p class="fs-5 mb-4">@Model.BlogModel.Content</p>
-                    </section>
-                </article>
-                <!-- Comments section-->
                 <section class="mb-5">
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <!-- Comment form-->
-                            <form class="mb-4">
-                                <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                               
-                                <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
-                            </form>
-                            <!-- Comment with nested comments-->
-                            <div class="d-flex mb-4">
-                                <!-- Parent comment-->
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                    <!-- Child comment 1-->
-                                    <div class="d-flex mt-4">
-                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                        <div class="ms-3">
-                                            <div class="fw-bold">Commenter Name</div>
-                                            And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                        </div>
-                                    </div>
-                                    <!-- Child comment 2-->
-                                    <div class="d-flex mt-4">
-                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                        <div class="ms-3">
-                                            <div class="fw-bold">Commenter Name</div>
-                                            When you put money directly to a problem, it makes a good headline.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single comment-->
-                            <div class="d-flex">
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                <div class="ms-3">
-                                    <div class="fw-bold">Commenter Name</div>
-                                    When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="fs-5 mb-4">@Model.BlogModel.Header</p>
+                    <p class="fs-5 mb-4">@Model.BlogModel.Content</p>
                 </section>
-            
-            <!-- Side widgets-->
-            <!--<div class="col-lg-4">-->
-                <!-- Search widget-->
-                <!--<div class="card mb-4">
-                    <div class="card-header">Search</div>
-                    <div class="card-body">
-                        <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                        </div>
-                    </div>
-                </div>-->
-                <!-- Categories widget-->
-                <!--<div class="card mb-4">
-                    <div class="card-header">Categories</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">Web Design</a></li>
-                                    <li><a href="#!">HTML</a></li>
-                                    <li><a href="#!">Freebies</a></li>
-                                </ul>
+            </article>
+
+            @{
+
+                string username = "";
+                if (@HttpContext.Session.GetString("user") != null)
+                {
+                    string userRole = "Guest";
+                    MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+                    string sql = "SELECT * FROM User WHERE Username=@USER";
+                    MySqlCommand command = new MySqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@USER", @HttpContext.Session.GetString("user"));
+                    try
+                    {
+                        con.Open();
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                                if (reader["Role"] != DBNull.Value)
+                                {
+                                    userRole = reader["Role"].ToString();
+                                }
+                                if (reader["Username"] != DBNull.Value)
+                                {
+                                    username = reader["Username"].ToString();
+                                }
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.ToString());
+                    }
+
+                    finally
+                    {
+                        con.Close();
+                    }
+
+
+                    // Guest navbar (logged in)
+
+                    if (userRole == "Staff")
+                    {
+                        <!-- Comments for admins -->
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    <form method="post" class="mb-4">
+                                        <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                        <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                        <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                        <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
+                                    </form>
+
+
+                                    <br /><br />
+
+                                    <!-- Single comment-->
+                                          <div>
+
+                                              @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                                  {
+                                                      <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog" role="document">
+                                                              <div class="modal-content">
+                                                                  <div class="modal-header">
+                                                                      <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                          <span aria-hidden="true">&times;</span>
+                                                                      </button>
+                                                                  </div>
+                                                                  <div class="modal-body">
+                                                                      Are you sure you want to Delete this comment?
+                                                                  </div>
+                                                                  <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                      <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+
+                                                          <div class="m-3">
+                                                              <div class="row">
+
+                                                                  <div class="col-8 fw-bold">@Model.commentslist[i].Username <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                                  <div class="col-4"><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+                                                              </div>
+                                                              <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                              <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                                              <div><p>@Model.commentslist[i].Comment</p> </div>
+
+
+                                                          </div>
+                                                      
+                                                  }
+
+                                              }
+
+                                          </div>
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">JavaScript</a></li>
-                                    <li><a href="#!">CSS</a></li>
-                                    <li><a href="#!">Tutorials</a></li>
-                                </ul>
+                        </section>
+                    }
+                    else
+                    {
+                        <!-- Comments for registered users -->
+                        <section class="mb-5">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <!-- Comment form-->
+                                    <form method="post" class="mb-4">
+                                        <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                        <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                        <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Join discussion and leave a comment!"></textarea>
+                                        <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                        <button type="submit" class="float-right btn btn-primary mt-sm-2">Comment</button>
+                                    </form>
+
+
+                                    <br /><br />
+
+                                    <!-- Single comment-->
+                                    <div>
+
+                                        @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                            {
+                                                <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are you sure you want to Delete this comment?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                if (username == Model.commentslist[i].Username)
+                                                {
+
+
+                                                    <div class="m-3">
+                                                        <div class="row">
+
+                                                            <div class="col-8 fw-bold">@Model.commentslist[i].Username <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                            <div class="col-4"><button class="float-right btn btn-danger btn-sm" data-toggle="modal" data-target="#returnModal">Delete</button></div>
+                                                        </div>
+                                                            <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                            <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                                        <div><p>@Model.commentslist[i].Comment</p> </div>
+
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                    <div class="m-3">
+                                        <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                        <div><p>@Model.commentslist[i].Comment</p> </div>
+                                        <a type="button" class="btn btn-success btn-sm" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                        <a type="button" class="btn btn-danger btn-sm ml-3" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+
+                                    </div>
+                                                }
+                                            }
+
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    }
+                }
+                else
+                {
+
+                    <!-- Comments for not registered peeps-->
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form method="post" class="mb-4">
+                                    <input type="number" asp-for="comment.UserId" value="@Model.usrId" hidden required />
+                                    <input type="number" asp-for="comment.BlogId" value="@Model.pageNum" hidden required />
+                                    <textarea class="form-control" asp-for="comment.Comment" id="content" rows="3" placeholder="Please register or login to join the discussion and leave a comment!"></textarea>
+                                    <span asp-validation-for="comment.Comment" class="text-danger"></span>
+                                    <button type="submit" class="float-right btn btn-primary mt-sm-2 disabled">Comment</button>
+                                </form>
+
+
+                                <br /><br />
+
+                                <!-- Single comment-->
+                                <div>
+
+                                    @{ for (var i = 0; i < Model.commentslist.Count; i++)
+                                        {
+                                            <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="returnModalLabel">Delete Comment?</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to Delete this comment?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <a type="button" class="btn btn-danger" href="/Blog/DelComment/@Model.commentslist[i].Id">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-3">
+                                                <div class="fw-bold">@Model.commentslist[i].Username &nbsp;&nbsp; <p class="badge bg-secondary text-decoration-none link-light" href="#!">@Model.commentslist[i].Created</p></div>
+                                                <div><p>@Model.commentslist[i].Comment</p> </div>
+                                                <a type="button" class="btn btn-success btn-sm disabled" href="/Blog/like/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-up"></i></a>  <p class="badge bg-success text-decoration-none link-light" href="#!">@Model.commentslist[i].like</p>
+                                                <a type="button" class="btn btn-danger ml-3 btn-sm disabled" href="/Blog/dislike/@Model.commentslist[i].Id"><i class="fa-solid fa-thumbs-down"></i></a> <p class="badge bg-danger text-decoration-none link-light" href="#!">@Model.commentslist[i].dislike</p>
+                                            </div>
+                                            
+                                        }
+
+                                    }
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>-->
-                <!-- Side widget-->
-                <!--<div class="card mb-4">
-                    <div class="card-header">Side Widget</div>
-                    <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
-                </div>-->
-            </div>
+                    </section>
+                }
+            }
+
         </div>
     </div>
-   
+    </div>
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
 </body>
+@{
+    var cmms = @Model.commentslist;
+
+}
+<script>
+
+    var dataBlog = @Html.Raw(Json.Serialize(cmms));
+    console.log(dataBlog);
+    var values = [];
+
+    var $table = $('#table')
+    $(function () {
+        var data = dataBlog
+        $table.bootstrapTable({ data: data })
+    })
+
+    function customViewFormatter(data) {
+        var template = $('#profileTemplate').html()
+        var view = ''
+        $.each(data, function (i, row) {
+            view += template.replace('%ID%', row.id)
+                .replace('%USRN%',row.username)
+                .replace('%COMMENT%', row.comment)
+                .replace('%LIKECOUNT%', row.like)
+                .replace('%DISLIKECOUNT%',row.dislike)
+                .replace('%CREATED%', moment(row.created).format('DD/MM/YYYY HH:mm:ss'))
+
+        })
+
+        return `<div class="row mx-0">${view}</div>`
+        }
+
+
+</script>
+
+
 <
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

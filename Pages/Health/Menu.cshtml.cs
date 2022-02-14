@@ -27,7 +27,6 @@ namespace EDP_Project.Pages
         [BindProperty]
         public string[] CaloriesStatus { get; set; }
         
-        
         public HealthModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
@@ -39,34 +38,7 @@ namespace EDP_Project.Pages
         }
         public void OnGet()
         {
-            //if (HttpContext.Session.GetString("user") != null) // if user not logged in
-            //{
-
-            //    if (!_userSvc.twofactorVerified(HttpContext.Session.GetString("user"))) // if user didnt verify via 2FA
-            //    {
-
-            //        RedirectToPage("/Auth/TwoFactorAuth");
-
-            //    }
-
-            //    else
-            //    {
-            //        if (!_userSvc.emailVerified(HttpContext.Session.GetString("user"))) // if user did not verify email
-            //        {
-            //            RedirectToPage("/Auth/EmailVerification");
-            //        }
-
-
-            //        if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user"))) /// if user pw age exceeded
-            //        {
-            //            RedirectToPage("/Auth/ResetPassword");
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    RedirectToPage("/Login");
-            //}
+            _userSvc.AIOCheckGuest();
 
             int userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
 
@@ -89,8 +61,7 @@ namespace EDP_Project.Pages
             List<ExerciseRoutines> myRoutines = _svc.GetRoutine(userId);
             if (myRoutines.Count == 0)
             {
-                ExerciseStatus[0] = "<i class=\"fa-solid fa-triangle-exclamation\"></i> You have not set any exercise routine." +
-                    "We recommend you to add some exercise routines";
+                ExerciseStatus[0] = "<i class=\"fa-solid fa-triangle-exclamation\"></i> You have not set any exercise routine. Recommended to set one";
                 ExerciseStatus[1] = "text-danger";
                 ExerciseStatus[2] = "alert-danger";
             }

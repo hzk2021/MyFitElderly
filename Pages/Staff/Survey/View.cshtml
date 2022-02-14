@@ -49,9 +49,10 @@
                 <th>CreatedOn</th>
                 <th>UpdatedOn</th>
                 <th>ViewStatus</th>
-                <th>CreatedByStaffID (change to staffName later)</th>
+                <th>CreatedByStaff</th>
                 <th>Option 1</th>
                 <th>Option 2</th>
+                <th>Option 3</th>
             </tr>
         </thead>
 
@@ -68,14 +69,14 @@
                             <td>@survey.CreatedOn</td>
                             <td>@survey.UpdatedOn</td>
                             <td>@survey.ViewStatus</td>
-                            <td>@Model._usrv.GetStaffUserName(@survey.CreatedByStaffID.ToString())</td> @*Need to change later*@
+                            <td>@Model._usrv.GetStaffUserName(@survey.CreatedByStaffID.ToString())</td>
                             <td><a class="btn btn-warning" asp-page="Edit" asp-route-sid="@survey.SurveyUUID">Edit</a></td>
                             <td>
                                 <form asp-page="Delete" method="post" asp-route-sid="@survey.SurveyUUID">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
-
+                            <td><a class="btn btn-success" asp-page="ViewResponses" asp-route-sid="@survey.SurveyUUID">Responses</a></td>
                         </tr>
                     }
                 }

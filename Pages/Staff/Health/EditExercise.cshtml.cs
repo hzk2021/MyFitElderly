@@ -13,19 +13,23 @@ namespace EDP_Project.Pages
     public class EditExerciseModel : PageModel
     {
         private readonly HealthService _svc;
+        private readonly UserService _userSvc;
+
         [BindProperty]
         public Exercise ExerciseModel { get; set; }
 
         [BindProperty]
         public string ErrorMsg { get; set; }
 
-        public EditExerciseModel(HealthService svc)
+        public EditExerciseModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
+            _userSvc = userSvc;
         }
 
         public void OnGet(int exerciseId)
         {
+            _userSvc.AIOCheckStaff();
             ExerciseModel = _svc.GetExerciseById(exerciseId);
         }
 

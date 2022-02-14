@@ -51,5 +51,13 @@ namespace EDP_Project.Services
             _context.Post.Remove(postItem);
             _context.SaveChanges();
         }
+
+
+        public void RemoveComment(int commentId)
+        {
+            Comments commentItem = _context.Comments.Where(x => x.Id == commentId).ToList()[0];
+            _context.Comments.Remove(commentItem);
+            _context.SaveChanges();
+        }
     }
 }

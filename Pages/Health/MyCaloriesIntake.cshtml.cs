@@ -17,6 +17,10 @@ namespace EDP_Project.Pages.Health
 
         [BindProperty]
         public List<CaloriesIntakes> ChartRecords { get; set; }
+
+        [BindProperty]
+        public string[] EvaluatedMsg { get; set; }
+
         public MyCaloriesIntakeModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
@@ -25,8 +29,11 @@ namespace EDP_Project.Pages.Health
 
         public void OnGet()
         {
+            _userSvc.AIOCheckGuest();
+
             int userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             ChartRecords = _svc.GetChartCaloriesIntake(userId);
+            EvaluatedMsg = _svc.EvaluateCalories(userId, 2);
         }
     }
 }

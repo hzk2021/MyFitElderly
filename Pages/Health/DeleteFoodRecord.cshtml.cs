@@ -25,8 +25,10 @@ namespace EDP_Project.Pages.Health
 
         public IActionResult OnGet(int userId)
         {
+            _userSvc.AIOCheckGuest();
+
             // Ensures that page is not executed by other users on another person
-            Console.WriteLine("Delete Reached");
+            Console.WriteLine("Delete Food");
             int yourUserId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             if (yourUserId == userId)
             {

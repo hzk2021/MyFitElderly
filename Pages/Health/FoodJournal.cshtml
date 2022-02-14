@@ -289,7 +289,7 @@ else
                     @foreach (var food in Model.AllFood.Where(x => x.Category == categories[i]))
                     {
                         <div class="dropdown-item" onclick="AddFood(this);" style="cursor: pointer; margin: 8px 0;">
-                            @food.FoodName <span hidden>@food.FoodId</span>
+                            @food.FoodName <span hidden>@food.FoodId</span> + <span>@food.Calories cal</span>
                         </div>
                     }
                 </div>
@@ -299,9 +299,9 @@ else
                 <div class="tab-pane container-fluid" id="@tabId">
                     @foreach (var food in Model.AllFood.Where(x => x.Category == categories[i]))
                     {
-                        <div class="dropdown-item" onclick="AddFood(this);" style="cursor:pointer;">
-                            @food.FoodName <span hidden>@food.FoodId</span>
-                        </div>
+                    <div class="dropdown-item" onclick="AddFood(this);" style="cursor:pointer;">
+                        @food.FoodName <span hidden>@food.FoodId</span> + <span>@food.Calories cal</span>
+                    </div>
                     }
                 </div>
             }

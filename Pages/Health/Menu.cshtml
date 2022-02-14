@@ -6,11 +6,12 @@
 
 <h1>@ViewData["Title"]</h1>
 <p>What would you like to view?</p>
+<br />
 <div class="row">
     <div class="col-sm-4">
         <a asp-page="FoodJournal">
             <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Food_Journal.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-journalCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Food Journal</span>
@@ -23,24 +24,9 @@
         </a>
     </div>
     <div class="col-sm-4">
-        <a asp-page="">
-            <div class="card text-dark text-center">
-                <img class="card-img-top bright-img" height="200" src="/images/Medicine.jpg" />
-                <div class="card-body ">
-                    <h4>
-                        <span class="card-title">My Ongoing Medications</span>
-                    </h4>
-                </div>
-                <div class="card-footer health-selectionFooter">
-                    <p>You have no ongoing medication</p>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-sm-4">
         <a asp-page="MyExerciseRoutine">
             <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Exercise.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-exerciseCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Exercise Routine</span>
@@ -52,13 +38,10 @@
             </div>
         </a>
     </div>
-</div>
-<br style="margin-bottom:5%;"/>
-<div class="row">
     <div class="col-sm-4">
         <a asp-page="MyCaloriesIntake">
             <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Calories.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-caloriesCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Calories Intake</span>
