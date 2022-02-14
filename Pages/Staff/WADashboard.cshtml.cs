@@ -49,6 +49,7 @@ namespace EDP_Project.Pages.Staff
 
         public async void OnGet()
         {
+            _usrv.AIOCheckStaff();
 
             surveysCreated = await _srv.GetAllSurveys();
             surveyCount = surveysCreated.Count;
