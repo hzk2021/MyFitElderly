@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,12 +20,15 @@ namespace EDP_Project.Pages.Staff.Survey
         public Models.Survey.Survey newSurvey { get; set; }
 
         [BindProperty]
+        [Required, MinLength(1, ErrorMessage =("Please have at least 1 survey question!"))]
         public List<Models.Survey.Question> AllQuestionList { get; set; }
 
         [BindProperty]
+        [Required, MinLength(1, ErrorMessage = ("Please add an option for the question!"))]
         public List<Models.Survey.QuestionOption> qnsOptions { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Please add a survey image!")]
         public IFormFile imgFile { get; set; }
 
         public UserService _usrv;

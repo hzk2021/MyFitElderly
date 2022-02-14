@@ -173,5 +173,16 @@ namespace EDP_Project.Services.Survey
             return await _dbcontext.SurveyResponse.ToListAsync();
         }
 
+        public async Task DeleteResponseForASurvey(string sid)
+        {
+            var listOfResponses = _dbcontext.SurveyResponse.Where(sr => sr.ReferenceToSurveyID == sid).ToList();
+
+            foreach (var response in listOfResponses)
+            {
+                _dbcontext.SurveyResponse.Remove(response);
+                await _dbcontext.SaveChangesAsync();
+            }
+        }
+
     }
 }

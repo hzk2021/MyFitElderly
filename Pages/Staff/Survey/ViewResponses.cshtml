@@ -1,6 +1,7 @@
 ﻿@page "{sid}"
 @model EDP_Project.Pages.Staff.Survey.ViewResponsesModel
 @{
+    ViewData["Title"] = "View Survey Responses - Admin";
 }
 
 <style>
@@ -48,8 +49,8 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Survey</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a asp-page="View">Survey</a></li>
             <li class="breadcrumb-item active" aria-current="page">View Response</li>
         </ol>
     </nav>
@@ -60,16 +61,36 @@
 
                 <div class="box-grp">
                     <div class="top-box">
-                        <h1 class="title">Response Count: @Model.svyResponses.Count
+                        <h1 class="title">
+
+                            @{
+                                var listOfQuestion = new List<String>();
+
+                                foreach (var response in Model.svyResponses)
+                                {
+                                    listOfQuestion.Add(response.Question_Text);
+                                }
+
+                                var responseCount = 0;
+
+                                if (listOfQuestion.Count != 0)
+                                {
+                                    responseCount = @Model.svyResponses.Count / listOfQuestion.Distinct().ToArray().Length;
+                                }
+
+                                <span>Responses Count: @responseCount</span>
+                            }
 
 
-                        <a class="nav-link dropdown ellipsis fa-solid fa-ellipsis-v" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </a>
+                            <a class="nav-link dropdown ellipsis fa-solid fa-ellipsis-v" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
 
-                        <span class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-download"></i> Download responses (.csv format)</a>
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-trash"></i> Delete All Responses</a>
-                        </span>
+                            <span class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a href="@Url.Page("ViewResponses", "Download", new { Model.svy.SurveyUUID })" class="dropdown-item"><i class="fa-solid fa-download"></i> Download responses (.csv format)</a>
+                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#deleteModal" href="#"><i class="fa-solid fa-trash"></i> Delete All Responses</button>
+
+
+                            </span>
 
                         </h1>
                     </div>
@@ -78,6 +99,29 @@
                 </div>
 
                 <div id="draw-charts">
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Confirmation Box</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Do you really want delete all the responses? This action cannot be reversed.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">No, stop it!</button>
+                                <form asp-page="DeleteResponses" method="post" asp-route-sid="@Model.svy.SurveyUUID">
+                                    <button type="submit" class="btn btn-success" href="#">Yes, do it!</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
