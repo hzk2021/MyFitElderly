@@ -1,0 +1,149 @@
+﻿@page
+@model EDP_Project.Pages.Health.MyCaloriesIntakeModel
+@{
+    ViewData["Title"] = "My Calories Intake";
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+
+<h1>My Calories Intake</h1>
+<br />
+
+<h3>Summary of calories over the week</h3>
+<div id="GraphSection" class="row" style="margin-bottom:2.5%;">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body" style="height:70%;">
+                <canvas class="h-25" id="line"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<div id="RecordsTable">
+    <h3>Calories intake</h3>
+    <div class="col-4">
+        <div id="toolbar">
+            <select id="selectFilter" class="form-control" name="filterAlgorithm" onchange="getFilter(this)">
+                <option value="All" selected>All</option>
+            </select>
+        </div>
+    </div>
+    <table id="caloriesIntake_table" class="table" style="border: 0;"
+           data-search="true"
+           data-page-size="7"
+           data-toolbar="#toolbar"
+           data-pagination="true"
+           data-side-pagination="server"
+           data-filter-control="true"
+           data-show-fullscreen="true"
+           data-url="Table_getCaloriesIntake">
+        <thead>
+            <tr>
+                <th data-field="date" data-sortable="true">Date</th>
+                <th data-field="caloriesIntake" data-sortable="true">Intake</th>
+                <th data-field="caloriesBurned" data-sortable="true">Burned</th>
+                <th data-field="netGainLoss" data-sortable="true" data-cell-style="gainLossFieldCust">Net gain/loss</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var chart = document.getElementById("line").getContext("2d");
+
+    const bgChartColor = {
+        id: "bgChartColor",
+        beforeDraw(chart, args, options) {
+            const { ctx, chartArea: { top, right, bottom, left, width, height }, scales: { x, y } } = chart;
+            var colorsSchemes = { red: "rgba(200, 0, 0, 0.15)", yellow: "rgba(255, 200, 0, 0.15)", green: "rgba(0, 200, 0, 0.15)" };
+            ctx.save();
+
+            //ctx.fillStyle = colorsSchemes.red;
+            //ctx.fillRect(left, top, width, y.getPixelForValue(1600) - 40);
+            //ctx.restore();
+
+            //ctx.fillStyle = colorsSchemes.yellow;
+            //ctx.fillRect(left, y.getPixelForValue(1600) - 40, width, y.getPixelForValue(1200) - 40);
+            //ctx.restore();
+
+            //ctx.fillStyle = colorsSchemes.green;
+            //ctx.fillRect(left, y.getPixelForValue(1200) - 40, width, y.getPixelForValue(-200) - 40 );
+            //ctx.restore();
+
+            //ctx.fillStyle = colorsSchemes.yellow;
+            //ctx.fillRect(left, y.getPixelForValue(-200) + top, width, y.getPixelForValue(-600) - top);
+            //ctx.restore();
+
+            //ctx.fillStyle = colorsSchemes.red;
+            //ctx.fillRect(left, y.getPixelForValue(-600) + top, width, bottom - top);
+            //ctx.restore();
+        }
+    }
+
+    function assignChartInfoData(rawData) {
+        var labels = [];
+        var values = [];
+        for (var i in rawData) {
+            labels.push(rawData[i].day);
+            values.push(rawData[i].caloriesIntake - rawData[i].caloriesBurned);
+        }
+        console.log(labels);
+        console.log(values);
+
+        var chartInfo = new Chart(chart, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Calories intake",
+                    data: values,
+                    backgroundColor: "rgba(6, 128, 250)",
+                }]
+            },
+            options: {
+                scales: {
+                    y: {beginAtZero: true}
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            },
+            plugins: [bgChartColor]
+        });
+    }
+
+    var rawData = @Html.Raw(Json.Serialize(Model.ChartRecords));
+    assignChartInfoData(rawData);
+    console.log(rawData);
+</script>
+<script>
+    $table = $("#caloriesIntake_table");
+    $(document).ready(function () {
+        $table.bootstrapTable();
+    });
+
+    function gainLossFieldCust(value, row, index) {
+        value = parseFloat(value);
+        if (-200 < value && value < 1200) {
+            return { classes: "text-success font-weight-bold" }
+        }
+        else if (-600 < value && value < -200 || 1200 < value && value < 1600) {
+            return { classes: "text-warning font-weight-bold" }
+        }
+        return { classes: "text-danger font-weight-bold" };
+    }
+
+    var lastRow = $(`<tr>
+                    <td colspan="2"></td>
+                    <td>Week's average:</td>
+                    <td id="averageIntake"></td>
+                </tr>`)
+    var averageIntake = $
+    $("#averageIntake")
+</script>
+
+@section Scripts {
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

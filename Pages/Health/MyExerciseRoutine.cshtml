@@ -1,0 +1,814 @@
+﻿@page
+@model EDP_Project.Pages.Health.MyExerciseRoutineModel
+@{
+}
+
+<h1>My Exercise Routine</h1>
+<br />
+<div id="recordExists">@Model.RoutinesExist</div>
+
+<div id="DisplayRoutines">
+    @if (Model.Days.Count == 0)
+    {
+        <h5>You have not set any exercise routine.</h5>
+        <p>Exercise is good to balance your calories intake. We recommend you to add some exercise routines</p>
+        <br />
+        <button class="btn btn-info btn-lg" onclick="ShowForm(this)"><i class="fas fa-plus"></i> Add an exercise routine</button>
+    }
+    else
+    {
+        <button class="btn btn-info btn-lg" onclick="ShowForm(this)"><i class="far fa-edit"></i> Edit my routine</button>
+        @for (var i = 0; i < Model.Days.Count; i++)
+        {
+            var day = Model.Days[i];
+            <div class="card container">
+                <h3>@day.Replace(",", ", ")</h3>
+                <table>
+                    @foreach (var routine in Model.Routines.Where(x => x.Days == day))
+                    {
+                        <tr>
+                            <td>@routine.ExerciseDetails.ExerciseName </td>
+                            <td>@routine.Intensity @routine.ExerciseDetails.Measurement</td>
+                        </tr>
+                    }
+                </table>
+                <h5>Calories: @Model.Calories[i]</h5>
+            </div>
+        }
+    }
+</div>
+
+<div id="FormSection" style="display:none;">
+    @{ string[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };}
+    <div class="collapse show" id="AddRoutines">
+        <form method="post">
+            <div id="health-addRoutine-groupsContainer">
+                <div class="card container health-addRoutine-daysGroup" style="margin:8px 0">
+                    <h4>Days</h4>
+
+                    <p class="health-addRoutine-checkboxErr text-danger"></p>
+                    <div class="row container">
+                        @for (var i = 0; i < days.Length; i++)
+                        {
+                            <div class="form-group col-xs-6" style="margin-right:1%">
+                                <input class="health-addRoutine-daysCheckbox" id="health-addRoutine-1-@i" type="checkbox" asp-for="GroupedDays[0][i]" onchange="UpdateCheckboxes();" />
+                                <label for="health-addRoutine-1-@i">@days[i]</label>
+                            </div>
+                        }
+                    </div>
+
+                    <h4>Exercises</h4>
+                    <table>
+                        <tr>
+                            <td style="width:45%">Exercise Name</td>
+                            <td style="width:20%">Intensity</td>
+                            <td style="width:10%">Unit</td>
+                            <td style="width:25%"></td>
+                        </tr>
+                        <tr class="addRoutine-tr">
+                            <td class="health-addRoutine-table-td2">
+                                <div class="health-addRoutine-inputGroup">
+                                    <div class="health-addRoutine-nameInput" style="position: relative;">
+
+                                        <div class="form-group">
+                                            <div class="form-control health-addRoutine-displayInput" onclick="OpenOptions(this); return false;" style="margin-bottom: 1%;cursor: text;"></div>
+                                        </div>
+                                        <input type="text" asp-for="Routines[0].ExerciseId" class="form-control exerciseId-field" hidden readonly />
+
+                                    </div>
+
+                                    <input class="health-addRoutine-inputCount" type="number" asp-for="GroupedExerciseCount[0]" value="0" hidden />
+                                </div>
+
+                                <button class="btn btn-outline-info health-addRoutine-addExerciseButton" onclick="AddInput(1); return false;" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another exercise</button>
+                            </td>
+                            <td class="align-top">
+                                <div class="form-group health-addRoutine-intensity">
+                                    <input type="text" asp-for="Routines[0].Intensity" value="" class="form-control addRoutine-intensity-input" style="margin-bottom: 1%;" required />
+                                </div>
+                            </td>
+                            <td class="align-top">
+                                <div class="form-group health-addRoutine-unit" style="margin-bottom: 2.5%; margin-top: 7px;">--</div>
+                            </td>
+                            <td class="align-top">
+                                <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="float-right row">
+                                    <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
+                                    <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
+                                    <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <button id="health-addRoutine-addGroupButton" class="btn btn-lg btn-info btn-block" onclick="AddGroup(); return false;" style="margin:8px 0"><i class="fas fa-plus-circle"></i> Add another routine</button>
+            <button onclick="OnSubmit(); return false;" class="btn btn-success"><i class="fas fa-save"></i> Save my routine</button>
+            <table id="exerciseCaloriesTable">
+                @foreach (var exercise in Model.AllExercises)
+                {
+                    <tr>
+                        <td>@exercise.ExerciseId</td>
+                        <td>@exercise.CaloriesBurnPerUnit</td>
+                    </tr>
+                }
+            </table>
+        </form>
+
+        <h5>Calories Burned: <span id="health-addRoutine-totalCalories">0</span></h5>
+    </div>
+    @if (Model.RoutinesExist)
+    {
+        <div class="collapse show" id="EditRoutines">
+            <form method="post">
+                <div id="health-addRoutine-groupsContainer">
+                    @for (var gec = 0; gec < Model.GroupedExerciseCount.Count; gec++)
+                    {
+                        <div class="card container health-addRoutine-daysGroup" style="margin:8px 0">
+                            <h4>Days</h4>
+
+                            <p class="health-addRoutine-checkboxErr text-danger"></p>
+                            <div class="row container">
+
+                                @for (var i = 0; i < days.Length; i++)
+                                {
+                                    <div class="form-group col-xs-6" style="margin-right:1%">
+                                        @if (bool.Parse(Model.GroupedDays[gec][i]))
+                                        {
+                                            <input class="health-addRoutine-daysCheckbox" id="health-addRoutine-1-@i" type="checkbox" asp-for="GroupedDays[gec][i]" onchange="UpdateCheckboxes();" checked />
+                                        }
+                                        else
+                                        {
+                                            <input class="health-addRoutine-daysCheckbox" id="health-addRoutine-1-@i" type="checkbox" asp-for="GroupedDays[gec][i]" onchange="UpdateCheckboxes();" />
+                                        }
+                                        <label for="health-addRoutine-1-@i">@days[i]</label>
+                                    </div>
+                                }
+                            </div>
+
+                            <h4>Exercises</h4>
+                            @if (gec == 0)
+                            {
+                                <table>
+                                    <tr>
+                                        <td style="width:45%">Exercise Name</td>
+                                        <td style="width:20%">Intensity</td>
+                                        <td style="width:10%">Unit</td>
+                                        <td style="width:25%"></td>
+                                    </tr>
+                                    <tr class="addRoutine-tr">
+                                        <td class="health-addRoutine-table-td2">
+                                            <div class="health-addRoutine-inputGroup">
+                                                @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                                {
+                                                    <div class="health-addRoutine-nameInput" style="position: relative;">
+
+                                                        <div class="form-group">
+                                                            <div class="form-control health-addRoutine-displayInput" onclick="OpenOptions(this); return false;" style="margin-bottom: 1%;cursor: text;">@Model.Routines[i].ExerciseDetails.ExerciseName</div>
+                                                        </div>
+
+                                                        <input type="text" asp-for="Routines[i].ExerciseId" value="@Model.Routines[i].ExerciseId" class="form-control exerciseId-field" hidden readonly />
+                                                        <input type="text" asp-for="Routines[i].RoutineId" value="@Model.Routines[i].RoutineId" hidden readonly />
+                                                    </div>
+                                                }
+
+                                                <input class="health-addRoutine-inputCount" type="number" asp-for="GroupedExerciseCount[gec]" value="@Model.GroupedExerciseCount[gec]" hidden />
+                                            </div>
+
+
+                                            <button class="btn btn-outline-info health-addRoutine-addExerciseButton" onclick="AddInput(1); return false;" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another exercise</button>
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                <div class="form-group health-addRoutine-intensity">
+                                                    <input type="text" asp-for="Routines[i].Intensity" value="@Model.Routines[i].Intensity" class="form-control addRoutine-intensity-input" style="margin-bottom: 1%;" required />
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <div class="form-group health-addRoutine-unit" style="margin-bottom: 2.5%;margin-top: 30px;">@Model.Routines[i].ExerciseDetails.Measurement</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-group health-addRoutine-unit" style="margin-bottom: 2.5%; margin-top: 7px;">@Model.Routines[i].ExerciseDetails.Measurement</div>
+                                                }
+
+                                            }
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                @if (Model.GroupedExerciseCount[gec] == 1)
+                                                {
+                                                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    if (i > 0)
+                                                    {
+                                                        <br />
+                                                        <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;margin-top: 11px;"><i class="far fa-times-circle"></i></button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;"><i class="far fa-times-circle"></i></button>
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="float-right row">
+                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
+                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
+                                                <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                            else
+                            {
+                                <table>
+                                    <tr>
+                                        <td style="width:45%">Exercise Name</td>
+                                        <td style="width:20%">Intensity</td>
+                                        <td style="width:10%">Unit</td>
+                                        <td style="width:25%"></td>
+                                    </tr>
+                                    <tr class="addRoutine-tr">
+                                        <td class="health-addRoutine-table-td2">
+                                            <div class="health-addRoutine-inputGroup">
+                                                @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                                {
+                                                    <div class="health-addRoutine-nameInput" style="position: relative;">
+
+                                                        <div class="form-group">
+                                                            <div class="form-control health-addRoutine-displayInput" onclick="OpenOptions(this); return false;" style="margin-bottom: 1%;cursor: text;">@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseDetails.ExerciseName</div>
+                                                        </div>
+
+                                                        <input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseId" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseId" class="form-control exerciseId-field" hidden readonly />
+                                                        <input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].RoutineId" hidden readonly />
+                                                    </div>
+                                                }
+
+                                                <input class="health-addRoutine-inputCount" type="number" asp-for="GroupedExerciseCount[gec]" value="@Model.GroupedExerciseCount[gec - 1]" hidden />
+                                            </div>
+
+
+                                            <button class="btn btn-outline-info health-addRoutine-addExerciseButton" onclick="AddInput(@gec + 1); return false;" style="margin-bottom: 2%;"><i class="fas fa-plus-circle"></i> Add another exercise</button>
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                <div class="form-group health-addRoutine-intensity">
+                                                    <input type="text" asp-for="Routines[Model.GroupedExerciseCount[gec - 1] + i].Intensity" value="@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].Intensity" class="form-control addRoutine-intensity-input" style="margin-bottom: 1%;" required />
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <div class="form-group health-addRoutine-unit" style="margin-bottom: 2.5%; margin-top: 30px;">@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseDetails.Measurement</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-group health-addRoutine-unit" style="margin-bottom: 2.5%; margin-top: 7px;">@Model.Routines[Model.GroupedExerciseCount[gec - 1] + i].ExerciseDetails.Measurement</div>
+                                                }
+
+                                            }
+                                        </td>
+                                        <td class="align-top">
+                                            @for (var i = 0; i < Model.GroupedExerciseCount[gec]; i++)
+                                            {
+                                                @if (Model.GroupedExerciseCount[gec] == 1)
+                                                {
+                                                    <button class="btn text-secondary" style="margin-bottom: 2.5%;" disabled><i class="far fa-times-circle"></i></button>
+                                                }
+                                                else
+                                                {
+                                                    if (i > 0)
+                                                    {
+                                                        <br />
+                                                        <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;margin-top: 11px;"><i class="far fa-times-circle"></i></button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;"><i class="far fa-times-circle"></i></button>
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="float-right row">
+                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-copy"></i></button>
+                                                <button class="btn btn-lg text-primary"><i class="fa-regular fa-clipboard"></i></button>
+                                                <button type="button" class="btn btn-lg text-danger" onclick="RemoveGroup(this)"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </div>
+                    }
+
+                </div>
+
+                <button id="health-addRoutine-addGroupButton" class="btn btn-lg btn-info btn-block" onclick="AddGroup(); return false;" style="margin:8px 0"><i class="fas fa-plus-circle"></i> Add another routine</button>
+                <button onclick="OnSubmit(); return false;" class="btn btn-success"><i class="fas fa-save"></i> Save my routine</button>
+            </form>
+
+            <h5>Calories Burned: <span id="health-addRoutine-totalCalories">0</span></h5>
+        </div>
+
+    }
+
+    <table id="exerciseCaloriesTable">
+        @foreach (var exercise in Model.AllExercises)
+        {
+            <tr>
+                <td>@exercise.ExerciseId</td>
+                <td>@exercise.CaloriesBurnPerUnit</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div id="DropdownList" class="health-addRoutine-selectList dropdown-menu" style="display:none;position:absolute;">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a href="#kmList" data-toggle="tab" class="nav-link active">Distance based</a>
+        </li>
+        <li class="nav-item">
+            <a href="#sList" data-toggle="tab" class="nav-link">Time based</a>
+        </li>
+        <li class="nav-item">
+            <a href="#repList" data-toggle="tab" class="nav-link">Reps based</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <input type="text" value="" class="form-control health-addRoutine-exerciseListSearch" placeholder="Type in exercise name..." style="margin:2.5%;width: 95%;" />
+
+        @{ string[] categories = { "km", "s", "rep" };}
+        @for (var i = 0; i < categories.Length; i++)
+        {
+            string tabId = categories[i] + "List";
+            if (i == 0)
+            {
+                <div class="tab-pane container-fluid active" id="@tabId">
+                    @foreach (var exercise in Model.AllExercises.Where(x => x.Measurement == categories[i]))
+                    {
+                        <div class="dropdown-item" onclick="AddExercise(this);" style="cursor: pointer; margin: 8px 0;">
+                            @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="tab-pane container-fluid" id="@tabId">
+                    @foreach (var exercise in Model.AllExercises.Where(x => x.Measurement == categories[i]))
+                    {
+                    <div class="dropdown-item" onclick="AddExercise(this);" style="cursor:pointer;">
+                        @exercise.ExerciseName <span hidden>@exercise.ExerciseId</span> <span hidden>@exercise.Measurement</span>
+                    </div>
+                    }
+                </div>
+            }
+
+        }
+
+    </div>
+
+</div>
+<button onclick="SetAspValues();"></button>
+
+<script>
+    var dropdownCooldown = false;
+
+    var exerciseCalories = {}; //Table of exerciseId: Calories
+    var emptyClonedGroup = document.getElementById("AddRoutines").querySelector(".health-addRoutine-daysGroup").cloneNode(true);
+    var checkboxes = emptyClonedGroup.getElementsByClassName("health-addRoutine-daysCheckbox");
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes.item(i).checked = false;
+    }
+     
+    function ShowForm(btn) {
+        document.getElementById("FormSection").style.display = "block";
+        btn.style.display = "none";
+    }
+
+    function OpenOptions(inp) {
+        dropdownCooldown = true;
+        var dropdownDiv = document.querySelector(".health-addRoutine-selectList").cloneNode(true);
+        dropdownDiv.style.display = "block";
+
+        var parentDiv = inp.parentElement.parentElement;
+        var allInputsGrp = parentDiv.parentElement.getElementsByClassName("health-addRoutine-nameInput");
+
+        // Disabling options that are already selected
+        for (var i = 0; i < allInputsGrp.length; i++) {
+            var foodIdField = allInputsGrp[i].querySelector(".exerciseId-field");
+            var allCategories = dropdownDiv.getElementsByClassName("tab-pane");
+
+            for (var j = 0; j < allCategories.length; j++) {
+                var allListItem = allCategories[j].getElementsByClassName("dropdown-item");
+
+                for (var k = 0; k < allListItem.length; k++) {
+                    var dropdownValue = allListItem[k].querySelector("span").innerText;
+                    if (dropdownValue == foodIdField.value) {
+                        allListItem[k].style.color = "#6C757D";
+                        allListItem[k].style.backgroundColor = "#DDDDDD";
+                        allListItem[k].style.cursor = "default";
+                        allListItem[k].removeAttribute("onclick");
+                    }
+                }
+            }
+        }
+
+        parentDiv.appendChild(dropdownDiv);
+        setTimeout(function () { dropdownCooldown = false; }, 126)
+    }
+
+    function AddInput(number) {
+        var inputGroup = document.getElementsByClassName("health-addRoutine-inputGroup")[number - 1];
+
+        var exerciseNameInputDiv = inputGroup.querySelector(".health-addRoutine-nameInput").cloneNode(true);
+        exerciseNameInputDiv.querySelector(".health-addRoutine-displayInput").innerText = "";
+        var itemIdField = exerciseNameInputDiv.querySelector(".itemId-field");
+        if (itemIdField)
+            itemIdField.remove();
+
+        var exerciseIdInput = exerciseNameInputDiv.querySelector(".exerciseId-field");
+        exerciseIdInput.readonly = false;
+        exerciseIdInput.value = "";
+        exerciseIdInput.readonly = true;
+        inputGroup.appendChild(exerciseNameInputDiv);
+
+        var td = document.getElementsByClassName("addRoutine-tr")[number - 1].getElementsByTagName("td");
+
+        var quantityInput = document.querySelector(".health-addRoutine-intensity").cloneNode(true);
+        quantityInput.querySelector("input").value = "";
+        var measurementDiv = document.querySelector(".health-addRoutine-unit").cloneNode(true);
+        measurementDiv.innerHTML = "--";
+        measurementDiv.style.marginTop = "30px";
+        td.item(1).appendChild(quantityInput);
+        td.item(2).appendChild(measurementDiv);
+        td.item(3).innerHTML +=
+            `<br />
+            <button class="btn text-primary" onclick="RemoveInput(this); return false;" style="margin-bottom: 2.5%;margin-top: 11px;"><i class="far fa-times-circle"></i></button>`;
+
+        var firstBtn = td.item(3).querySelector("button")
+        firstBtn.className = "btn text-primary";
+        firstBtn.setAttribute("onclick", "RemoveInput(this); return false;")
+        firstBtn.disabled = false;
+
+        SetAspValues();
+    }
+
+    function AddGroup() {
+        var newGroup = emptyClonedGroup.cloneNode(true);
+        var allGroups = document.getElementsByClassName("health-addRoutine-daysGroup");
+        var groupNo = allGroups.length;
+
+        // Checkbox change
+        var hiddenCheckboxInputs = [].slice.call(document.querySelector("form").children).filter(x => x.tagName.toLowerCase() === "input");
+        console.log(hiddenCheckboxInputs);
+        for (i = 0; i < 7; i++) {
+            var input = newGroup.querySelector(`input[name="GroupedDays[0][${i}]"]`);
+            input.name = `GroupedDays[${groupNo}][${i}]`;
+
+            var hiddenInput = document.createElement("input");
+            hiddenInput.name = `GroupedDays[${groupNo}][${i}]`;
+            hiddenInput.type = "hidden";
+            hiddenInput.value = "false";
+
+            document.querySelector("form").appendChild(hiddenInput);
+        }
+
+        // AddInput & GroupedExerciseCount val change
+        newGroup.querySelector(".health-addRoutine-addExerciseButton").setAttribute("onclick", `AddInput(${groupNo + 1}); return false;`);
+        newGroup.querySelector(".health-addRoutine-inputCount").name = `GroupedExerciseCount[${groupNo}]`;
+        newGroup.querySelector(".health-addRoutine-inputCount").id = `GroupedExerciseCount_${groupNo}_`;
+
+        document.getElementById("health-addRoutine-groupsContainer").appendChild(newGroup);
+
+        SetAspValues();
+        UpdateCheckboxes();
+    }
+
+    function RemoveGroup(btn) {
+        btn.closest(".health-addRoutine-daysGroup").remove();
+        SetAspValues();
+    }
+
+    function RemoveInput(button) {
+        var tr = button.parentElement.parentElement;
+        var allButtons = button.parentElement.querySelectorAll("button");
+
+        if (allButtons.length == 2) {
+            for (var i in allButtons) {
+                var firstBtn = allButtons.item(i)
+                firstBtn.className = "btn text-secondary";
+                firstBtn.style.marginTop = 0;
+                firstBtn.removeAttribute("onclick");
+                firstBtn.disabled = true;
+            }
+        }
+
+        for (var i in allButtons) {
+            if (allButtons[i] === button) {
+                tr.getElementsByClassName("health-addRoutine-nameInput").item(i).remove();
+                tr.getElementsByClassName("health-addRoutine-intensity").item(i).remove();
+                tr.getElementsByClassName("health-addRoutine-unit").item(i).remove();
+                if (i - 1 >= 0) {
+                    button.parentElement.querySelectorAll("br").item(i - 1).remove();
+                }
+                else {
+                    button.parentElement.querySelectorAll("br").item(0).remove();
+                }
+                break;
+            }
+        }
+        button.remove();
+
+        SetAspValues();
+    }
+
+    function AddExercise(div) {
+        var group = div.parentElement.parentElement.parentElement.parentElement;
+
+        // Update name field
+        var displayInput = group.querySelector(".health-addRoutine-displayInput");
+        displayInput.innerText = div.innerText;
+        var allDisplayInputs = document.querySelectorAll(".health-addRoutine-displayInput");
+        for (var i = 0; i < allDisplayInputs.length; i++) {
+            if (allDisplayInputs.item(i) == displayInput) {
+                document.getElementsByClassName("health-addRoutine-unit").item(i).innerText = div.getElementsByTagName("span").item(1).innerText;
+            }
+        }
+
+        var idField = group.getElementsByTagName("input").item(0);
+        idField.readonly = false;
+        idField.value = div.getElementsByTagName("span").item(0).innerText;
+        idField.readonly = true;
+        div.parentElement.style.display = "none";
+
+        div.parentElement.remove();
+    }
+
+    function SetAspValues() {
+        var allInpGrp = document.getElementsByClassName("health-addRoutine-nameInput");
+        var intensities = document.getElementsByClassName("addRoutine-intensity-input");
+
+        // Checkbox change
+        var allGroups = document.getElementsByClassName("health-addRoutine-daysGroup");
+        var groupNo = allGroups.length;
+        var hiddenCheckboxInputs = [].slice.call(document.querySelector("form").children).shift().filter(x => x.tagName.toLowerCase() === "input");
+
+        for (j = 0; j < groupNo.length; j++) {
+            var groupCheckboxes = allGroups.item(j).querySelector(`input[type="checkbox"]`);
+            for (i = 0; i < 7; i++) {
+                var input = groupCheckboxes.item(i);
+                input.name = `GroupedDays[${j}][${i}]`;
+
+                hiddenCheckboxInputs.item(j * 7 + i).name = `GroupedDays[${j}][${i}]`;
+            }
+        }
+
+        for (var i = 0; i < allInpGrp.length; i++) {
+            var inputs = allInpGrp.item(i).querySelectorAll("input");
+
+            intensities.item(i).name = `Routines[${i}].Intensity`;
+            intensities.item(i).id = `Routines_${i}__Intensity`;
+
+            inputs.item(0).name = `Routines[${i}].ExerciseId`;
+            inputs.item(0).id = `Routines_${i}__ExerciseId`;
+            if (inputs.item(1)) {
+                inputs.item(1).name = `Routines[${i}].RoutineId`;
+                inputs.item(1).id = `Routines_${i}__RoutineId`;
+            }            
+        }
+
+        var allCards = document.getElementsByClassName("health-addRoutine-daysGroup");
+
+        for (var i = 0; i < allCards.length; i++) {
+            var inputCount = allCards.item(i).querySelector(".health-addRoutine-inputCount");
+            inputCount.readonly = false;
+            inputCount.value = allCards.item(i).getElementsByClassName("health-addRoutine-nameInput").length;
+            inputCount.readonly = true;
+        }
+
+        InitFunctions();
+        
+    }
+
+    function UpdateCalories() {
+        var totalCalories = 0;
+
+        var allInputs = document.getElementsByClassName("exerciseId-field");
+        var allIntensity = document.getElementsByClassName("health-addRoutine-intensity");
+
+        for (var i = 0; i < allInputs.length; i++) {
+            var foodId = allInputs.item(i).value;
+            if (foodId > 0) {
+                totalCalories += exerciseCalories[foodId] * allIntensity.item(i).querySelector("input").value;
+            }
+
+        }
+
+        document.querySelector("#health-addRoutine-totalCalories").innerText = totalCalories;
+
+    }
+
+    function UpdateCheckboxes() {
+        var allGroups = document.getElementsByClassName("health-addRoutine-daysGroup");
+        var disabledCheckboxesIndex = [false, false, false, false, false, false, false];
+        var totalDisabled = 0;
+
+        // Register invalid checkboxes
+        for (var i = 0; i < allGroups.length; i++) {
+            var currGrpCheckboxes = allGroups.item(i).getElementsByClassName("health-addRoutine-daysCheckbox");
+            for (var j = 0; j < currGrpCheckboxes.length; j++) {
+                if (!disabledCheckboxesIndex[j] && currGrpCheckboxes.item(j).checked) {
+                    disabledCheckboxesIndex[j] = true;
+                    totalDisabled++;
+                }
+            }
+        }
+
+        // Disabling the invalid checkboxes
+        for (var i = 0; i < allGroups.length; i++) {
+            var currGrpCheckboxes = allGroups.item(i).getElementsByClassName("health-addRoutine-daysCheckbox");
+            for (var j = 0; j < currGrpCheckboxes.length; j++) {
+                if (disabledCheckboxesIndex[j] && !currGrpCheckboxes.item(j).checked) {
+                    currGrpCheckboxes.item(j).disabled = true;
+                    currGrpCheckboxes.item(j).parentElement.querySelector("label").style.opacity = 0.5;
+                }
+                else if (currGrpCheckboxes.item(j).disabled) {
+                    currGrpCheckboxes.item(j).disabled = false;
+                    currGrpCheckboxes.item(j).parentElement.querySelector("label").style.opacity = 1;
+                }
+            }
+        }
+
+        // Limiting the routines once all days have already been selected
+        var addGrpBtn = document.getElementById("health-addRoutine-addGroupButton")
+        if (totalDisabled == disabledCheckboxesIndex.length) {
+            addGrpBtn.style.display = "none";
+        }
+        else if (addGrpBtn.style.display == "none") {
+            addGrpBtn.style.display = "block";
+        }
+        
+    }
+
+    function OnSubmit() {
+        var allGroups = document.getElementsByClassName("health-addRoutine-daysGroup");
+        var allInputs = document.getElementsByClassName("health-addRoutine-displayInput");
+        var valid = true;
+
+        for (var i = 0; i < allInputs.length; i++) {
+            var currInp = allInputs.item(i)
+            var err_msg = currInp.parentElement.querySelector(".err_msg")
+            if (err_msg) {
+                err_msg.remove();
+            }
+
+            if (!allInputs.item(i).innerHTML) {
+                var errMsg = document.createElement("span");
+                errMsg.className = "err_msg text-danger";
+                errMsg.innerText = "Please enter exercise here";
+                allInputs.item(i).parentElement.appendChild(errMsg);
+                valid = false;
+            }
+        }
+
+        for (var i = 0; i < allGroups.length; i++) {
+            var unchecked = true;
+            var allCheckboxes = allGroups.item(i).getElementsByClassName("health-addRoutine-daysCheckbox");
+            for (var j = 0; j < allCheckboxes.length; j++) {
+                if (allCheckboxes.item(j).checked) {
+                    unchecked = false;
+                    break;
+                }
+            }
+            if (unchecked) {
+                allGroups.item(i).querySelector(".health-addRoutine-checkboxErr").innerText = "Please select the day of routine";
+                valid = false;
+            }
+        }
+
+        
+        if (valid) {
+            document.getElementById("FormSection").querySelector("form").submit();
+        }
+        
+    }
+
+    function ListenersInterrupt() {
+        // Listening for change in aria-expanded
+        setInterval(function () {
+            UpdateCalories();
+        }, 500);
+
+        setInterval(function () {
+            SetAspValues();
+        }, 50);
+    }
+
+    function InitFunctions() {
+        // Set calories values object
+        var exerciseCaloriesTable = document.querySelector("#exerciseCaloriesTable");
+        if (exerciseCaloriesTable) {
+            var allTr = exerciseCaloriesTable.querySelectorAll("tr");
+            console.log(allTr);
+            if (allTr.length > 0) {
+                console.log("Here");
+                for (var i in allTr) {
+                    var allTd = allTr.item(i).querySelectorAll("td");
+                    exerciseCalories[allTd[0].innerText] = parseInt(allTd[1].innerText);
+                }
+            }
+
+            exerciseCaloriesTable.parentElement.removeChild(exerciseCaloriesTable);
+            var recordExists = document.getElementById("recordExists");
+            if (recordExists) {
+                if (recordExists.innerText.toLowerCase == "true") {
+                    document.getElementById("AddRoutines").remove();
+                }
+                recordExists.remove();
+            }
+        }
+        
+    }
+
+    var allInputsFields = document.querySelectorAll("input");
+    for (var i = 0; i < allInputsFields.length; i++) {
+        allInputsFields[i].addEventListener("change", function (e) {
+            SetAspValues();
+        });
+    }
+
+    // Check if something is descendant of another
+    const isDescendant = (el, parent) => {
+        let isChild = false
+
+        if (el === parent) {
+            isChild = true
+        }
+
+        while (el = el.parentNode) {
+            if (el == parent) {
+                isChild = true
+            }
+        }
+
+        return isChild
+    }
+
+    // Close tabs when clicking anywhere
+    window.addEventListener('load', function () {
+        document.addEventListener('click', function (event) {
+            const allTabs = document.getElementsByClassName("health-addRoutine-selectList");
+            const navBar = document.querySelector("header");
+
+            if (event.target.getAttribute("type") != "submit" && ![].slice.call(allTabs).find(x => x === event.target || isDescendant(event.target, x))
+                && event.target.getAttribute("type") != "checkbox" && ![].slice.call(navBar).find(x => x == event.target || isDescendant(event.target, x)) ) {
+                event.preventDefault();
+                if (!dropdownCooldown) {
+                    for (var i in allTabs) {
+                        if (allTabs.item(i).style.display == "block") {
+                            allTabs.item(i).remove();
+                        }
+                    }
+                }
+            }
+
+        });
+
+        InitFunctions();
+        ListenersInterrupt();
+        SetAspValues();
+        UpdateCheckboxes();
+    });
+</script>
+
+
+

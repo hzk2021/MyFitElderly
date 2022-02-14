@@ -1,34 +1,32 @@
 ﻿@page
-@model EDP_Project.Pages.FoodListModel
+@model EDP_Project.Pages.ExerciseListModel
 @{
-    ViewData["Title"] = "Food List";
+    ViewData["Title"] = "Exercise List";
 }
 <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
 
-<h1>Health Tracking - Food Records</h1>
+<h1>Health Tracking - Exercise Records</h1>
 <br />
 <div class="row">
-    <a asp-page="AddFood" class="btn btn-primary" style="margin-bottom:2%;"><i class="fas fa-plus-circle"></i> Add new food</a>
+    <a asp-page="AddExercise" class="btn btn-primary" style="margin-bottom:2%;"><i class="fas fa-plus-circle"></i> Add new exercise</a>
 </div>
 <br />
 
 <div class="" id="LMTab">
-    <div class="toolbar">
-    </div>
-    <table id="foodList_table"
+    <table id="exerciseList_table"
            data-search="true"
            data-toolbar="#toolbar"
            data-pagination="true"
            data-side-pagination="server"
            data-filter-control="true"
            data-show-fullscreen="true"
-           data-url="Table_getFood">
+           data-url="Table_getExercise">
         <thead>
             <tr>
-                <th data-field="foodId" data-sortable="true">Id</th>
-                <th data-field="foodName" data-sortable="true">Name</th>
-                <th data-field="category" data-sortable="true">Category</th>
-                <th data-field="calories" data-sortable="true">Calories</th>
+                <th data-field="exerciseId" data-sortable="true">Id</th>
+                <th data-field="exerciseName" data-sortable="true">Name</th>
+                <th data-field="measurement" data-sortable="true">Unit</th>
+                <th data-field="caloriesBurnPerUnit" data-sortable="true">Calories burn/unit</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -36,19 +34,19 @@
 </div>
 
 <script>
-    $table = $("#foodList_table");
+    $table = $("#exerciseList_table");
     $(document).ready(function () {
         $table.bootstrapTable();
     });
 
     setInterval(function () {
-        var allTr = document.querySelector("#foodList_table").querySelectorAll("tr");
+        var allTr = document.querySelector("#exerciseList_table").querySelectorAll("tr");
         for (var i = 1; i < allTr.length; i++) {
             var allCurrTd = allTr.item(i).querySelectorAll("td");
             if (allCurrTd.length == 5) {
                 if (allCurrTd.item(4).innerHTML == "-") {
                     allCurrTd.item(4).innerHTML =
-                        `<a href="EditFood/${allCurrTd.item(0).innerText}"><i class="fas fa-pencil-alt"></i></a>
+                        `<a href="EditExercise/${allCurrTd.item(0).innerText}"><i class="fas fa-pencil-alt"></i></a>
                     <span class="text-primary">  |  </span>
                     <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmDelete_${allCurrTd.item(0).innerText}"><i class="fa fa-trash"></i></button>
                     <!-- The Modal -->
@@ -68,18 +66,16 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <a href="DeleteFood/${allCurrTd.item(0).innerText}" class="btn btn-danger">Delete</a>
+                                    <a href="DeleteExercise/${allCurrTd.item(0).innerText}" class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>`
                 }
-                
+
             }
         }
     }, 500)
-    
-
     //var category = document.getElementById("CategoryFilter").value;
     //var search = document.getElementById("SearchBar").value
 
@@ -99,35 +95,7 @@
             values.push(obj.category)
         }
 
-    }
-
-    var $table = $('#table')
-    $(function () {
-        var data = dataDict
-        $table.bootstrapTable({ data: data })
-    })
-
-    function getFilter(selectObject) {
-        var value = selectObject.value;
-        console.log(values);
-        if (value == "All") {
-            $table.bootstrapTable('filterBy', {
-                category: values
-            })
-        }
-        else {
-
-            $table.bootstrapTable('filterBy', {
-                category: value
-            })
-        }
-    }*/
-
-    //while (true) {
-    //    setTimeout(function () {
-
-    //    }, 1000)
-    //}
+    } */
 </script>
 
 @section Scripts {

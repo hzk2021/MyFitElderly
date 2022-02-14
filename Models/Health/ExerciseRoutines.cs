@@ -7,25 +7,22 @@ using System.Threading.Tasks;
 
 namespace EDP_Project.Models
 {
-    public class Meals
+    public class ExerciseRoutines
     {
         [Key]
-        public int Id { get; set; }
+        public int RoutineId { get; set; }
 
         public int UserId { get; set; }
 
         [Required]
-        public String MealType { get; set; }
+        public int ExerciseId { get; set; }
 
         [Required]
-        public int FoodId { get; set; }
+        public double Intensity { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
+        public String Days { get; set; }
 
-        public DateTime Date { get; set; }
-
-        public Food FoodDetails { get; set; }
-
+        public Exercise ExerciseDetails { get; set; }
     }
 }

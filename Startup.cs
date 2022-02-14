@@ -64,16 +64,15 @@ namespace EDP_Project
                 MySqlCommand dctt = new MySqlCommand(dropComments, conn);
 
                 conn.Open();
-                dlt.ExecuteNonQuery();
-                dm.ExecuteNonQuery();
-                dci.ExecuteNonQuery();
-                dqot.ExecuteNonQuery();
-                dqt.ExecuteNonQuery();
-                dert.ExecuteNonQuery();
-                dsrt.ExecuteNonQuery();
-                dst.ExecuteNonQuery();
-                dctt.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+                //dlt.ExecuteNonQuery();
+                //dm.ExecuteNonQuery();
+                //dci.ExecuteNonQuery();
+                //dqot.ExecuteNonQuery();
+                //dqt.ExecuteNonQuery();
+                //dert.ExecuteNonQuery();
+                //dsrt.ExecuteNonQuery();
+                //dst.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
 
 
             }
@@ -124,12 +123,14 @@ CREATE TABLE IF NOT EXISTS Log (
 
 
 
-            MySqlCommand Create_caloriesIntake = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS caloriesIntake (
+            MySqlCommand Create_caloriesIntake = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS caloriesIntakes (
+            `Id`                INT             AUTO_INCREMENT NOT NULL,
             `Date`              DATETIME        NOT NULL,
             `UserId`            INT             NOT NULL,
             `Day`               NVARCHAR (15)   NOT NULL,
-            `CaloriesIntake`    INT             NULL,
-            PRIMARY KEY (`Date` ASC),
+            `CaloriesIntake`    DOUBLE          NULL,
+            `CaloriesBurned`    DOUBLE          NULL DEFAULT 1800,
+            PRIMARY KEY (`Id` ASC),
             FOREIGN KEY (`UserId`) REFERENCES user(`Id`)
             );", con);
 
@@ -137,7 +138,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `FoodId`       INT              AUTO_INCREMENT  NOT NULL,
             `FoodName`     NVARCHAR (50)    NOT NULL,
             `Category`     NVARCHAR (20)    NULL,
-            `Calories`     INT              NOT NULL,
+            `Calories`     DOUBLE           NOT NULL,
             PRIMARY KEY (`FoodId` ASC)
             );", con);
 
@@ -157,7 +158,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `ExerciseId`            INT              AUTO_INCREMENT  NOT NULL,
             `ExerciseName`          NVARCHAR (50)    NOT NULL,
             `Measurement`           NVARCHAR (20)    NOT NULL,
-            `CaloriesBurnPerUnit`   INT              NOT NULL,
+            `CaloriesBurnPerUnit`   DOUBLE           NOT NULL,
             PRIMARY KEY (`ExerciseId` ASC)
             );", con);
 
@@ -166,7 +167,7 @@ CREATE TABLE IF NOT EXISTS Log (
             `UserId`                INT              NOT NULL,
             `ExerciseId`            INT              NOT NULL,
             `Intensity`             DOUBLE           NOT NULL,
-            `Day`                   NVARCHAR(15)     NOT NULL,
+            `Days`                  NVARCHAR(56)     NOT NULL,
             PRIMARY KEY (`RoutineId` ASC),
             FOREIGN KEY (`ExerciseId`) REFERENCES exercise(`ExerciseId`),
             FOREIGN KEY (`UserId`) REFERENCES user(`Id`)

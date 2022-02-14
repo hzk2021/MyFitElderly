@@ -37,7 +37,7 @@ namespace EDP_Project.Pages
             {
                 Console.WriteLine(FoodModel.FoodName);
                 string response = _svc.AddFood(FoodModel);
-                if (response == "True")
+                if (response == "true")
                 {
                     return RedirectToPage("FoodList");
                 }

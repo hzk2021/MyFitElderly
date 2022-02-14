@@ -10,8 +10,8 @@
     border-bottom: 1px solid #CED4DA;
 }
 
-#health-addFood-table .health-addFood-inputGroup > * {
-    margin-bottom:1%;
+#health-addFood-table .health-addFood-inputGroup > *, #health-addRoutine-table .health-addRoutine-inputGroup > * {
+    margin-bottom: 1%;
 }
 
 input.bottom-line-input {

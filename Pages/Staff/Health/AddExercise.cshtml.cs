@@ -4,39 +4,45 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDP_Project.Models;
 using EDP_Project.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 
-namespace EDP_Project.Pages.Staff.Health
+namespace EDP_Project.Pages
 {
-    public class EditFoodModel : PageModel
+    public class AddExerciseModel : PageModel
     {
         private readonly HealthService _svc;
+        private readonly UserService _userSvc;
+
         [BindProperty]
-        public Food FoodModel { get; set; }
+        public Exercise ExerciseModel { get; set; }
 
         [BindProperty]
         public string ErrorMsg { get; set; }
 
-        public EditFoodModel(HealthService svc)
+        public AddExerciseModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
+            _userSvc = userSvc;
         }
 
-        public void OnGet(int id)
+        public void OnGet()
         {
-            FoodModel = _svc.GetFoodById(id);
+            
         }
+
 
         public IActionResult OnPost()
         {
             if (ModelState.IsValid)
             {
-                string response = _svc.UpdateFood(FoodModel);
+                Console.WriteLine(ExerciseModel.ExerciseName);
+                string response = _svc.AddExercise(ExerciseModel);
                 if (response == "true")
                 {
-                    return RedirectToPage("FoodList");
+                    return RedirectToPage("ExerciseList");
                 }
                 else
                 {

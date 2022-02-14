@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EDP_Project.Pages
 {
-    public class FoodListModel : PageModel
+    public class ExerciseListModel : PageModel
     {
         public void OnGet()
         {

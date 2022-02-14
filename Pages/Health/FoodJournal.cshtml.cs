@@ -25,13 +25,13 @@ namespace EDP_Project.Pages.Health
         public List<Meals> TodayRecord { get; set; }
 
         [BindProperty]
-        public List<Meals> AllRecord { get; set; }
-
-        [BindProperty]
         public bool RecordExists { get; set; }
 
         [BindProperty]
         public List<Meals> MealsModel { get; set; }
+
+        [BindProperty]
+        public int UserId { get; set; }
 
         [BindProperty]
         public string ErrorMsg { get; set; }
@@ -51,9 +51,9 @@ namespace EDP_Project.Pages.Health
         public void OnGet()
         {
             AllFood = _svc.GetAllFoodRecords();
-            var userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
-            AllRecord = _svc.GetMealsRecord(userId);
-            TodayRecord = _svc.GetTodayRecordAdded(userId);
+            UserId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
+            
+            TodayRecord = _svc.GetTodayMealAdded(UserId);
             RecordExists = TodayRecord.Count > 0;
             if (RecordExists)
                 Date = TodayRecord[0].Date;
@@ -68,7 +68,8 @@ namespace EDP_Project.Pages.Health
         {
             if (ModelState.IsValid)
             {
-                var userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
+                Console.WriteLine("ModelState Valid");
+                int userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
                 // Assign same date and userid for all
                 for (var i = 0; i < MealsModel.Count; i++)
                 {
@@ -76,15 +77,28 @@ namespace EDP_Project.Pages.Health
                     MealsModel[i].UserId = userId;
                 }
 
-                string response;
+                string response1;
                 if (UpdateOperation)
-                    response = _svc.AddMeals(MealsModel);
+                {
+                    Console.WriteLine("Adding meal");
+                    response1 = _svc.AddMeals(MealsModel);
+                }
                 else
-                    response = _svc.UpdateMeals(MealsModel);
+                {
+                    Console.WriteLine("Updating meal");
+                    response1 = _svc.UpdateMeals(MealsModel, userId);
+                }
 
-                if (response != "true")
-                    ErrorMsg = response;
+                string response2 = _svc.CalculateCalories(userId);
+
+                if (response1 != "true" || response2 != "true")
+                    ErrorMsg = response1;
             }
+            else
+            {
+                return Page();
+            }
+
             return RedirectToPage("FoodJournal");
         }
     }

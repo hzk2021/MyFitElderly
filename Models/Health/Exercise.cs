@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace EDP_Project.Models
 {
-    public class Food
+    public class Exercise
     {
         [Key]
-        public int FoodId { get; set; }
+        public int ExerciseId { get; set; }
 
         [Required]
-        public String FoodName { get; set; }
+        public String ExerciseName { get; set; }
 
         [Required]
-        public String Category { get; set; }
+        public String Measurement { get; set; }
 
         [Required]
-        public double Calories { get; set; }
+        public double CaloriesBurnPerUnit { get; set; }
     }
 }
