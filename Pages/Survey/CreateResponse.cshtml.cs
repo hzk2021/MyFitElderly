@@ -30,7 +30,7 @@ namespace EDP_Project.Pages.Survey
 
         public async void OnGet(string sid)
         {
-            _usrv.AIOCheckGuest();
+            //_usrv.AIOCheckGuest();
 
             survey = await _srv.GetASurvey(sid);
 
@@ -45,7 +45,7 @@ namespace EDP_Project.Pages.Survey
         }
         public async Task<IActionResult> OnPost()
         {
-            _usrv.AIOCheckGuest();
+            //_usrv.AIOCheckGuest();
             if (ModelState.IsValid)
             {
                 for (int i = 0; i < survey_response.Count; i++)

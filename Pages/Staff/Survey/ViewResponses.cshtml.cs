@@ -34,7 +34,7 @@ namespace EDP_Project.Pages.Staff.Survey
         }
         public async void OnGet(string sid)
         {
-            //_usrv.AIOCheckStaff();
+            _usrv.AIOCheckStaff();
 
             svy = await _srv.GetASurvey(sid);
 

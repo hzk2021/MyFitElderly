@@ -37,29 +37,32 @@
 
 <div class="container">
     @{
-        <h1 class="text-center">Available Surveys</h1>
+        <h1 class="text-center">Available Surveys For You</h1>
 
         <div class="my-grid">
             @{
                 foreach (var survey in Model.Surveys)
                 {
-                    <div class="grid-item">
-                        @if (survey.ImgBytes != null)
-                        {
-                            var base64 = Convert.ToBase64String(survey.ImgBytes);
-                            var userImage = String.Format("data:image/gif;base64,{0}", base64);
-                            <img src="@userImage" alt="Survey Image" />
-                        }
+                    if (survey.ViewStatus == "Visible")
+                    {
+                        <div class="grid-item">
+                            @if (survey.ImgBytes != null)
+                            {
+                                var base64 = Convert.ToBase64String(survey.ImgBytes);
+                                var userImage = String.Format("data:image/gif;base64,{0}", base64);
+                                <img src="@userImage" alt="Survey Image" />
+                            }
 
-                        <div class="grid-info">
-                            <p>Title: @survey.Title</p>
-                            <p>Description: @survey.Description</p>
+                            <div class="grid-info">
+                                <p>Title: @survey.Title</p>
+                                <p>Description: @survey.Description</p>
 
-                            <form asp-page="CreateResponse" method="get" asp-route-sid="@survey.SurveyUUID">
-                                <button type="submit" class="btn btn-primary">Take this survey</button>
-                            </form>
+                                <form asp-page="CreateResponse" method="get" asp-route-sid="@survey.SurveyUUID">
+                                    <button type="submit" class="btn btn-primary">Take this survey</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
             }
         </div>
