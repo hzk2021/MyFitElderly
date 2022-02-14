@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using EDP_Project.Services;
 using EDP_Project.Services.Survey;
@@ -70,6 +71,19 @@ namespace EDP_Project.Pages.Staff.Survey
                 }
             }
 
+        }
+
+        public async Task<ActionResult> OnGetDownload(string SurveyUUID)
+        {
+            var existingSurvey = await _srv.GetASurvey(SurveyUUID);
+            var svy_responses = await _srv.GetResponsesFromSurveyID(existingSurvey.SurveyUUID);
+
+            string txt = "Question" + ",Response";
+            foreach (var response in svy_responses)
+            {
+                txt = txt + ($"{response.Question_Text},{response.Response_Text}\n");
+            }
+            return File(Encoding.UTF8.GetBytes(txt), "text/plain", $"{existingSurvey.Title}_{existingSurvey.Category}_DataSet.csv");
         }
     }
 }

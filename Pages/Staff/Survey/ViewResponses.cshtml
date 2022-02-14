@@ -67,8 +67,12 @@
                         </a>
 
                         <span class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-download"></i> Download responses (.csv format)</a>
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-trash"></i> Delete All Responses</a>
+                            <a href="@Url.Page("ViewResponses", "Download", new { Model.svy.SurveyUUID })" class="dropdown-item"><i class="fa-solid fa-download"></i> Download responses (.csv format)</a>
+
+                            <form asp-page="DeleteResponses" method="post" asp-route-sid="@Model.svy.SurveyUUID">
+                                <button type="submit" class="dropdown-item" href="#"><i class="fa-solid fa-trash"></i> Delete All Responses</button>
+                            </form>
+
                         </span>
 
                         </h1>
