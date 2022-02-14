@@ -277,7 +277,7 @@ else
     </ul>
 
     <div class="tab-content">
-        <input type="text" value="" class="form-control health-addFood-foodListSearch" placeholder="Type in food name..." style="margin:2.5%;width: 95%;" />
+        @*<input type="text" value="" class="form-control health-addFood-foodListSearch" placeholder="Type in food name..." style="margin:2.5%;width: 95%;" />*@
 
         @{ string[] categories = { "Light Meal", "Heavy Meal", "Snack", "Drink" };}
         @for (var i = 0; i < categories.Length; i++)
@@ -289,7 +289,7 @@ else
                     @foreach (var food in Model.AllFood.Where(x => x.Category == categories[i]))
                     {
                         <div class="dropdown-item" onclick="AddFood(this);" style="cursor: pointer; margin: 8px 0;">
-                            @food.FoodName <span hidden>@food.FoodId</span> + <span>@food.Calories cal</span>
+                            @food.FoodName <span hidden>@food.FoodId</span>
                         </div>
                     }
                 </div>
@@ -300,7 +300,7 @@ else
                     @foreach (var food in Model.AllFood.Where(x => x.Category == categories[i]))
                     {
                     <div class="dropdown-item" onclick="AddFood(this);" style="cursor:pointer;">
-                        @food.FoodName <span hidden>@food.FoodId</span> + <span>@food.Calories cal</span>
+                        @food.FoodName <span hidden>@food.FoodId</span>
                     </div>
                     }
                 </div>
