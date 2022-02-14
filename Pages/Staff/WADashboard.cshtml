@@ -8,17 +8,20 @@
 
 <style>
     .card.card-stats {
-        margin-bottom: 20px;
+        margin: 15px auto 0 auto;
+        border: 1px solid #cccccc;
+        box-shadow: 0 0 5px #cccccc;
     }
+
 
     .floater {
         float: right;
     }
 
     .grp-chart {
-        margin: 15px 1% 0 1%;
         display: inline-block;
-        width: 33%;
+        margin: 15px 3% 0 0;
+        width: 30%;
         border: 1px solid #cccccc;
         box-shadow: 0 0 5px #cccccc;
     }
@@ -26,6 +29,7 @@
     .grp-chart > h3 {
         margin: 5%;
     }
+
 </style>
 
 <nav aria-label="breadcrumb">
@@ -39,8 +43,62 @@
 
     <h1 class="text-center">Web Analytics Dashboard</h1>
 
+
+    <!-- Card stats -->
+    <div class="row">
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Number of Blogs </h5>
+                            <span class="h2 font-weight-bold mb-0">@Model.blogCount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Number of Surveys</h5>
+                            <span class="h2 font-weight-bold mb-0">@Model.surveyCount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total Users</h5>
+                            <span class="h2 font-weight-bold mb-0">@Model.totalUsers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grp-chart" style="width: 100%; display:block;">
+        <h3>Revenue Overtime</h3>
+        <div id="rotChart_div" class="gchart"></div>
+    </div>
+
+
     <div class="grp-chart">
-        <h3>Used By Gender</h3>
+        <h3>Users By Gender</h3>
         <div id="genderChart_div" class="gchart"></div>
     </div>
 
@@ -50,9 +108,10 @@
     </div>
 
     <div class="grp-chart">
-        <h3>Web Traffic Source (Visits)</h3>
+        <h3>Web Traffic Sources</h3>
         <div id="trafficChart_div" class="gchart"></div>
     </div>
+
 
 
 
@@ -61,7 +120,7 @@
 <script type="text/javascript">
 
     // Load the Visualization API and the corechart package.
-    google.charts.load('current', { 'packages': ['corechart', 'geochart'] });
+    google.charts.load('current', { 'packages': ['corechart', 'geochart', 'line'] });
 
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawChart);
@@ -127,12 +186,44 @@
             2]);
 
         var options = {
-            height: 400,
+            height: 250,
             bar: { groupWidth: "95%" },
             legend: { position: "none" },
         };
         var chart = new google.visualization.BarChart(document.getElementById("trafficChart_div"));
         chart.draw(view, options);
+
+
+
+        //
+        var data = google.visualization.arrayToDataTable([
+            ['Revenue', '2021', '2022'],
+            ['Jan', 1000, 400],
+            ['Feb', 1170, 460],
+            ['Mar', 660, 1120],
+            ['Apr', 820, 540],
+            ['May', 840, 540],
+            ['Jun', 900, 650],
+            ['July', 740, 640],
+            ['Aug', 700, 740],
+            ['Sep', 820, 630],
+            ['Oct', 821, 700],
+            ['Nov', 800, 810],
+            ['Dev', 900, 1020],
+
+
+        ]);
+
+        var options = {
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            chartArea: {width: '100%'},
+            height: 350
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('rotChart_div'));
+
+        chart.draw(data, options);
 
     }
 </script>
