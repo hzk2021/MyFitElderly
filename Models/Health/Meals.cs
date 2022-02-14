@@ -26,5 +26,6 @@ namespace EDP_Project.Models
         public DateTime Date { get; set; }
 
         public Food FoodDetails { get; set; }
+
     }
 }

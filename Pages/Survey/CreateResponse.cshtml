@@ -6,6 +6,14 @@
 
 <link href="~/css/surveystyle.css" rel="stylesheet" />
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a asp-page="List">Survey List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Fill Out</li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -50,49 +58,49 @@
                             </div>
                         </div>
 
-                            @{
-                                var AllQnsList = Model.AllQuestionList;
+                        @{
+                            var AllQnsList = Model.AllQuestionList;
 
-                                if (AllQnsList != null)
+                            if (AllQnsList != null)
+                            {
+                                for (int i = 0; i < AllQnsList.Count; i++)
                                 {
-                                    for (int i = 0; i < AllQnsList.Count; i++)
-                                    {
-                                        <div class="row mt-4">
-                                            <div class="col-md-12">
-                                                <div class="card p-3 form-2">
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            <div class="card p-3 form-2">
 
-                                                    <input hidden asp-for="@Model.survey_response[i].ReferenceToSurveyID" value="@Model.AllQuestionList[i].BelongsToSurveyID" />
-                                                    <input class="qnsInput form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" readonly />
-                                                    <input hidden readonly asp-for="@Model.survey_response[i].Question_Text" value="@Model.AllQuestionList[i].Text" />
+                                                <input hidden asp-for="@Model.survey_response[i].ReferenceToSurveyID" value="@Model.AllQuestionList[i].BelongsToSurveyID" />
+                                                <input class="qnsInput form-control mt-3 qnsTB" type="text" value="@Model.AllQuestionList[i].Text" readonly />
+                                                <input hidden readonly asp-for="@Model.survey_response[i].Question_Text" value="@Model.AllQuestionList[i].Text" />
 
 
 
-                                                    @{
+                                                @{
 
-                                                        var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
-                                                        if (n != null)
+                                                    var n = await Model._srv.GetOptionsFromAQuestion(AllQnsList[i].QuestionUUID);
+                                                    if (n != null)
+                                                    {
+                                                        for (int k = 0; k < n.Count; k++)
                                                         {
-                                                            for (int k = 0; k < n.Count; k++)
-                                                            {
-                                                                <div class="form-inline">
-                                                                    <input class="dot my-1 mr-2 mt-3" id="@i.ToString()-@k.ToString()" type="radio" value="@n[k].Text" asp-for="@Model.survey_response[i].Response_Text"/>
+                                                            <div class="form-inline">
+                                                                <input class="dot my-1 mr-2 mt-3" id="@i.ToString()-@k.ToString()" type="radio" value="@n[k].Text" asp-for="@Model.survey_response[i].Response_Text" />
 
-                                                                    <label for="@i.ToString()-@k.ToString()"class="form-control-md mt-3"/> @n[k].Text
+                                                                <label for="@i.ToString()-@k.ToString()" class="form-control-md mt-3" /> @n[k].Text
 
-                                                                </div>
-                                                            }
+                                                            </div>
                                                         }
                                                     }
+                                                }
 
-                                                    <hr class="hruler" />
+                                                <hr class="hruler" />
 
-                                                </div>
                                             </div>
                                         </div>
-                                    }
-
+                                    </div>
                                 }
+
                             }
+                        }
 
                     </form>
 

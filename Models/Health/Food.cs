@@ -17,6 +17,7 @@ namespace EDP_Project.Models
         [Required]
         public String Category { get; set; }
 
-        public int Calories { get; set; }
+        [Required]
+        public double Calories { get; set; }
     }
 }

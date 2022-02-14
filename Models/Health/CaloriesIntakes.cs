@@ -8,8 +8,11 @@ namespace EDP_Project.Models
 {
     public class CaloriesIntakes
     {
-        [Required, Key]
-        public String Date { get; set; }
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
 
         [Required]
         public int UserId { get; set; }
@@ -17,6 +20,9 @@ namespace EDP_Project.Models
         [Required]
         public String Day { get; set; }
 
-        public int CaloriesIntake { get; set; }
+        public double CaloriesIntake { get; set; }
+
+        public double CaloriesBurned { get; set; }
+
     }
 }

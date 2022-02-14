@@ -8,7 +8,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a asp-page="View">Survey</a></li>
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
@@ -54,18 +54,18 @@
                                         <div class="col-12 my-3">
                                             <label class="form-label">Category</label>
                                             @Html.DropDownListFor(m => m.svy.Category, Enum.GetNames(typeof(Models.Survey.SurveyCategory)).Select(e => new SelectListItem { Text = e }), new { @class = "form-control" })
-                                            <span asp-validation-for="@Model.svy.Category" class="text-danger"></span>
+                                            @*<span asp-validation-for="@Model.svy.Category" class="text-danger"></span>*@
                                         </div>
 
                                         <div class="col-12 my-3">
                                             <label class="form-label">Title</label>
                                             <input class="form-control" type="text" asp-for="svy.Title" />
-                                            <span asp-validation-for="@Model.svy.Title" class="text-danger"></span>
+                                            @*<span asp-validation-for="@Model.svy.Title" class="text-danger"></span>*@
                                         </div>
                                         <div class="col-12 my-3">
                                             <label class="form-label">Description</label>
                                             <textarea class="form-control" asp-for="svy.Description"></textarea>
-                                            <span asp-validation-for="@Model.svy.Description" class="text-danger"></span>
+                                            @*<span asp-validation-for="@Model.svy.Description" class="text-danger"></span>*@
                                         </div>
 
                                         <div class="col-12 my-3">

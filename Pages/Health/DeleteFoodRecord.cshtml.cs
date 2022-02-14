@@ -16,18 +16,25 @@ namespace EDP_Project.Pages.Health
 
         [BindProperty]
         public string ErrorMsg { get; set; }
+
         public DeleteFoodRecordModel(HealthService svc, UserService userSvc)
         {
             _svc = svc;
             _userSvc = userSvc;
         }
+
         public IActionResult OnGet(int userId)
         {
+            _userSvc.AIOCheckGuest();
+
             // Ensures that page is not executed by other users on another person
+            Console.WriteLine("Delete Food");
             int yourUserId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
             if (yourUserId == userId)
             {
                 var response = _svc.RemoveMeals(userId);
+                Console.WriteLine(response);
+
                 if (response == "true")
                     return RedirectToPage("FoodJournal");
                 else
@@ -37,6 +44,7 @@ namespace EDP_Project.Pages.Health
             else
                 ErrorMsg = "Error 403: Forbidden";
 
+            Console.WriteLine("Reached here");
             return Page();
         }
     }

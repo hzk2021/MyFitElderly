@@ -43,7 +43,7 @@ namespace EDP_Project.Pages.Survey
                 AllQuestionList = await _srv.GetQuestionsFromASurvey(survey.SurveyUUID);
             }
         }
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPost(string sid)
         {
             _usrv.AIOCheckGuest();
             if (ModelState.IsValid)
@@ -63,6 +63,19 @@ namespace EDP_Project.Pages.Survey
 
                 return RedirectToPage("List");
 
+            }
+            else
+            {
+                survey = await _srv.GetASurvey(sid);
+
+                if (survey == null)
+                {
+                    Response.Redirect("/Survey/List");
+                }
+                else
+                {
+                    AllQuestionList = await _srv.GetQuestionsFromASurvey(survey.SurveyUUID);
+                }
             }
             return Page();
         }

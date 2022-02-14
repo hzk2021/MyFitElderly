@@ -11,25 +11,14 @@ namespace EDP_Project.Pages
 {
     public class FoodListModel : PageModel
     {
-        private readonly HealthService _svc;
-        public List<Food> AllFood { get; set; }
-        public int PageNo { get; set; }
-        public string Category { get; set; }
-        public string Search { get; set; }
-        public FoodListModel(HealthService svc)
+        private readonly UserService _userSvc;
+        public FoodListModel(UserService userSvc)
         {
-            _svc = svc;
-            PageNo = 1;
-            Category = "All";
+            _userSvc = userSvc;
         }
         public void OnGet()
         {
-            AllFood = _svc.GetFoodRecords(PageNo, Category, Search);
-        }
-
-        public IActionResult OnPost()
-        {
-            return Page();
+            _userSvc.AIOCheckStaff();
         }
     }
 }
