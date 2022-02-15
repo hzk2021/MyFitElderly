@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using EDP_Project.Models.Blog;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
@@ -17,47 +18,90 @@ namespace EDP_Project.Pages.Staff.Blog
         public List<Post> BlogPosts { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            BlogPosts = new List<Post>();
-            con.Open();
-
-            string query = "SELECT * FROM Post";
-
-            MySqlCommand cmd = new MySqlCommand(query, con);
-
-            MySqlDataReader dataReader = cmd.ExecuteReader();
-            try
+            if (HttpContext.Session.GetString("user") != null)
             {
-                //Create Command
-                //Create a data reader and Execute the command
-
-                //Read the data and store them in the list
-                while (dataReader.Read())
+                string userRole = "Guest";
+                string sql = "SELECT * FROM User WHERE Username=@USER";
+                MySqlCommand command = new MySqlCommand(sql, con);
+                command.Parameters.AddWithValue("@USER", HttpContext.Session.GetString("user"));
+                try
                 {
-                    BlogPosts.Add(new Post
+                    con.Open();
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
-                        Id = (int)dataReader["Id"],
-                        Title = dataReader["Title"].ToString(),
-                        Category = dataReader["Category"].ToString(),
-                        Header = dataReader["Header"].ToString(),
-                        Content = dataReader["Content"].ToString(),
-                        Created = (DateTime)dataReader["Created"],
+                        while (reader.Read())
+                        {
 
-
-                    });
+                            if (reader["Role"] != DBNull.Value)
+                            {
+                                userRole = reader["Role"].ToString();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
                 }
 
+                finally
+                {
+                    con.Close();
+                }
+                if (userRole == "Staff")
+                {
+                    BlogPosts = new List<Post>();
+                    con.Open();
 
-            }
-            catch (WebException ex)
-            {
-                throw ex;
-            }
+                    string query = "SELECT * FROM Post";
 
-            finally
+                    MySqlCommand cmd = new MySqlCommand(query, con);
+
+                    MySqlDataReader dataReader = cmd.ExecuteReader();
+                    try
+                    {
+                        //Create Command
+                        //Create a data reader and Execute the command
+
+                        //Read the data and store them in the list
+                        while (dataReader.Read())
+                        {
+                            BlogPosts.Add(new Post
+                            {
+                                Id = (int)dataReader["Id"],
+                                Title = dataReader["Title"].ToString(),
+                                Category = dataReader["Category"].ToString(),
+                                Header = dataReader["Header"].ToString(),
+                                Content = dataReader["Content"].ToString(),
+                                Created = (DateTime)dataReader["Created"],
+
+
+                            });
+                        }
+
+
+                        return Page();
+                    }
+                    catch (WebException ex)
+                    {
+                        throw ex;
+                    }
+
+                    finally
+                    {
+                        dataReader.Close();
+                    }
+                }
+                else
+                {
+                    return RedirectToPage("/Error/Error404");
+                }
+            }
+            else
             {
-                dataReader.Close();
+                return RedirectToPage("/Login");
             }
         }
     }

@@ -665,7 +665,7 @@ namespace EDP_Project.Services
                 averageValueStr.Substring(1);
             }
             double averageValue = Math.Round(double.Parse(averageValueStr), 1);
-            if (-200 < averageValue && averageValue < 1200)
+            if (-200 < averageValue && averageValue < 600)
             {
                 result = new string []{ "<i class=\"fa-solid fa-circle-check\"></i> Your calories intake is within acceptable range", "text-success", ""};
                 if (option == 1)
@@ -679,7 +679,7 @@ namespace EDP_Project.Services
                     return result;
                 }
             }
-            else if (-600 < averageValue && averageValue < -200 || 1200 < averageValue && averageValue < 1600)
+            else if (-600 < averageValue && averageValue < -200 || 600 < averageValue && averageValue < 1000)
             {
                 result = new string[] { "<i class=\"fa-solid fa-triangle-exclamation\"></i> Your calories intake is slightly out of the acceptable range.", "text-warning", "" };
                 if (option == 1)

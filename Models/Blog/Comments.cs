@@ -11,6 +11,7 @@ namespace EDP_Project.Models.Blog
         public int Id { get; set; }
         public int UserId { get; set; }
         public int BlogId { get; set; }
+        [Required(ErrorMessage = "Comments cannot be left empty")]
         public string Comment { get; set; }
         public int like { get; set; }
         public int dislike { get; set; }
