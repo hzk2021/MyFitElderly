@@ -386,6 +386,7 @@ namespace EDP_Project.Services
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return "An error occurred while resetting today's record. Try again later.";
             }
 }

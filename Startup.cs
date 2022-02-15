@@ -140,7 +140,8 @@ CREATE TABLE IF NOT EXISTS Log (
             `FoodName`     NVARCHAR (50)    NOT NULL,
             `Category`     NVARCHAR (20)    NULL,
             `Calories`     DOUBLE           NOT NULL,
-            PRIMARY KEY (`FoodId` ASC)
+            PRIMARY KEY (`FoodId` ASC),
+            ON DELETE CASCADE
             );", con);
 
             MySqlCommand Create_mealItems = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS meals (
@@ -160,7 +161,8 @@ CREATE TABLE IF NOT EXISTS Log (
             `ExerciseName`          NVARCHAR (50)    NOT NULL,
             `Measurement`           NVARCHAR (20)    NOT NULL,
             `CaloriesBurnPerUnit`   DOUBLE           NOT NULL,
-            PRIMARY KEY (`ExerciseId` ASC)
+            PRIMARY KEY (`ExerciseId` ASC),
+            ON DELETE CASCADE
             );", con);
 
             MySqlCommand Create_exerciseRoutines = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS exerciseRoutines (
