@@ -490,7 +490,7 @@ namespace EDP_Project.Services
                                                 { ExerciseId = m.ExerciseId, RoutineId = m.RoutineId, UserId = m.UserId, Intensity = m.Intensity,
                                                     Days = m.Days, ExerciseDetails = f }).ToList();
 
-            double totalCaloriesBurned = todayExerciseRoutines.Aggregate(0d, (total, y) => total + 1800 + Math.Round(y.Intensity * y.ExerciseDetails.CaloriesBurnPerUnit, 1));
+            double totalCaloriesBurned = 1800 + todayExerciseRoutines.Aggregate(0d, (total, y) => total + Math.Round(y.Intensity * y.ExerciseDetails.CaloriesBurnPerUnit, 1));
 
             List<Meals> todayMeals = GetTodayMealAdded(userId);
             double totalCaloriesIntake = todayMeals.Aggregate(0d, (total, y) => total + Math.Round(y.Quantity * y.FoodDetails.Calories, 1));
