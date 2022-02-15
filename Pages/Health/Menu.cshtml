@@ -6,66 +6,49 @@
 
 <h1>@ViewData["Title"]</h1>
 <p>What would you like to view?</p>
+<br />
 <div class="row">
     <div class="col-sm-4">
         <a asp-page="FoodJournal">
             <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Food_Journal.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-journalCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Food Journal</span>
                     </h4>
                 </div>
-                <div class="card-footer health-selectionFooter">
-                    <p>You have yet to record your breakfast, lunch and dinner today</p>
+                <div class="card-footer health-selectionFooter @Model.JournalStatus[2]">
+                    <p class="@Model.JournalStatus[1]">@Html.Raw(Model.JournalStatus[0])</p>
                 </div>
             </div>
         </a>
     </div>
     <div class="col-sm-4">
-        <a asp-page="">
+        <a asp-page="MyExerciseRoutine">
             <div class="card text-dark text-center">
-                <img class="card-img-top bright-img" height="200" src="/images/Medicine.jpg" />
-                <div class="card-body ">
-                    <h4>
-                        <span class="card-title">My Ongoing Medications</span>
-                    </h4>
-                </div>
-                <div class="card-footer health-selectionFooter">
-                    <p>You have no ongoing medication</p>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-sm-4">
-        <a asp-page="">
-            <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Exercise.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-exerciseCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Exercise Routine</span>
                     </h4>
                 </div>
-                <div class="card-footer health-selectionFooter">
-                    <p>You have exercises on Tuesdays and Saturdays</p>
+                <div class="card-footer health-selectionFooter @Model.ExerciseStatus[2]">
+                    <p class="@Model.ExerciseStatus[1]">@Html.Raw(Model.ExerciseStatus[0])</p>
                 </div>
             </div>
         </a>
     </div>
-</div>
-<br style="margin-bottom:5%;"/>
-<div class="row">
     <div class="col-sm-4">
-        <a asp-page="">
+        <a asp-page="MyCaloriesIntake">
             <div class="card text-dark text-center">
-                <img class="card-img-top" height="200" src="/images/Calories.jpg" />
+                <img class="card-img-top" height="200" src="/images/healthImages/health-caloriesCover.png" />
                 <div class="card-body ">
                     <h4>
                         <span class="card-title">My Calories Intake</span>
                     </h4>
                 </div>
-                <div class="card-footer health-selectionFooter">
-                    <p>Your calories intake for this week is good</p>
+                <div class="card-footer health-selectionFooter @Model.CaloriesStatus[2]">
+                    <p class="@Model.CaloriesStatus[1]">@Html.Raw(Model.CaloriesStatus[0])</p>
                 </div>
             </div>
         </a>

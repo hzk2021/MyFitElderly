@@ -130,7 +130,7 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="">Take A Survey</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Survey/List">Take A Survey</a>
                                     </li>
 
 
@@ -165,8 +165,12 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" id="healthDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Health</a>
+                                        <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                            <a class="dropdown-item" asp-page="/Staff/Health/FoodList">Manage food list</a>
+                                            <a class="dropdown-item" asp-page="/Staff/Health/ExerciseList">Manage exercise list</a>
+                                        </div>
                                     </li>
 
                                     <li class="nav-item dropdown">
@@ -188,6 +192,9 @@
 
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Staff/Survey/View">Survey</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Staff/WADashboard">Web Analytics Dashboard</a>
                                     </li>
 
 
@@ -219,9 +226,6 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>

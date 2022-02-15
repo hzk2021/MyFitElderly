@@ -14,12 +14,13 @@ namespace EDP_Project.Models.Survey
 
         public string SurveyUUID { get; set; }
 
-        [Required(ErrorMessage ="Please enter a category")]
+        [Required(ErrorMessage ="Please enter a category!")]
         public string Category { get; set; }
 
-        [Required(ErrorMessage ="Please enter a title")]
+        [Required(ErrorMessage ="Please enter a title!")]
         public string Title { get; set; }
 
+        [Required(ErrorMessage = "Please enter a description!")]
         public string Description { get; set; }
 
         public DateTime CreatedOn { get; set; }

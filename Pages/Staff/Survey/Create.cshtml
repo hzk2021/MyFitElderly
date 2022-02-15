@@ -9,7 +9,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
         <li class="breadcrumb-item"><a asp-page="View">Survey</a></li>
         <li class="breadcrumb-item active" aria-current="page">Create</li>
     </ol>
@@ -42,42 +42,43 @@
 
                                     <div class="addImageDiv">
                                         <label for="file-upload" class="custom-file-upload">
-                                            <i class="fas fa-file-image fa-2x"></i> <span><u><b>Add Survey Image</b></u></span>
+                                        <i class="fas fa-file-image fa-2x"></i> <span><u><b>Add Survey Image</b></u></span>
 
                                         </label>
-                                        <input type="file" asp-for="@Model.imgFile" accept="image/*" name="imgFile" id="file-upload" onchange="var outputFile = document.getElementById('output'); outputFile.src = window.URL.createObjectURL(this.files[0]); if (!this.files[0].type.includes('image')) { alert('Please only upload image file!'); this.value=''}"/>
+                                        <input type="file" asp-for="@Model.imgFile" accept="image/*" name="imgFile" id="file-upload" onchange="var outputFile = document.getElementById('output'); outputFile.src = window.URL.createObjectURL(this.files[0]); if (!this.files[0].type.includes('image')) { alert('Please only upload image file!'); this.value=''}" />
+                                        @*<span asp-validation-for="@Model.imgFile" class="text-danger"></span>*@
                                     </div>
 
                                     <div class="col-12 my-3">
                                         <label class="form-label">Category</label>
                                         @Html.DropDownListFor(m => m.newSurvey.Category, new SelectList(Enum.GetValues(typeof(Models.Survey.SurveyCategory))), new { @class = "form-control" })
-                                        <span asp-validation-for="@Model.newSurvey.Category" class="text-danger"></span>
+                                        @*<span asp-validation-for="@Model.newSurvey.Category" class="text-danger"></span>*@
                                     </div>
 
                                     <div class="col-12 my-3">
                                         <label class="form-label">Title</label>
                                         <input class="form-control" type="text" asp-for="newSurvey.Title" />
-                                        <span asp-validation-for="@Model.newSurvey.Title" class="text-danger"></span>
+                                        @*<span asp-validation-for="@Model.newSurvey.Title" class="text-danger"></span>*@
                                     </div>
                                     <div class="col-12 my-3">
                                         <label class="form-label">Description</label>
                                         <textarea class="form-control" asp-for="newSurvey.Description"></textarea>
-                                        <span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>
+                                        @*<span asp-validation-for="@Model.newSurvey.Description" class="text-danger"></span>*@
                                     </div>
 
                                     <div class="col-12 my-3">
                                         <label class="form-label">View Status</label>
-                                        <div>
-                                            <label>
-                                                <input type="radio" class="viewStatus" value="Visible" asp-for="@Model.newSurvey.ViewStatus" /> Visible
-                                            </label>
+                                    <div>
+                                        <label>
+                                            <input type="radio" class="viewStatus" value="Visible" asp-for="@Model.newSurvey.ViewStatus" /> Visible
+                                        </label>
 
-                                            <label class="ml-4">
-                                                <input type="radio" class="viewStatus" value="Hidden" asp-for="@Model.newSurvey.ViewStatus" checked /> Hidden
-                                            </label>
-                                        </div>
+                                        <label class="ml-4">
+                                            <input type="radio" class="viewStatus" value="Hidden" asp-for="@Model.newSurvey.ViewStatus" checked /> Hidden
+                                        </label>
                                     </div>
-                                </div>
+                                    </div>
+                                    </div>
 
                             </div>
                         </div>
