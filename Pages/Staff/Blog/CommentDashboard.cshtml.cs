@@ -103,7 +103,7 @@ namespace EDP_Project.Pages.Staff.Blog
                                 BlogId = (int)dataReader["BlogId"],
                                 Comment = dataReader["Comment"].ToString(),
                                 Created = (DateTime)dataReader["Created"],
-                                like = (int)(Convert.IsDBNull(dataReader["likey"]) ? null : (int?)dataReader["likey"]),
+                                likey = (int)(Convert.IsDBNull(dataReader["likey"]) ? null : (int?)dataReader["likey"]),
                                 dislike = (int)(Convert.IsDBNull(dataReader["dislike"]) ? null : (int?)dataReader["dislike"])
                             }); ; ; ;
                         }

@@ -150,7 +150,7 @@ namespace EDP_Project.Pages.Auth
 
         public void OnGet()
         {
-
+            HttpContext.Session.SetString("affirmation", "true");
 
         }
 
@@ -168,6 +168,9 @@ namespace EDP_Project.Pages.Auth
             {
 
                 verifyTwoFactor(HttpContext.Session.GetString("user"));
+
+
+                HttpContext.Session.Remove("affirmation");
 
                 return RedirectToPage("/Index");
             }

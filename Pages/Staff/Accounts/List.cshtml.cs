@@ -72,6 +72,14 @@ namespace EDP_Project.Pages.Staff.Accounts
 
         // =========== Chart Stuff =========== //
 
+
+        [BindProperty]
+        public int numVerified { get; set; }
+
+
+        [BindProperty]
+        public int numUnverified { get; set; }
+
         [BindProperty]
         public int janGuest { get; set; }
 
@@ -354,6 +362,7 @@ namespace EDP_Project.Pages.Staff.Accounts
                 if (users.Role.Trim() == "Guest")
                 {
 
+
                     switch (DateTime.Parse(users.DateCreated).Month)
                     {
 
@@ -446,6 +455,11 @@ namespace EDP_Project.Pages.Staff.Accounts
 
                 numActive = userAccounts.Where(x => x.Status == "Active").Count();
                 numInactive = userAccounts.Where(x => x.Status == "Inactive").Count();
+
+                numVerified = userAccounts.Where(x => x.EmailVerified == "True").Count();
+                numUnverified = userAccounts.Where(x => x.EmailVerified == "False").Count();
+
+
 
             }
             return Page();

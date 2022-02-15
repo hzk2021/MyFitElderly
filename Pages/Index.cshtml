@@ -4,6 +4,10 @@
     ViewData["Title"] = "Home page";
 }
 
+
+
+@using Microsoft.AspNetCore.Http;
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,12 +46,25 @@
 
 <body>
 
- 
+
 
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
         <div class="container text-center text-md-left" data-aos="fade-up">
-            <h1>Welcome<span> @Model.cUsername</span></h1>
+
+            @{
+                if (@HttpContext.Session.GetString("user") != null)
+                {
+                    <h1>Welcome<span> @HttpContext.Session.GetString("user")</span></h1>
+
+                }
+                else
+                {
+                    <h1>Welcome</h1>
+
+                }
+            }
+
             <a href="#about" class="btn-get-started scrollto">Get Started</a>
         </div>
     </section><!-- End Hero -->
@@ -82,9 +99,9 @@
 
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
                         <div class="icon-box">
-                            <div class="icon"><i class="fa-solid fa-briefcase-medical"></i></div>
-                            <h4><a href="/Booking/MedicalSpecialist">Medical Specialist Booking</a></h4>
-                            <p>Book an appointment for medical consultations with our soecialist!</p>
+                            <div class="icon"><i class="fa-solid fa-circle-question"></i></div>
+                            <h4><a href="/frequently-asked-questions">Got a Question?</a></h4>
+                            <p>You can either look for our Frequently Asked Questions page or send us an enquiry via the 'Contact Us' page!</p>
                         </div>
                     </div>
 
@@ -143,7 +160,6 @@
             </div>
         </section><!-- End About Section -->
         <!-- ======= Testimonies Section ======= -->
- 
         <!-- ======= Counts Section ======= -->
         <section id="counts" class="counts">
             <div class="container">

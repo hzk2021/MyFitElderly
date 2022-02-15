@@ -308,40 +308,68 @@ namespace EDP_Project.Pages
             return h;
         }
 
-
-        public IActionResult OnPostButton2(IFormCollection data)
+        public bool verifyPassAge(string userId)
         {
 
-            myUser = retrieverUserFromSession(HttpContext.Session.GetString("user"));
-
-
-            string salt;
-            string finalHash;
-            byte[] Key;
-            byte[] IV;
-
-
-            // swap shit here
+            DateTime lastPwSet = new DateTime();
 
             con.Open();
 
+            try
+            {
+                MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE USERNAME = @USERNAME", con);
+                cmdx.Parameters.AddWithValue("@USERNAME", userId);
+
+                using (MySqlDataReader reader = cmdx.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["LastPwSet"] != null)
+                        {
+                            if (reader["LastPwSet"] != DBNull.Value)
+                            {
+                                lastPwSet = (DateTime)reader["LastPwSet"];
+                            }
+
+                            else
+                            {
+                                return true;
+                            }
+
+                        }
 
 
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
 
-            // Make a random salt
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] saltByte = new byte[8];
+            finally
+            {
+                con.Close();
 
-            //Fills array of bytes with a cryptographically strong sequence of random values.
-            rng.GetBytes(saltByte);
-            salt = Convert.ToBase64String(saltByte);
+            }
 
-            SHA512Managed hashing = new SHA512Managed();
-            string passWithSalt = inputPass + salt;
-            byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
-            finalHash = Convert.ToBase64String(hashWithSalt);
+            // Minimum password age; if it has exceeded 3 days, then allow reset of password
 
+            if (DateTime.Now.Subtract(lastPwSet).TotalDays > 3)
+            {
+                return true;
+            }
 
+            return false;
+
+        }
+
+        public bool verifySamePassword(string finalHashxx)
+        {
+
+            string currentHashedPass = "";
+
+            string oldPasswordSalt = "";
 
 
 
@@ -349,40 +377,160 @@ namespace EDP_Project.Pages
 
             try
             {
-                string sql = "UPDATE User SET PasswordSalt = @PASSWORDSALT, Password = @PASSWORD WHERE Username=@USER; ";
-                using (var cmd = new MySqlCommand(sql, con))
+                MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE USERNAME = @USERNAME", con);
+                cmdx.Parameters.AddWithValue("@USERNAME", HttpContext.Session.GetString("user"));
+
+                using (MySqlDataReader reader = cmdx.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@PASSWORDSALT", salt);
-                    cmd.Parameters.AddWithValue("@PASSWORD", finalHash);
-                    cmd.Parameters.AddWithValue("@USER", myUser.Username);
-                    var update = cmd.ExecuteNonQuery();
+                    while (reader.Read())
+                    {
+                        if (reader["Password"] != null)
+                        {
+                            if (reader["Password"] != DBNull.Value)
+                            {
+                                currentHashedPass = (String)reader["Password"];
+                            }
+
+
+                            if (reader["PasswordSalt"] != DBNull.Value)
+                            {
+                                oldPasswordSalt = (String)reader["PasswordSalt"];
+                            }
+
+                        }
+
+
+                    }
                 }
             }
-
             catch (Exception ex)
             {
                 throw new Exception(ex.ToString());
             }
-            finally
+
+            SHA512Managed hashing = new SHA512Managed();
+
+
+            string currentPwdWithSalt = inputPass + oldPasswordSalt;
+
+            byte[] currentHashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(currentPwdWithSalt));
+
+            string userHash1 = Convert.ToBase64String(currentHashWithSalt);
+
+
+            if (userHash1.Equals(currentHashedPass))
             {
-                con.Close();
+                return true;
             }
 
 
+            return false;
+
+
+
+
+        }
 
 
 
 
 
+        public IActionResult OnPostButton2(IFormCollection data)
+        {
 
-            unverifyUser(HttpContext.Session.GetString("user").ToString());
+            if (verifyPassAge(HttpContext.Session.GetString("user").ToString()))
+            {
 
 
 
-            logger.Info($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} logged out");
-            HttpContext.Session.Remove("user");
-            HttpContext.Session.Clear();
-            return RedirectToPage("Login", false);
+                    myUser = retrieverUserFromSession(HttpContext.Session.GetString("user"));
+
+
+                    string salt;
+                    string finalHash;
+                    byte[] Key;
+                    byte[] IV;
+
+
+                    // swap shit here
+
+                    con.Open();
+
+
+
+
+                    // Make a random salt
+                    RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+                    byte[] saltByte = new byte[8];
+
+                    //Fills array of bytes with a cryptographically strong sequence of random values.
+                    rng.GetBytes(saltByte);
+                    salt = Convert.ToBase64String(saltByte);
+
+                    SHA512Managed hashing = new SHA512Managed();
+                    string passWithSalt = inputPass + salt;
+                    byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
+                    finalHash = Convert.ToBase64String(hashWithSalt);
+
+
+
+
+                if (!verifySamePassword(inputPass))
+                {
+
+
+
+                    try
+                    {
+                        string sql = "UPDATE User SET PasswordSalt = @PASSWORDSALT, Password = @PASSWORD, LastPwSet = @LASTPWSET WHERE Username=@USER; ";
+                        using (var cmd = new MySqlCommand(sql, con))
+                        {
+                            cmd.Parameters.AddWithValue("@PASSWORDSALT", salt);
+                            cmd.Parameters.AddWithValue("@PASSWORD", finalHash);
+                            cmd.Parameters.AddWithValue("@USER", myUser.Username);
+                            cmd.Parameters.AddWithValue("@LASTPWSET", DateTime.Now);
+                            var update = cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.ToString());
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+
+
+
+
+                    unverifyUser(HttpContext.Session.GetString("user").ToString());
+                    logger.Warn($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} Changed their password manually");
+                    logger.Info($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} logged out");
+                    HttpContext.Session.Remove("user");
+                    HttpContext.Session.Clear();
+                    return RedirectToPage("Login", false);
+
+                }
+
+                else
+                {
+                    return Redirect("/Profile?samepass=true");
+
+                }
+
+
+
+            }
+
+
+            else
+            {
+
+                return Redirect("/Profile?youngpass=true");
+
+            }
         }
 
 

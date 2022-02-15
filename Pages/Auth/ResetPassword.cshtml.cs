@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
+using NLog;
 
 namespace EDP_Project.Pages.Auth
 {
@@ -28,7 +29,89 @@ namespace EDP_Project.Pages.Auth
 
         public string error_msg { get; set; }
 
+        private static Logger logger = LogManager.GetLogger("MyAppLoggerRules");
+
+
         MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
+
+
+        public bool verifySamePassword(string finalHashxx)
+        {
+
+            con.Open();
+
+            string currentHashedPass = "";
+
+            string oldPasswordSalt = "";
+
+
+
+
+
+            try
+            {
+                MySqlCommand cmdx = new MySqlCommand("SELECT * FROM USER WHERE USERNAME = @USERNAME", con);
+                cmdx.Parameters.AddWithValue("@USERNAME", HttpContext.Session.GetString("user"));
+
+                using (MySqlDataReader reader = cmdx.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["Password"] != null)
+                        {
+                            if (reader["Password"] != DBNull.Value)
+                            {
+                                currentHashedPass = (String)reader["Password"];
+                            }
+
+
+                            if (reader["PasswordSalt"] != DBNull.Value)
+                            {
+                                oldPasswordSalt = (String)reader["PasswordSalt"];
+                            }
+
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
+            finally
+            {
+                con.Close();
+            }
+
+            SHA512Managed hashing = new SHA512Managed();
+
+
+            string currentPwdWithSalt = userPwInput + oldPasswordSalt;
+
+            byte[] currentHashWithSalt = hashing.ComputeHash(System.Text.Encoding.UTF8.GetBytes(currentPwdWithSalt));
+
+            string userHash1 = Convert.ToBase64String(currentHashWithSalt);
+
+
+            if (userHash1.Equals(currentHashedPass))
+            {
+                return true;
+            }
+
+
+            return false;
+
+
+
+
+        }
+
+
+
+
 
         public bool verifyPassAge(string userId)
         {
@@ -99,6 +182,38 @@ namespace EDP_Project.Pages.Auth
             return Page();
         }
 
+        protected string getUserEmail(string userid)
+        {
+            string h = null;
+            string sql = "select Email FROM User WHERE Username = @USERNAME";
+            MySqlCommand command = new MySqlCommand(sql, con);
+            command.Parameters.AddWithValue("@USERNAME", userid);
+            try
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+
+                    while (reader.Read())
+                    {
+                        if (reader["Email"] != null)
+                        {
+                            if (reader["Email"] != DBNull.Value)
+                            {
+                                h = reader["Email"].ToString();
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            return h;
+        }
+
+
 
         private int CheckPassword(string password)
         {
@@ -162,6 +277,9 @@ namespace EDP_Project.Pages.Auth
 
         public IActionResult OnPost()
         {
+
+
+
             int scores = CheckPassword(userPwInput);
             string status = "";
             switch (scores)
@@ -195,63 +313,77 @@ namespace EDP_Project.Pages.Auth
             {
 
 
-
-
-                string salt;
-                string finalHash;
-                byte[] Key;
-                byte[] IV;
-
-                con.Open();
-
-                // Make a random salt
-                RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-                byte[] saltByte = new byte[8];
-
-                //Fills array of bytes with a cryptographically strong sequence of random values.
-                rng.GetBytes(saltByte);
-                salt = Convert.ToBase64String(saltByte);
-
-                SHA512Managed hashing = new SHA512Managed();
-                string passWithSalt = userPwInput + salt;
-                byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
-                finalHash = Convert.ToBase64String(hashWithSalt);
-
-
-                try
+                if (!verifySamePassword(userPwInput))
                 {
-                    string sql = "UPDATE User SET PasswordSalt = @PASSWORDSALT, Password = @PASSWORD WHERE Username=@USER;";
-                    using (var cmd = new MySqlCommand(sql, con))
+
+
+
+                    string salt;
+                    string finalHash;
+                    byte[] Key;
+                    byte[] IV;
+
+                    con.Open();
+
+                    // Make a random salt
+                    RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+                    byte[] saltByte = new byte[8];
+
+                    //Fills array of bytes with a cryptographically strong sequence of random values.
+                    rng.GetBytes(saltByte);
+                    salt = Convert.ToBase64String(saltByte);
+
+                    SHA512Managed hashing = new SHA512Managed();
+                    string passWithSalt = userPwInput + salt;
+                    byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(passWithSalt));
+                    finalHash = Convert.ToBase64String(hashWithSalt);
+
+
+                    try
                     {
-                        cmd.Parameters.AddWithValue("@PASSWORDSALT", salt);
-                        cmd.Parameters.AddWithValue("@PASSWORD", finalHash);
-                        cmd.Parameters.AddWithValue("@USER", HttpContext.Session.GetString("user").ToString());
-                        var update = cmd.ExecuteNonQuery();
-                    }
-                }
-
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.ToString());
-                }
-                finally
-                {
-                    // update pw last set timestamp
-
-                    // No need void passwork token; for it is mandatory to change password this time.
-
-                    string sql = "UPDATE User SET LastPwSet = @LASTPWSET WHERE Username=@USERID; ";
-                    using (var cmdz = new MySqlCommand(sql, con))
-                    {
-                        cmdz.Parameters.AddWithValue("@LASTPWSET", DateTime.Now);
-                        cmdz.Parameters.AddWithValue("@USERID", HttpContext.Session.GetString("user").ToString());
-                        var update = cmdz.ExecuteNonQuery();
+                        string sql = "UPDATE User SET PasswordSalt = @PASSWORDSALT, Password = @PASSWORD WHERE Username=@USER;";
+                        using (var cmd = new MySqlCommand(sql, con))
+                        {
+                            cmd.Parameters.AddWithValue("@PASSWORDSALT", salt);
+                            cmd.Parameters.AddWithValue("@PASSWORD", finalHash);
+                            cmd.Parameters.AddWithValue("@USER", HttpContext.Session.GetString("user").ToString());
+                            var update = cmd.ExecuteNonQuery();
+                        }
                     }
 
-                    con.Close();
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.ToString());
+                    }
+                    finally
+                    {
+                        // update pw last set timestamp
+
+                        // No need void passwork token; for it is mandatory to change password this time.
+
+                        string sql = "UPDATE User SET LastPwSet = @LASTPWSET WHERE Username=@USERID; ";
+                        using (var cmdz = new MySqlCommand(sql, con))
+                        {
+                            cmdz.Parameters.AddWithValue("@LASTPWSET", DateTime.Now);
+                            cmdz.Parameters.AddWithValue("@USERID", HttpContext.Session.GetString("user").ToString());
+                            var update = cmdz.ExecuteNonQuery();
+                        }
+
+
+
+                        logger.Warn($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} Changed their password due to password policy");
+
+                        con.Close();
+                    }
+
+                    return RedirectToPage("/Logout", false);
                 }
 
-                return RedirectToPage("/Index", false);
+                else
+                {
+                    error_msg = "Your cannot be the same as your recent password.";
+
+                }
 
             }
             else

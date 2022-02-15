@@ -16,12 +16,14 @@ namespace EDP_Project.Services
         private readonly UserDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
 
+
         MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
 
         public UserService(UserDbContext context, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _contextAccessor = contextAccessor;
+
         }
 
 
@@ -146,6 +148,8 @@ namespace EDP_Project.Services
         }
 
 
+
+
         public bool twofactorVerified(string userID)
         {
             bool verified = new bool();
@@ -206,7 +210,7 @@ namespace EDP_Project.Services
 
                             else
                             {
-                                return true;
+                                return false;
                             }
 
                         }
@@ -219,12 +223,14 @@ namespace EDP_Project.Services
             {
                 throw new Exception(ex.ToString());
             }
+
+
             finally
             {
                 con.Close();
             }
 
-            // Minimum password age; if it has exceeded 3 days, then allow reset of password
+            // Maximum password age; if it has exceeded 30 days, then force user to change pass
             if (DateTime.Now.Subtract(lastPwSet).TotalDays > 30)
             {
                 return true;
@@ -334,7 +340,8 @@ namespace EDP_Project.Services
                 if (!twofactorVerified(HttpContext.Session.GetString("user")))
                 {
                     HttpContext.Response.Redirect("/Auth/TwoFactorAuth");
-                } else
+                }
+                else
                 {
                     if (!emailVerified(HttpContext.Session.GetString("user")))
                     {
@@ -346,12 +353,14 @@ namespace EDP_Project.Services
                         HttpContext.Response.Redirect("/Auth/ResetPassword");
                     }
                 }
-            } else
+            }
+            else
             {
                 HttpContext.Response.Redirect("/Login");
             }
 
         }
+
 
         public void AIOCheckGuest()
         {
@@ -387,9 +396,12 @@ namespace EDP_Project.Services
     }
 
 
-
-
-
-
-
 }
+
+
+
+    
+
+
+
+

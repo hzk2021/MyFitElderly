@@ -94,7 +94,7 @@ namespace EDP_Project.Pages.Staff.Accounts
 
             // send email
 
-            string to = userEmail; //To address    
+            string to = "ktykuang@gmail.com"; //To address    
             string from = "contact.breadington.official@gmail.com"; //From address    
             MailMessage message = new MailMessage(from, to);
             string mailbody = "<h1>Forgot your password?</h1><br> You requested a link to change your password. (If you didn't request this, you can ignore this email.)<br>reset your password by clicking on the link below <br>" + "https://localhost:44320/Auth/EndPasswordReset?token=" + HttpUtility.UrlEncode(GeneratePwToken(userName));

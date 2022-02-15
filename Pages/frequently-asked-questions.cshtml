@@ -1,0 +1,245 @@
+﻿@page
+@model EDP_Project.Pages.frequently_asked_questionsModel
+@{
+}
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" class="faqx">
+<head>
+    <title></title>
+
+    <link href="~/css/faq.css" rel="stylesheet" />
+
+    <style>
+
+
+
+        .container__cards {
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            border-radius: 20px;
+            width: 300px;
+            margin: 10px;
+            transition: all 300ms;
+        }
+
+            .card:hover {
+                width: 350px;
+            }
+
+            .card .cover {
+                width: 100%;
+                height: 250px;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .card .cover img {
+                    width: 250px;
+                    display: block;
+                    margin: auto;
+                    position: relative;
+                    top: 40px;
+                    z-index: 1;
+                    filter: drop-shadow(5px 5px 4px rgba(0,0,0,0.5));
+                    transition: all 400ms;
+                }
+
+            .card:hover .cover img {
+                top: 0px;
+                filter: none;
+            }
+
+            .card .img__back {
+                width: 100%;
+                height: 200px;
+                position: absolute;
+                bottom: -80px;
+                left: 0;
+                background-size: cover;
+                border-radius: 20px;
+                transition: all 300ms;
+            }
+
+            .card:nth-of-type(1) .img__back {
+                background-image: url(https://i.ibb.co/HGnXjYq/bg1.jpg);
+            }
+
+            .card:nth-of-type(2) .img__back {
+                background-image: url(https://i.ibb.co/swsWmMQ/bg2.jpg);
+            }
+
+            .card:nth-of-type(3) .img__back {
+                background-image: url(https://i.ibb.co/wSKR72W/bg3.jpg);
+            }
+
+            .card:hover .img__back {
+                bottom: -40px;
+            }
+
+            .card .description {
+                background: white;
+                margin-top: -10px;
+                padding: 20px;
+                border-radius: 0px 0px 20px 20px;
+                transition: all 300ms;
+            }
+
+            .card:hover .description {
+                padding: 40px;
+            }
+
+            .card .description h2 {
+                margin-top: 10px;
+            }
+
+            .card .description p {
+                margin-top: 10px;
+            }
+
+            .card .description input {
+                padding: 10px 40px;
+                margin-top: 20px;
+                border: none;
+                background: #fc466b;
+                color: white;
+                font-size: 14px;
+                cursor: pointer;
+                border-radius: 8px;
+                transition: all 300ms;
+            }
+
+                .card .description input:hover {
+                    background: #fd0638;
+                }
+    </style>
+
+</head>
+
+
+
+
+
+<body>
+
+    <nav aria-label="breadcrumb" style="animation-duration: 1.3s;
+animation-name: slidein;">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="text-decoration:none">Frequently Asked Questions</li>
+        </ol>
+    </nav>
+
+
+    <div class="container__cards">
+
+        <div class="card">
+            <div class="cover">
+                <img src="~/images/1.png" alt="">
+                <div class="img__back"></div>
+            </div>
+            <div class="description">
+                <h3 style="text-align:center">Account Recovery Process</h3>
+                <p>Fret not! recovering your account is extremely simple; all you gotta do is start by navigate to Login page, and click on "Forget Password"</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="cover">
+                <img src="~/images/2.png" alt="">
+                <div class="img__back"></div>
+            </div>
+            <div class="description">
+                <h3 style="text-align:center">Calorie Counter's Efficiency</h3>
+                <p>MyFitElderly's simple-to-use calorie calculator paired with its extensived database is a proven tool to promoting a healthier lifestyle.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="cover">
+                <img src="~/images/3.png" alt="">
+                <div class="img__back"></div>
+            </div>
+            <div class="description">
+                <h3 style="text-align:center">Health Blogs Legitimacy</h3>
+                <p>Our dietitian team makes sure our articles are credible and up-to-date at the time of publishing, and that recipes meet Monash University low FODMAP guidelines.</p>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <div id="faqq">
+
+
+        <main class="faq " style=" margin-top: 50px; ">
+
+            <div class="faq__logo__holder">
+                <div class="faq__logo">
+                    <img src="https://bobmatyas.github.io/fm-faq-accordion/images/illustration-woman-online-mobile.svg" alt="woman at a computer" class="faq__logo__image hidden-lg">
+                    <img src="https://bobmatyas.github.io/fm-faq-accordion/images/illustration-box-desktop.svg" alt="" class="faq__logo__image visible-lg">
+                </div>
+            </div>
+
+            <div class="faq__holder" style="font-size:2px;">
+                <h1 class="faq__heading">More FAQ(s)</h1>
+
+                <details class="faq__detail">
+                    <summary class="faq__summary"><span class="faq__question">Help! How do I submit a support ticket?!</span></summary>
+                    <p class="faq__text">If your queries have not been answered here; fret not! you can contact us on the "Contact Us" page and we will reply to you shortly! =).</p>
+                </details>
+
+                <details class="faq__detail">
+                    <summary class="faq__summary"><span class="faq__question">How do I change my username or email?</span></summary>
+                    <p class="faq__text">You can navigate to our MyFitEldery's profile customization page. Navigate to your profile picture, followed by "Profile".</p>
+                </details>
+
+                <details class="faq__detail">
+                    <summary class="faq__summary"><span class="faq__question">How do I reset my password?</span></summary>
+                    <p class="faq__text">Click “Forgot password” from the login page or “Change password” from your profile page.</p>
+                    <p class="faq__text">A reset link will be emailed to you.</p>
+                </details>
+
+                <details class="faq__detail">
+                    <summary class="faq__summary"><span class="faq__question">I can't change passwords often.</span></summary>
+                    <p class="faq__text">You should wait at least 3 days before changing your password. This prevents users from recycling old passwords - leading to vulnerable accounts.</p>
+                </details>
+
+                <details class="faq__detail">
+                    <summary class="faq__summary"><span class="faq__question">Do you provide additional support?</span></summary>
+                    <p class="faq__text">Chat and email support is available 24/7! Channels are open during normal business hours.</p>
+                </details>
+
+            </div>
+        </main>
+
+
+        <div class="attribution">
+            catch-as-catch-can by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Higher Brothers</a>.
+            Coded by <a href="https://www.bobmatyas.com">Tian Yu</a>.
+        </div>
+
+    </div>
+
+
+
+
+</body>
+
+
+
+</html>
+
+

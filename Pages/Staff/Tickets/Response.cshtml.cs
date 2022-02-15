@@ -112,7 +112,7 @@ namespace EDP_Project.Pages.Staff.Tickets
                 string sql = "UPDATE Ticket SET Status = @STATUS WHERE Ticket_Reference_Id = @TICKET_ID; ";
                 using (var cmd = new MySqlCommand(sql, con))
                 {
-                    cmd.Parameters.AddWithValue("@STATUS", "Closed");
+                    cmd.Parameters.AddWithValue("@STATUS", "Resolved");
                     cmd.Parameters.AddWithValue("@TICKET_ID", HttpContext.Request.Query["id"].ToString());
                     var update = cmd.ExecuteNonQuery();
                 }
