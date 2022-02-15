@@ -13,18 +13,26 @@ namespace EDP_Project.Pages.Booking
     {
         private readonly BookingService _svc;
         public List<Specialist> AllSpecialist { get; set; }
+        public SpecialistDepartment OneDepartment { get; set; }
         public MedicalSpecialistModel(BookingService svc)
         {
             _svc = svc;
         }
-        public void OnGet()
+        public void OnGet(int id)
         {
             AllSpecialist = _svc.getSpecialistRecords();
+            OneDepartment = _svc.GetDepartmentById(id);
+            
+            int spec = id;
         }
-
         public IActionResult OnPost()
         {
             return Page();
+        }
+
+        public void selectSpecialist_btn(Object sender, EventArgs e)
+        {
+
         }
     }
 }

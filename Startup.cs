@@ -266,6 +266,22 @@ CREATE TABLE IF NOT EXISTS Log (
             FOREIGN KEY (`Department`) REFERENCES specialistDepartment(`Department`)
             );", con);
 
+            MySqlCommand Create_specialistSlot = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS specialistSlot (
+            `Id`            INT             NOT NULL,
+            `Date`          DateTime        NOT NULL,
+            `SpecId`        INT             NOT NULL,
+            `Slot1`         TINYINT         NULL,
+            `Slot2`         TINYINT         NULL,
+            `Slot3`         TINYINT         NULL,
+            `Slot4`         TINYINT         NULL,
+            `Slot5`         TINYINT         NULL,
+            `Slot6`         TINYINT         NULL,
+            `Slot7`         TINYINT         NULL,
+            `Slot8`         TINYINT         NULL,
+
+            PRIMARY KEY (`Id` ASC),
+            FOREIGN KEY (`SpecId`) REFERENCES specialist(`Id`)
+            );", con);
 
             // generate root account
 
@@ -292,6 +308,7 @@ CREATE TABLE IF NOT EXISTS Log (
                 Create_comments.ExecuteNonQuery();
                 Create_specialistDepartment.ExecuteNonQuery();
                 Create_specialist.ExecuteNonQuery();
+                Create_specialistSlot.ExecuteNonQuery();
 
                 gen_root_acc.ExecuteNonQuery();
 

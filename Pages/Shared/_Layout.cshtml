@@ -119,8 +119,14 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-page="/Booking/MedicalSpecialist">Booking</a>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" id="bookingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Booking</a>
+                                        <div class="dropdown-menu" aria-labelledby="sepcialistDropdown">
+                                            <a class="dropdown-item" asp-area="" asp-page="/Booking/MedicalDepartment">Book a Specialist</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="/Booking/MedicalSpecialist">Specialist</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="">My Appointments</a>
+                                        </div>
                                     </li>
 
                                     <li class="nav-item">
@@ -162,24 +168,31 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Health/Menu">Health</a>
                                     </li>
+
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle text-dark" id="blogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blogging</a>
                                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                                            <a  class="dropdown-item" asp-area="" asp-page="/Staff/Blog/Dashboard">Blog Dashboard</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Blog/Dashboard">Blog Dashboard</a>
                                             <a class="dropdown-item" asp-area="" asp-page="/Staff/Blog/CommentDashboard">Comment Dashboard</a>
-                                            <a  class="dropdown-item" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="/Blog/UserViewBlog">Blog</a>
                                         </div>
                                     </li>
+
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle text-dark" id="sepcialistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Specialist</a>
+                                        <a class="nav-link dropdown-toggle text-dark" id="sepcialistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Medical Specialists</a>
                                         <div class="dropdown-menu" aria-labelledby="sepcialistDropdown">
                                             <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/ViewSpecialist">Manage Medical Specialists</a>
-                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/CreateSpecialistDepartment">Create Medical Departments</a>
+                                            <a class="dropdown-item" asp-area="" asp-page="/Staff/Booking/CreateSpecialistDepartment">Manage Medical Departments</a>
                                         </div>
                                     </li>
+
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-area="" asp-page="/Staff/Survey/View">Survey</a>
                                     </li>
+
+
+
+
                                     <li class="nav-item dropdown ml-auto ">
 
                                         <img src="~/@userPhotoPath" style="height:40px; width:auto;" class="rounded-circle avatar" alt="Avatar">
