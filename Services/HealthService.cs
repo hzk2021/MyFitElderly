@@ -613,7 +613,7 @@ namespace EDP_Project.Services
                 record.Date = row.Date.ToShortDateString() + "<br />" + row.Date.DayOfWeek.ToString();
                 record.CaloriesIntake = row.CaloriesIntake.ToString();
                 record.CaloriesBurned = row.CaloriesBurned.ToString();
-                double netGainLoss = row.CaloriesIntake - row.CaloriesBurned;
+                double netGainLoss = Math.Round(row.CaloriesIntake - row.CaloriesBurned, 1);
                 overallIntake += netGainLoss;
                 if (netGainLoss > 0)
                 {

@@ -6,7 +6,7 @@
 
 <form method="post">
     <div class="card">
-        <h1 style="padding:2%;">Add new exercise record</h1>
+        <h1 style="padding:2%;">Edit exercise record</h1>
         @if (!String.IsNullOrEmpty(Model.ErrorMsg))
         {
             <p class="alert alert-danger">@Model.ErrorMsg</p>
@@ -36,7 +36,7 @@
     <br style="margin-bottom:5%;" />
 
     <a asp-page="FoodList" class="btn btn-secondary">Discard</a>
-    <input class="btn btn-success float-right" type="submit" value="Add to list" />
+    <input class="btn btn-success float-right" type="submit" value="Update record" />
 </form>
 
 @section Scripts {
