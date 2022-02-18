@@ -10,6 +10,7 @@
 <html lang="en">
 <head>
 
+    <link href="https://cdn.jsdelivr.net/gh/akottr/dragtable@master/dragtable.css" rel="stylesheet">
 
 
 
@@ -51,6 +52,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
 
+
 </head>
 <body>
 
@@ -58,13 +60,23 @@
     @*<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>*@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 
 
 
+
     <div class="wrapper">
+
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">User Account Management</li>
+            </ol>
+        </nav>
 
         <!-- Preloader -->
 
@@ -101,13 +113,13 @@
                         <div class="icon">
                             <i class="fas fa-users"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#lineChart" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-success">
+                    <div class="small-box bg-warning">
                         <div class="inner">
                             @*<h3>53<sup style="font-size: 20px">%</sup></h3>*@
                             <h3> @Model.numRegistrations</h3>
@@ -116,13 +128,13 @@
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#lineChart" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-warning">
+                    <div class="small-box bg-success">
                         <div class="inner">
                             <h3>@Model.numActive</h3>
 
@@ -131,7 +143,7 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#table" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -146,7 +158,7 @@
                         <div class="icon">
                             <i class="fas fa-user-times"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="#table" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -160,7 +172,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">
-                                <i class="fas fa-chart-pie mr-1"></i>
+                                <i class="fa-solid fa-users-gear mr-1"></i>
                                 User Accounts
                             </h3>
 
@@ -187,10 +199,11 @@
 
                                 <table id="table" data-search="true" data-pagination="true" data-toolbar="#toolbar"
                                        data-search="true"
+                                       data-reorderable-columns="true"
                                        data-show-columns="true"
                                        data-show-refresh="true"
-                                       data-detail-view="true"
                                        data-show-export="true"
+                                         data-show-fullscreen="true"
                                        data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
                                     <thead>
                                         <tr>
@@ -261,7 +274,7 @@
                     <div class="card bg-gradient-light">
                         <div class="card-header border-0">
                             <h3 class="card-title">
-                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <i class="fa-solid fa-users mr-1"></i>
                                 New Users
                             </h3>
                             <!-- card tools -->
@@ -300,40 +313,40 @@
 
 
                                     @*<li>
-                                            <img src="dist/img/user8-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Norman</a>
-                                            <span class="users-list-date">Yesterday</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user7-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Jane</a>
-                                            <span class="users-list-date">12 Jan</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user6-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">John</a>
-                                            <span class="users-list-date">12 Jan</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user2-160x160.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Alexander</a>
-                                            <span class="users-list-date">13 Jan</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user5-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Sarah</a>
-                                            <span class="users-list-date">14 Jan</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user4-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Nora</a>
-                                            <span class="users-list-date">15 Jan</span>
-                                        </li>
-                                        <li>
-                                            <img src="dist/img/user3-128x128.jpg" alt="User Image">
-                                            <a class="users-list-name" href="#">Nadia</a>
-                                            <span class="users-list-date">15 Jan</span>
-                                        </li>*@
+                            <img src="dist/img/user8-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Norman</a>
+                            <span class="users-list-date">Yesterday</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user7-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Jane</a>
+                            <span class="users-list-date">12 Jan</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user6-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">John</a>
+                            <span class="users-list-date">12 Jan</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user2-160x160.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Alexander</a>
+                            <span class="users-list-date">13 Jan</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user5-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Sarah</a>
+                            <span class="users-list-date">14 Jan</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user4-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Nora</a>
+                            <span class="users-list-date">15 Jan</span>
+                        </li>
+                        <li>
+                            <img src="dist/img/user3-128x128.jpg" alt="User Image">
+                            <a class="users-list-name" href="#">Nadia</a>
+                            <span class="users-list-date">15 Jan</span>
+                        </li>*@
 
 
                                 </ul>
@@ -354,20 +367,20 @@
                         </div>
                         <!-- /.card-body-->
                         <!--<div class="card-footer bg-transparent">
-                            <div class="row">
-                                <div class="col-4 text-center">
-                                    <div class="text-white">Testing</div>
-                                </div>-->
+            <div class="row">
+                <div class="col-4 text-center">
+                    <div class="text-white">Testing</div>
+                </div>-->
                         <!-- ./col -->
                         <!--<div class="col-4 text-center">
-                            <div id="sparkline-2"></div>
-                            <div class="text-white">Testing</div>
-                        </div>-->
+            <div id="sparkline-2"></div>
+            <div class="text-white">Testing</div>
+        </div>-->
                         <!-- ./col -->
                         <!--<div class="col-4 text-center">
-                                <div class="text-white">Nigger</div>
-                            </div>
-                        </div>-->
+                <div class="text-white">Nigger</div>
+            </div>
+        </div>-->
                         <!-- /.row -->
                         <!--</div>-->
 
@@ -380,6 +393,71 @@
                     <!-- /.card -->
 
 
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-pie mr-1"></i>
+
+                                Number of Verified Users
+                            </h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+
+
+
+
+                            @* here *@
+
+                            <canvas id="pie-chart" width="800" height="450"></canvas>
+
+
+                        </div>
+                        <!-- /.card-body -->
+                        @*<div class="card-footer bg-light p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            United States of America
+                            <span class="float-right text-danger">
+                                <i class="fas fa-arrow-down text-sm"></i>
+                                12%
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            India
+                            <span class="float-right text-success">
+                                <i class="fas fa-arrow-up text-sm"></i> 4%
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            China
+                            <span class="float-right text-warning">
+                                <i class="fas fa-arrow-left text-sm"></i> 0%
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>*@
+
+                        <!-- /.footer -->
+                    </div>
 
                     <div class="card">
                         <div class="card-header">
@@ -409,12 +487,14 @@
                                    data-search="true"
                                    data-show-columns="true"
                                    data-show-refresh="true"
+                                   data-show-fullscreen="true"
+                                   data-reorderable-columns="true"
                                    data-show-export="true"
                                    data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
                                 <thead>
                                     <tr>
                                         <th data-field="machineName" data-sortable="true">Host</th>
-                                        <th data-field="level" data-sortable="true">Category</th>
+                                        <th data-field="level" data-formatter="catFormatter" data-sortable="true">Category</th>
                                         <th data-field="logged" data-formatter="dateFormat" data-sortable="true">Date and Time</th>
                                         <th data-field="message" data-sortable="true">Operation</th>
 
@@ -433,39 +513,37 @@
                         </div>
                         <!-- /.card-body -->
                         @*<div class="card-footer bg-light p-0">
-                                <ul class="nav nav-pills flex-column">
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            United States of America
-                                            <span class="float-right text-danger">
-                                                <i class="fas fa-arrow-down text-sm"></i>
-                                                12%
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            India
-                                            <span class="float-right text-success">
-                                                <i class="fas fa-arrow-up text-sm"></i> 4%
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            China
-                                            <span class="float-right text-warning">
-                                                <i class="fas fa-arrow-left text-sm"></i> 0%
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>*@
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            United States of America
+                            <span class="float-right text-danger">
+                                <i class="fas fa-arrow-down text-sm"></i>
+                                12%
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            India
+                            <span class="float-right text-success">
+                                <i class="fas fa-arrow-up text-sm"></i> 4%
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            China
+                            <span class="float-right text-warning">
+                                <i class="fas fa-arrow-left text-sm"></i> 0%
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>*@
 
                         <!-- /.footer -->
                     </div>
-
-
 
                 </section>
                 <!-- right col -->
@@ -539,7 +617,9 @@
 
     <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/gh/akottr/dragtable@master/jquery.dragtable.js"></script>
 
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/reorder-columns/bootstrap-table-reorder-columns.min.js"></script>
 
 
     <script src="https://unpkg.com/codeflask/build/codeflask.min.js"></script>
@@ -552,7 +632,8 @@
         var niggerman = @Model.userAccounts;
         var niggerman2 = @Model.userLogs;
 
-
+        var numVerified = Model.numVerified;
+        var numUnverified = Model.numUnverified;
 
 
         var janG = Model.janGuest;
@@ -646,6 +727,28 @@
     <script>
 
 
+
+        new Chart(document.getElementById("pie-chart"), {
+            type: 'pie',
+            data: {
+                labels: ["Verified", "Unverified"],
+                datasets: [{
+                    label: "Population (millions)",
+                    backgroundColor: ["#8e5ea2", "#3cba9f"],
+                    // here 2
+                    data: [@numVerified, @numUnverified]
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Aggregation of verified & unverified users'
+                }
+            }
+        });
+
+
+
      var datakmfks = @Html.Raw(Json.Serialize(niggerman))
      var datakmfkslogs = @Html.Raw(Json.Serialize(niggerman2))
         var currentEmail = "@serverEmail"
@@ -729,7 +832,7 @@
                 },
                 {
                     label: "Staff Accounts",
-                    data: [@decS, @febS, @marS, @aprS, @mayS, @junS, @julS, @augS, @sepS, @octS, @novS, @decS],
+                    data: [@janS, @febS, @marS, @aprS, @mayS, @junS, @julS, @augS, @sepS, @octS, @novS, @decS],
                     backgroundColor: [
                         'rgba(0, 137, 132, .2)',
                     ],
@@ -758,6 +861,14 @@
 
 
     <script>
+
+        function catFormatter(value, row, index) {
+
+            if (value == "Info") return '<p style="color:#17a2b8">Info</p>'
+            else return '<p style="color:red">Warn</p>'
+
+
+        }
 
         function dateFormat(value, row, index) {
             return moment(value).format('DD/MM/YYYY HH:mm:ss');

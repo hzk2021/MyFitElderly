@@ -154,7 +154,7 @@ namespace EDP_Project.Pages.Staff.Accounts
                     string MyConnection2 = "datasource=localhost;port=3307;username=root;password=root";
                     //string Query = "delete from user where Username='" + userID + "';";
 
-                    string Query = "update user set PhotoPath= @PHOTOPATH , Email= @USERID, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where Email= @CUSER";
+                    string Query = "update user set PhotoPath= @PHOTOPATH , Email= @USERID, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS, Status = @STATUS where Email= @CUSER";
 
                     MySqlCommand MyCommand2 = new MySqlCommand(Query, con);
 
@@ -166,6 +166,7 @@ namespace EDP_Project.Pages.Staff.Accounts
                     MyCommand2.Parameters.AddWithValue("@EMAIL", myUser.Email);
                     MyCommand2.Parameters.AddWithValue("@CONTACT", myUser.Contact);
                     MyCommand2.Parameters.AddWithValue("@ADDRESS", myUser.Address);
+                    MyCommand2.Parameters.AddWithValue("@STATUS", myUser.Status);
                     MyCommand2.Parameters.AddWithValue("@CUSER", userId);
 
 
@@ -188,7 +189,7 @@ namespace EDP_Project.Pages.Staff.Accounts
 
                 
 
-                    string Query = "update user set Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS where Email= @CUSER";
+                    string Query = "update user set Username= @USERNAME, Gender= @GENDER, DateOfBirth= @DOB,   Email= @EMAIL ,Contact= @CONTACT, Address= @ADDRESS, Status = @STATUS where Email= @CUSER";
 
                     MySqlCommand MyCommand2 = new MySqlCommand(Query, con);
 
@@ -198,6 +199,7 @@ namespace EDP_Project.Pages.Staff.Accounts
                     MyCommand2.Parameters.AddWithValue("@EMAIL", myUser.Email);
                     MyCommand2.Parameters.AddWithValue("@CONTACT", myUser.Contact);
                     MyCommand2.Parameters.AddWithValue("@ADDRESS", myUser.Address);
+                    MyCommand2.Parameters.AddWithValue("@STATUS", myUser.Status);
                     MyCommand2.Parameters.AddWithValue("@CUSER", userId);
                     MySqlDataReader MyReader2;
                     con.Open();
@@ -312,6 +314,17 @@ namespace EDP_Project.Pages.Staff.Accounts
                                 {
 
                                     myUser.Address = (string)reader["Address"];
+
+                                }
+
+                            }
+
+                            if (reader["Status"] != null)
+                            {
+                                if (reader["Status"] != DBNull.Value)   
+                                {
+
+                                    myUser.Status = (string)reader["Status"];
 
                                 }
 

@@ -129,15 +129,12 @@ namespace EDP_Project.Pages
         public IActionResult OnGet()
         {
 
-            int userid = retrieveuserid(HttpContext.Session.GetString("user"));
 
 
-            if (HttpContext.Session.GetString("user") != null)
+            if (HttpContext.Session.GetString("user") != null) // if user not logged in
             {
 
-                //cUsername = HttpContext.Session.GetString("user");
-
-                if (!_userSvc.twofactorVerified(HttpContext.Session.GetString("user")))
+                if (!_userSvc.twofactorVerified(HttpContext.Session.GetString("user"))) // if user didnt verify via 2FA
                 {
 
                     return RedirectToPage("/Auth/TwoFactorAuth");
@@ -146,13 +143,13 @@ namespace EDP_Project.Pages
 
                 else
                 {
-                    if (!_userSvc.emailVerified(HttpContext.Session.GetString("user")))
+                    if (!_userSvc.emailVerified(HttpContext.Session.GetString("user"))) // if user did not verify email
                     {
                         return RedirectToPage("/Auth/EmailVerification");
                     }
 
 
-                    if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user")))
+                    if (_userSvc.exceededPwAge(HttpContext.Session.GetString("user"))) /// if user pw age exceeded
                     {
                         return RedirectToPage("/Auth/ResetPassword");
                     }
@@ -162,6 +159,8 @@ namespace EDP_Project.Pages
             {
                 return Redirect("/Login");
             }
+
+
 
             return Page();
 

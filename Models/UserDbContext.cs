@@ -49,7 +49,7 @@ namespace Pract2.Models
 
         public DbSet<SpecialistDepartment> SpecialistDepartment { get; set; }
         public DbSet<Specialist> Specialist { get; set; }
-
+        public DbSet<SpecialistSlot> SpecialistSlot { get; set; }
 
     }
 }

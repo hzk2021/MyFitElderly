@@ -13,7 +13,7 @@ namespace EDP_Project.Pages.Staff.Booking
     {
         private readonly BookingService _svc;
         [BindProperty]
-        public SpecialistDepartment SpecialistDepartmentModel { get; set; }
+        public SpecialistDepartment MedicalDepartmentModel { get; set; }
 
         public CreateSpecialistDepartmentModel(BookingService svc)
         {
@@ -29,8 +29,8 @@ namespace EDP_Project.Pages.Staff.Booking
         {
             if (ModelState.IsValid)
             {
-                Console.WriteLine(SpecialistDepartmentModel.Department);
-                string response = _svc.CreateSpecialistDepartment(SpecialistDepartmentModel);
+                Console.WriteLine(MedicalDepartmentModel.Department);
+                string response = _svc.CreateDepartment(MedicalDepartmentModel);
                 if (response == "True")
                 {
                     return RedirectToPage("/");

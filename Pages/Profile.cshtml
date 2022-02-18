@@ -85,6 +85,17 @@
             }
 </style>
 
+
+<nav aria-label="breadcrumb" style="animation-duration: 1.3s;
+    animation-name: slidein;">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">User Profile Customization</li>
+    </ol>
+</nav>
+
+
+
 <form method="POST" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -97,6 +108,8 @@
                         <div class="account-settings">
                             <div class="user-profile">
                                 <div class="user-avatar" onclick="showInput()">
+
+
 
 
                                     <i class="fas fa-camera fa-lg"
@@ -333,11 +346,11 @@
                                        data-show-columns="true"
                                        data-show-refresh="true"
                                        data-show-export="true"
-                                       data-click-to-select="true" data-page-size="6" data-show-custom-view-button="true">
+                                       data-click-to-select="true" data-page-size="5" data-show-custom-view-button="true">
                                     <thead>
                                         <tr>
                                             <th data-field="machineName" data-sortable="true">Host</th>
-                                            <th data-field="level" data-sortable="true">Category</th>
+                                            <th data-field="level" data-formatter="catFormatter" data-sortable="true">Category</th>
                                             <th data-field="logged" data-formatter="dateFormat" data-sortable="true">Date and Time</th>
                                             <th data-field="message" data-sortable="true">Operation</th>
 
@@ -403,6 +416,50 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="successmodal2" tabindex="-1" role="dialog" aria-labelledby="successful_loginLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d53343;">
+                <h5 class="modal-title" id="successful_loginLabel" style="color: white">Alert!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #d53343;">
+                    You must wait longer to change your password.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="successmodal3" tabindex="-1" role="dialog" aria-labelledby="successful_loginLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d53343;">
+                <h5 class="modal-title" id="successful_loginLabel" style="color: white">Alert!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #d53343;">
+                    Password cannot be the same as your recent password.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var $table2 = $('#table2')
     $(function () {
@@ -427,6 +484,11 @@
 
     var sentResponse = Request.Query["emailexists"].ToString();
 
+    var sentResponse2 = Request.Query["youngpass"].ToString();
+
+
+    var sentResponse3 = Request.Query["samepass"].ToString();
+
 
 
     if (sentResponse == "true")
@@ -437,11 +499,38 @@
 
 
     }
+
+    if (sentResponse2 == "true")
+    {
+        <script>
+            $('#successmodal2').modal('toggle');
+        </script>
+
+
+    }
+
+
+    if (sentResponse3 == "true")
+    {
+        <script>
+            $('#successmodal3').modal('toggle');
+        </script>
+
+
+    }
 }
 
 
 <script>
 
+
+    function catFormatter(value, row, index) {
+
+        if (value == "Info") return '<p style="color:#17a2b8">Info</p>'
+        else return '<p style="color:red">Warn</p>'
+
+
+    }
 
 
 
@@ -556,12 +645,12 @@
 
                     <div class="form-group mx-sm-3 mb-2">
                         <div class="form-group">
-                            <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="4" id="password"
+                            <input type="password" asp-for="@Model.inputPass" title="Password has to contain at least 8 characters, a number, lowercase, uppercase & special characters." pattern="@myPattern" class="form-control" minlength="12" id="password"
                                    placeholder="Password" required>
                         </div>
                         <br>
                         <div class="form-group">
-                            <input type="password" name="password2" class="form-control" minlength="4" placeholder="Confirm Password"
+                            <input type="password" name="password2" class="form-control" minlength="12" placeholder="Confirm Password"
                                    id="password_confirm" oninput="check(this)" required>
                         </div>
                     </div>

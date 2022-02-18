@@ -1,0 +1,115 @@
+﻿@page
+@model EDP_Project.Pages.Booking.MedicalDepartmentModel
+@{
+    ViewData["Title"] = "Medical Departments";
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+
+<table id="table"
+       data-pagination="true"
+       data-page-size="8"
+       data-show-custom-view="true"
+       data-custom-view="customViewFormatter"
+       data-show-custom-view-button="true">
+
+    <thead>
+        <tr>
+            <th data-field="id" data-sortable="true">Id</th>
+            <th data-field="department" data-sortable="true">Department</th>
+            <th data-field="description" data-sortable="true">Description</th>
+            <th data-field="price" data-sortable="true">Price</th>
+            <th data-field="action" data-formatter="actionFormatter">Action</th>
+        </tr>
+    </thead>
+</table>
+
+<<!--template id="profileTemplate">
+<div class="col-4 mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-lg-8 col-md-6">
+                    <h3 class="mb-0 text-truncated">%DEPARTMENT%</h3>
+                    <p>
+                        (%DESCRIPTION%)
+                        <br />
+                        S$%PRICE%/Consultation
+                        %ACTION%
+                    </p>
+                </div>
+            </div>
+     
+                
+                <a asp-page="MedicalSpecialist" asp-route-id="" class="btn btn-primary">Book a specialist</a>-->
+
+
+
+            @*<button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#view_%DEPARTMENT%"></button>
+
+
+        <div class="modal" id="view_%DEPARTMENT%">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">%DEPARTMENT%</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Schedule an appointment?</p>
+                        <p class="text-danger"><i class="fas fa-exclamation-triangle"></i> Proceed with caution!</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a asp-page="MedicalSpecialist" asp-route-id="%DEPARTMENT%" class="btn btn-primary">Yes</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <!--</div>
+    </div>
+</div>
+</template>-->
+
+<script>
+    var dataSpecialist = @Html.Raw(Json.Serialize(Model.AllDepartment));
+    var $table = $('#table')
+    $(function () {
+        var data = dataSpecialist
+        $table.bootstrapTable({ data: data })
+    })
+
+    function customViewFormatter(data) {
+        var template = $('#profileTemplate').html()
+        var view = ''
+        $.each(data, function (i, row) {
+            view += template.replace('%ID%', row.id)
+                .replace('%DEPARTMENT%', row.department)
+                .replace('%DESCRIPTION%', row.description)
+                .replace('%PRICE%', row.price)
+                .replace('%ACTION%', row.action)
+        })
+
+        return `<div class="row mx-0">${view}</div>`
+    }
+
+    function actionFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+
+
+            if (key == 'id') {
+                html.push('<div style="text-align:center">')
+                html.push('<a class="edit" href="https://localhost:44320/Booking/MedicalSpecialist/' + value + '" title="dept"><i class="fa fa-edit"></i></a>' + '&nbsp &nbsp')
+            }
+
+        })
+        return html.join("")
+    }
+
+</script>

@@ -86,11 +86,15 @@ namespace EDP_Project.Pages
         public IActionResult OnGet()
         {
 
+            if (HttpContext.Session.GetString("user") != null)
+            {
+                unverifyUser(HttpContext.Session.GetString("user").ToString());
 
-            unverifyUser(HttpContext.Session.GetString("user").ToString());
+                logger.Info($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} logged out");
+                HttpContext.Session.Remove("user");
+                HttpContext.Session.Clear();
+            }
 
-            logger.Info($"{getUserEmail(HttpContext.Session.GetString("user").ToString())} logged out");
-            HttpContext.Session.Remove("user");
             HttpContext.Session.Clear();
             return RedirectToPage("Login", false);
 

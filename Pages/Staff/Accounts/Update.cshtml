@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @model EDP_Project.Pages.Staff.Accounts.UpdateModel
 @{
 }
@@ -105,6 +106,16 @@
 
 
 
+<nav aria-label="breadcrumb" style="width:100%">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/Staff/Accounts/List">User Account Management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update User</li>
+    </ol>
+</nav>
+
+
+
 <h1 class="display-4">Update Details</h1>
 
 <div class="registration-form" style="margin-bottom:120px;">
@@ -124,7 +135,7 @@
 
                 @*<img src="@Model.myUser.PhotoPath" class="avatar" alt="Avatar" id="avatarImg" style="  margin-left:170px; margin-bottom:20px; height: 110px; width: 110px;   border-radius: 50%;">*@
 
-                @{ 
+                @{
 
                     var imageLink = "\\" + Model.myUser.PhotoPath;
                 }
@@ -138,14 +149,14 @@
 
 
         <!-- <div class="custom-file">
-      <input type="file" class="custom-file-input" id="avatar" name="avatar" multiple accept=".jpg, .png, .jpeg" required>
-      <label class="custom-file-label" for="pic">Picture</label>
-    </div> -->
+          <input type="file" class="custom-file-input" id="avatar" name="avatar" multiple accept=".jpg, .png, .jpeg" required>
+          <label class="custom-file-label" for="pic">Picture</label>
+        </div> -->
         @*<div class="form-group">
-            <label>Profile Image</label>
-            <input id="avatarx" class="form-control" type="file" onChange="validation(event)" accept="" name="avatar"
-                   onChange="validate(this.value)" required />
-        </div>*@
+                <label>Profile Image</label>
+                <input id="avatarx" class="form-control" type="file" onChange="validation(event)" accept="" name="avatar"
+                       onChange="validate(this.value)" required />
+            </div>*@
 
         <div class="form-group" style="display:none">
             <label>Profile Image</label>
@@ -174,6 +185,8 @@
         </div>
 
 
+
+
         <div class="form-group">
             <label for="name">Date of Birth</label>
             <input asp-for="myUser.DateOfBirth" type="date" class="form-control" id="username" required>
@@ -190,20 +203,20 @@
 
 
         @*<div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" class="form-control" minlength="4" id="password" />
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" minlength="4" id="password" />
 
-        </div>
-
-
-        <div class="form-group">
-            <label for="password2">Confirm Password</label>
-            <input type="password" asp-for="myUser.Password" class="form-control" minlength="4" id="password_confirm" oninput="check(this)" required>
-            <span asp-validation-for="myUser.Password" class="text-danger"></span>
+            </div>
 
 
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <input type="password" asp-for="myUser.Password" class="form-control" minlength="4" id="password_confirm" oninput="check(this)" required>
+                <span asp-validation-for="myUser.Password" class="text-danger"></span>
 
-        </div>*@
+
+
+            </div>*@
 
 
         <div class="form-group">
@@ -225,17 +238,29 @@
         <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
 
 
+        <div class="form-group">
+            <label for="name">Account Status</label>
+            <div class="d-flex flex-row justify-content-center">
+                @Html.RadioButton("myUser.Status", "Active") <span>Active</span>
+                @Html.RadioButton("myUser.Status", "Inactive") <span>Inactive</span>
+                <span asp-validation-for="myUser.Status" class="text-danger"></span>
+            </div>
+        </div>
+
 
         <div class="form-group">
 
             @*<button type="submit" onclick="validate();" value="Submit" class="btn btn-block create-account">
-                Send Password Reset
-            </button>*@
+                    Send Password Reset
+                </button>*@
 
-            <a class="btn btn-block create-account" asp-page="/Staff/Accounts/Reset-Password" asp-route-username="@Model.myUser.Username"  role="button">
+            <a class="btn btn-block create-account" asp-page="/Staff/Accounts/Reset-Password" asp-route-username="@Model.myUser.Username" role="button">
                 Reset
                 password
             </a>
+
+
+
 
             <button type="submit" onclick="validate();" value="Submit" class="btn btn-block create-account">
                 Update

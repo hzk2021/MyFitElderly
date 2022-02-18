@@ -44,7 +44,7 @@ namespace EDP_Project.Pages.Staff.Tickets
         [BindProperty]
 
 
-        public int numClosed { get; set; }
+        public int numToday { get; set; }
 
 
 
@@ -129,7 +129,7 @@ namespace EDP_Project.Pages.Staff.Tickets
 
             numOpen = allTickets.Where(x => x.Status == "Open").Count();
             numResolved = allTickets.Where(x => x.Status == "Resolved").Count();
-            numClosed = allTickets.Where(x => x.Status == "Closed").Count();
+            numToday = allTickets.Where(x => x.Status == "Open" && x.DateCreated.Equals(DateTime.Today)).Count();
 
 
             return Page();

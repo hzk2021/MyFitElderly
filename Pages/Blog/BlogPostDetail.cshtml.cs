@@ -88,8 +88,7 @@ namespace EDP_Project.Pages.Blog
 
         public IActionResult OnPost()
         {
-            if (ModelState.IsValid)
-            {
+
                 var userId = _userSvc.retrieveuserid(HttpContext.Session.GetString("user"));
                 //MySqlConnection con = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password");
                 //comment.UserId = userId;
@@ -107,12 +106,8 @@ namespace EDP_Project.Pages.Blog
                 //string response = _svc.AddComments(comment);
 
                 con.Close();
-            }
-            else
-            {
-                ErrorMsg = "fml"; 
-            }
-            return RedirectToPage("BlogPostDetail");
+
+                return RedirectToPage("BlogPostDetail");
 
         }
         //public IActionResult OnPost()

@@ -293,16 +293,30 @@ namespace EDP_Project.Pages.Auth
 
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
 
 
+            if (HttpContext.Session.GetString("affirmation") == "true")
+            {
+                HttpContext.Session.Remove("user");
+                HttpContext.Session.Clear();
+
+            }
+
+
+
+            if (HttpContext.Session.GetString("user") != null)
+            {
+
+                return RedirectToPage("/TmpHome");
+            }
 
 
 
 
 
-
+            return Page();
 
 
         }

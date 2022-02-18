@@ -1,0 +1,314 @@
+﻿@page "{id}"
+@model EDP_Project.Pages.Booking.MedicalSlotModel
+@{
+    ViewData["Title"] = "Specialist";
+    var selectedSlot = "";
+}
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/custom-view/bootstrap-table-custom-view.js"></script>
+
+<h1>Select a time slot</h1>
+
+<br />
+<br />
+<form method="post">
+    <table class="table">
+        <tr>
+            <th>Date</th>
+            <th>9 am</th>
+            <th>10 am</th>
+            <th>11 am</th>
+            <th>12 pm</th>
+            <th>1 pm</th>
+            <th>2 pm</th>
+            <th>3 pm</th>
+            <th>4 pm</th>
+
+
+        </tr>
+
+        @foreach (var slot in Model.SpecialistSlotModel)
+        {
+        <tr>
+        <td>@slot.Date</td>
+
+        @if (slot.Slot1.ToString() == "False")
+        {
+            <td>
+                <br style="margin-bottom:5%;" />
+
+                <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                <!-- The Modal -->
+                <div class="modal" id="confirmSelect_@slot.Id">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Booking Confirmation</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>Book Slot?</p>
+                                <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="1"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        }
+        else
+        {
+            <td>Taken</td>
+        }
+
+        @if (slot.Slot2.ToString() == "False")
+        {
+            <td>
+                <br style="margin-bottom:5%;" />
+
+                <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                <!-- The Modal -->
+                <div class="modal" id="confirmSelect_@slot.Id">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Booking Confirmation</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>Book Slot?</p>
+                                <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="2"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        }
+        else
+        {
+            <td>Taken</td>
+        }
+
+        @if (slot.Slot3.ToString() == "False")
+        {
+            <td>
+                <br style="margin-bottom:5%;" />
+
+                <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                <!-- The Modal -->
+                <div class="modal" id="confirmSelect_@slot.Id">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Booking Confirmation</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>Book Slot?</p>
+                                <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="3"><i class="fas fa-pencil-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        }
+        else
+        {
+            <td>Taken</td>
+        }
+            @if (slot.Slot4.ToString() == "False")
+            {
+                <td>
+                    <br style="margin-bottom:5%;" />
+
+                    <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                    <!-- The Modal -->
+                    <div class="modal" id="confirmSelect_@slot.Id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Booking Confirmation</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Book Slot?</p>
+                                    <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="4"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td>Taken</td>
+            }
+            @if (slot.Slot5.ToString() == "False")
+            {
+                <td>
+                    <br style="margin-bottom:5%;" />
+
+                    <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                    <!-- The Modal -->
+                    <div class="modal" id="confirmSelect_@slot.Id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Booking Confirmation</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Book Slot?</p>
+                                    <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="5"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td>Taken</td>
+            }
+            @if (slot.Slot6.ToString() == "False")
+            {
+                <td>
+                    <br style="margin-bottom:5%;" />
+
+                    <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                    <!-- The Modal -->
+                    <div class="modal" id="confirmSelect_@slot.Id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Booking Confirmation</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Book Slot?</p>
+                                    <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="6"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td>Taken</td>
+            }
+            @if (slot.Slot7.ToString() == "False")
+            {
+                <td>
+                    <br style="margin-bottom:5%;" />
+
+                    <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                    <!-- The Modal -->
+                    <div class="modal" id="confirmSelect_@slot.Id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Booking Confirmation</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Book Slot?</p>
+                                    <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="7"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td>Taken</td>
+            }
+
+            @if (slot.Slot8.ToString() == "False")
+            {
+                <td>
+                    <br style="margin-bottom:5%;" />
+
+                    <button type="button" class="btn text-primary" style="padding:0px;" data-toggle="modal" data-target="#confirmSelect_@slot.Id">Select Slot</button>
+                    <!-- The Modal -->
+                    <div class="modal" id="confirmSelect_@slot.Id">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Booking Confirmation</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Book Slot?</p>
+                                    <p class="text-secondary"><i class="fa-thin fa-book"></i> Proceed with booking</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a asp-page="UpdateSlot" asp-route-id="@slot.Id" asp-route-specid="8"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            }
+            else
+            {
+                <td>Taken</td>
+            }
+        
+    </tr>
+
+
+
+      
+        }
+
+    </table>
+
+</form>
