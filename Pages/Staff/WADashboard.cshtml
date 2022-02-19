@@ -30,11 +30,20 @@
         margin: 5%;
     }
 
+    .breadcrumb .breadcrumb-item::before {
+        content: "";
+    }
+
 </style>
 
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <ol class="breadcrumb indigo lighten-4">
+        <li class="breadcrumb-item">
+            <a class="black-text" href="/">Home</a>
+            <i class="fas fa-caret-right mx-2" aria-hidden="true"></i>
+        </li>
+
+
         <li class="breadcrumb-item active" aria-current="page">Web Analytics Dashboard</li>
     </ol>
 </nav>
