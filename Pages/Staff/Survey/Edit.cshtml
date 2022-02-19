@@ -7,9 +7,17 @@
 <link href="~/css/surveystyle.css" rel="stylesheet" />
 
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Home</a></li>
-        <li class="breadcrumb-item"><a asp-page="View">Survey</a></li>
+    <ol class="breadcrumb indigo lighten-4">
+        <li class="breadcrumb-item">
+            <a class="black-text" href="/">Home</a>
+            <i class="fas fa-caret-right mx-2" aria-hidden="true"></i>
+        </li>
+
+        <li class="breadcrumb-item">
+            <a class="black-text" asp-page="View">Survey</a>
+            <i class="fas fa-caret-right mx-2" aria-hidden="true"></i>
+        </li>
+
         <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
