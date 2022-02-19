@@ -47,6 +47,8 @@ namespace EDP_Project
 
             string dropComments = @"DROP TABLE IF EXISTS comments";
 
+            string dropSpecialistSlot = @"DROP TABLE IF EXISTS specialistslot";
+
 
             using (MySqlConnection conn = new MySqlConnection(@"datasource=localhost;port=3306;database=it2166;username=root;password=password"))
             {
@@ -68,6 +70,8 @@ namespace EDP_Project
 
                 MySqlCommand dpppppppp = new MySqlCommand(dropPOST, conn);
 
+                MySqlCommand bdbd = new MySqlCommand(dropSpecialistSlot, conn);
+
                 conn.Open();
                 dlt.ExecuteNonQuery();
                 dm.ExecuteNonQuery();
@@ -78,8 +82,9 @@ namespace EDP_Project
                 dsrt.ExecuteNonQuery();
                 dst.ExecuteNonQuery();
                 dctt.ExecuteNonQuery();
-                cmd.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
                 dpppppppp.ExecuteNonQuery();
+                bdbd.ExecuteNonQuery();
 
 
                 //}
@@ -297,6 +302,8 @@ CREATE TABLE IF NOT EXISTS Log (
 
                 MySqlCommand gen_root_acc = new MySqlCommand("INSERT INTO `user` (`Id`, `PhotoPath`,`Username`,`Email`,`EmailVerified`,`TwoFactorVerified`,`Token`,`TokenExpiry`,`DateCreated`,`PasswordSalt`,`Password`,`ResetPwToken`,`ResetPwTokenExpiry`,`FailedAttempts`,`LastFailed`,`LastPwSet`,`Gender`,`DateOfBirth`,`Contact`,`Status`,`Role`,`Address`) VALUES ('999','Images/74b1e825-1fbe-4508-a7a7-b5ec86f8f366_icon.jpg','admin','admin@gmail.com',1,0,NULL,NULL,'2020-01-28','mbb8LPmet7Y=','cDt39OvddIC9uQf++ZeSsQDATAwtI4TlIswAWsgViCEBw/lAWgS16LDBvs47dCpbQOoq9Fu6mKKstCiYeYGedQ==',NULL,NULL,0,NULL,'2022-01-30 23:09:00','Male','2022-01-01 00:00:00','11111111','Active','Staff','ANG MO KIO AVENUE 8');", con);
 
+                // generate doctor slots ( only works if u got doctors)
+                MySqlCommand gen_specialist_slot = new MySqlCommand("INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (1,'2022-02-15 00:00:00',1,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (2,'2022-02-16 00:00:00',1,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (3,'2022-02-27 00:00:00',1,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (4,'2022-02-15 00:00:00',2,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (5,'2022-02-16 00:00:00',2,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (6,'2022-02-27 00:00:00',2,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (7,'2022-02-15 00:00:00',3,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (8,'2022-02-16 00:00:00',3,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (9,'2022-02-27 00:00:00',3,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (10,'2022-02-15 00:00:00',4,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (11,'2022-02-16 00:00:00',4,0,0,0,0,0,0,0,0); INSERT INTO `specialistSlot` (`Id`,`Date`,`SpecId`,`Slot1`,`Slot2`,`Slot3`,`Slot4`,`Slot5`,`Slot6`,`Slot7`,`Slot8`) VALUES (12,'2022-02-27 00:00:00',4,0,0,0,0,0,0,0,0);", con);
 
                 try
                 {
@@ -320,8 +327,8 @@ CREATE TABLE IF NOT EXISTS Log (
                     Create_specialist.ExecuteNonQuery();
                     Create_specialistSlot.ExecuteNonQuery();
 
-
                     gen_root_acc.ExecuteNonQuery();
+                    gen_specialist_slot.ExecuteNonQuery();
 
 
                 }
@@ -329,9 +336,6 @@ CREATE TABLE IF NOT EXISTS Log (
                 {
                     Console.WriteLine(e);
                 }
-
-
-
 
 
             }
