@@ -6,6 +6,9 @@
 
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css">
 <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<link href="https://unpkg.com/ionicons@4.5.5/dist/css/ionicons.min.css" rel="stylesheet">
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
 <style>
     .page-item.active .page-link {
@@ -27,20 +30,24 @@
 
     <h1 class="text-center">Existing Surveys</h1>
 
-    <table
-          data-toggle="table"
-          data-search="true"
-          data-show-columns="true"
-          data-pagination= "true"
-          data-filter-control="true"
-          data-buttons-class="dark"
-          data-page-size="5"
-          data-page-list="5,10,20"
-          data-page-list-class="dark"
-          data-toolbar=".toolbar"
-          data-toolbar-align="left"
-          data-pagination-pre-text="<"
-          data-pagination-next-text=">">
+    <table id="bs-table-survey"
+           data-toggle="table"
+           data-search="true"
+           data-show-columns="true"
+           data-pagination="true"
+           data-filter-control="true"
+           data-buttons-class="dark"
+           data-page-size="5"
+           data-page-list="5,10,20"
+           data-page-list-class="dark"
+           data-toolbar=".toolbar"
+           data-toolbar-align="left"
+           data-pagination-pre-text="<"
+           data-pagination-next-text=">"
+           data-show-fullscreen="true"
+           data-show-export="true"
+           data-icons-prefix="icon"
+           data-icons="icons">
 
         <thead>
             <tr>
@@ -85,3 +92,17 @@
     </table>
 
 </div>
+
+<script>
+    window.icons = {
+        columns: 'ion-md-menu',
+        fullscreen: 'ion-md-expand',
+        export: 'ion-md-cloud-download'
+    }
+
+    $('#bs-table-survey').bootstrapTable({
+        exportOptions: {
+            fileName: 'survey_forms_export'
+        }
+    })
+</script>
