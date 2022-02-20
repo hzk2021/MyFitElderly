@@ -68,18 +68,18 @@ namespace EDP_Project
 
                 MySqlCommand dpppppppp = new MySqlCommand(dropPOST, conn);
 
-                //conn.Open();
-                //dlt.ExecuteNonQuery();
-                //dm.ExecuteNonQuery();
-                //dci.ExecuteNonQuery();
-                //dqot.ExecuteNonQuery();
-                //dqt.ExecuteNonQuery();
-                //dert.ExecuteNonQuery();
-                //dsrt.ExecuteNonQuery();
-                //dst.ExecuteNonQuery();
-                //dctt.ExecuteNonQuery();
-                //cmd.ExecuteNonQuery();
-                //dpppppppp.ExecuteNonQuery();
+                conn.Open();
+                dlt.ExecuteNonQuery();
+                dm.ExecuteNonQuery();
+                dci.ExecuteNonQuery();
+                dqot.ExecuteNonQuery();
+                dqt.ExecuteNonQuery();
+                dert.ExecuteNonQuery();
+                dsrt.ExecuteNonQuery();
+                dst.ExecuteNonQuery();
+                dctt.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+                dpppppppp.ExecuteNonQuery();
 
 
                 //}
