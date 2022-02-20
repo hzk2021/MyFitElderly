@@ -24,7 +24,7 @@ namespace EDP_Project.Pages.Survey
 
         public async void OnGet()
         {
-            _usrv.AIOCheckGuest();
+            //_usrv.AIOCheckGuest();
             Surveys = await _srv.GetAllSurveys();
         }
     }
