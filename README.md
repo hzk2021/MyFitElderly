@@ -3,6 +3,7 @@
 	<br>
 		<img src="https://img.shields.io/static/v1?label=&message=.NET&color=512BD4&style=for-the-badge&logo=dotnet&logoColor=white&logoWidth=&labelColor=&link=">
 		<img src="https://img.shields.io/static/v1?label=&message=CSharp&color=239120&style=for-the-badge&logo=csharp&logoColor=white&logoWidth=&labelColor=&link=">
+		<img src="https://img.shields.io/static/v1?label=&message=MySQL&color=4479A1&style=for-the-badge&logo=mysql&logoColor=white&logoWidth=&labelColor=&link=">
 	</h1>
 </div>
 
