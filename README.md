@@ -26,6 +26,10 @@ Ergo, there are numerous benefits in taking up our web solution; especially in t
     - C# <img height="16" width="16" src="https://cdn.simpleicons.org/csharp" />
 </div>
 
+<div style="display: flex; align-items:center; column-gap: 5px;">
+    - MySQL <img height="16" width="16" src="https://cdn.simpleicons.org/mysql" />
+</div>
+
 #### Framework
 
 - [Entity Framework](https://learn.microsoft.com/en-us/aspnet/entity-framework)
